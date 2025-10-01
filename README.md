@@ -1,6 +1,6 @@
 # g3hq.com
 
-This is a Flask-based web application designed as a central hub for the G3 group of friends. It provides various tools and services to track stats, share content, and connect.
+This is a Flask-based web application [https://g3hq.com] designed as a central hub for the G3. It provides various tools and services to track stats, share content, and connect.
 
 ## Features
 
