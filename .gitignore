@@ -201,6 +201,10 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# Media files
+# Ignore user-uploaded media content like videos
+app/static/media/
+
 # Marimo
 marimo/_static/
 marimo/_lsp/

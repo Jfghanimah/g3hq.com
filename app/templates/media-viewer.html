@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block body_class %}smash-page-body{% endblock %}
+
+{% block content %}
+<div class="container py-5 fade-in">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+            
+            <!-- Frosted Glass Pane -->
+            <div class="p-4 p-md-5 rounded-4 shadow-lg frosted-pane">
+                
+                <!-- Page Header -->
+                <div class="mb-4">
+                    <h4 class="fw-light text-white border-bottom border-secondary pb-2 mb-3 text-truncate">{{ filename }}</h4>
+                </div>
+                
+                <!-- Video Player -->
+                <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
+                    <video controls preload="metadata" autoplay>
+                        <source src="{{ url_for('static', filename='media/' + filename) }}" type="video/mp4">
+                        <source src="{{ url_for('static', filename='media/' + filename) }}" type="{{ video_type or 'video/mp4' }}">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <!-- Back Button -->
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('media_share') }}" class="btn btn-secondary btn-lg shadow">
+                        <i class="bi bi-arrow-left-circle me-2"></i> Back to Media List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

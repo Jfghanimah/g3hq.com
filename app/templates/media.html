@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block body_class %}smash-page-body{% endblock %}
+
+{% block content %}
+<div class="container py-5 fade-in">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+            
+            <!-- Frosted Glass Pane -->
+            <div class="p-4 p-md-5 rounded-4 shadow-lg frosted-pane">
+                
+                <!-- Page Header -->
+                <div class="text-center mb-4">
+                    <h1 class="display-5 fw-light text-light">Media Share</h1>
+                    <p class="lead text-white-50">A collection of shared video clips.</p>
+                </div>
+                
+                <!-- Video List -->
+                <div class="list-group list-group-flush">
+                    {% if videos %}
+                        {% for video_file in videos %}
+                        <a href="{{ url_for('media_viewer', filename=video_file) }}" class="list-group-item list-group-item-action bg-transparent text-white-50 fs-5 py-3">
+                            <i class="bi bi-play-circle-fill me-2"></i>
+                            {{ video_file }}
+                        </a>
+                        {% endfor %}
+                    {% else %}
+                        <div class="list-group-item bg-transparent text-center text-white-50 fs-5 py-3">
+                            No videos found in the media directory.
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

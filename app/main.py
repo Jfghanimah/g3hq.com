@@ -68,6 +68,42 @@ def smash_add_player():
     return render_template("smash-add.html", title="Add a Player")
 
 
+@app.route("/media")
+def media_share():
+    """Renders a page listing available videos from the static/media directory."""
+    media_dir = os.path.join(app.static_folder, 'media')
+    videos = []
+
+    # Ensure the media directory exists
+    if os.path.exists(media_dir):
+        # Supported video extensions
+        supported_extensions = ('.mp4', '.webm', '.mov', '.ogg')
+        
+        for filename in sorted(os.listdir(media_dir)):
+            if filename.lower().endswith(supported_extensions):
+                videos.append(filename)
+    else:
+        # If the directory doesn't exist, create it.
+        os.makedirs(media_dir)
+
+    return render_template("media.html", videos=videos, title="Media Share")
+
+
+@app.route("/media/<path:filename>")
+def media_viewer(filename):
+    """Renders a page to view a single video."""
+    # Basic security: ensure the file exists in the media directory
+    media_dir = os.path.join(app.static_folder, 'media')
+    filepath = os.path.join(media_dir, filename)
+
+    # Check if the file exists and is within the intended directory
+    if not os.path.exists(filepath) or not os.path.abspath(filepath).startswith(os.path.abspath(media_dir)):
+        flash("Video not found or access denied.", "danger")
+        return redirect(url_for('media_share'))
+
+    return render_template("media-viewer.html", filename=filename, title=f"Viewing {filename}")
+
+
 if __name__ == '__main__':
     # Runs the app in debug mode for local development
     app.run(debug=True)
