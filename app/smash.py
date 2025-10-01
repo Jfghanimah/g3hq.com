@@ -17,7 +17,7 @@ def get_color_for_name(name: str) -> str:
     # Using HSL color space for more vibrant and readable colors
     hash_object = hashlib.md5(name.encode())
     # We use the integer value of the hash to get a hue value
-    hue = int.from_bytes(hash_object.digest(), 'big') % 360
+    hue = int.from_bytes(hash_object.digest(), 'big')*3 % 360
     
     saturation = 75  # Keep saturation high for vibrancy
     lightness = 60   # Keep lightness balanced for readability against a dark background
