@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+import os
+from flask import Flask, render_template, request, redirect, url_for, flash
 
-from smash import get_player_data, get_color_for_name, process_match_report
+from smash import get_player_data, get_color_for_name, process_match_report, add_player
 
 # Initialize the Flask application
 app = Flask(__name__)
+app.secret_key = os.urandom(24) # Necessary for flash messaging
 
 @app.route('/')
 @app.route('/home')
@@ -32,20 +34,38 @@ def smash_report():
         winner_str = request.form.get("winner")
         loser_str = request.form.get("loser")
 
-        # Call the new logic function from smash.py
         success, message = process_match_report(winner_str, loser_str)
 
-        if not success:
-            # For now, just return the error message.
-            # In the future, this could use Flask's flash messaging.
-            return message, 400
-        
-        return redirect(url_for('smash'))
+        if success:
+            flash(message, 'success')
+            return redirect(url_for('smash'))
+        else:
+            flash(message, 'danger')
+            return redirect(url_for('smash_report'))
 
-    # For a GET request
+    # For a GET request, display the form
     players = get_player_data()
     sorted_players = sorted(players, key=lambda player: (player['Name'], player['Character']))
     return render_template("smash-report.html", players=sorted_players, title="Report a Match")
+
+
+@app.route("/smash/add", methods=["GET", "POST"])
+def smash_add_player():
+    """Handles both displaying the add player form and processing the submission."""
+    if request.method == "POST":
+        player_name = request.form.get("name")
+        player_char = request.form.get("character")
+
+        success, message = add_player(player_name, player_char)
+
+        if success:
+            flash(message, 'success')
+            return redirect(url_for('smash'))
+        else:
+            flash(message, 'danger')
+            return redirect(url_for('smash_add_player'))
+
+    return render_template("smash-add.html", title="Add a Player")
 
 
 if __name__ == '__main__':

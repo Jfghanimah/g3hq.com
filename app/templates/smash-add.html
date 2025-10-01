@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block body_class %}smash-page-body{% endblock %}
+
+{% block content %}
+<div class="container py-5 fade-in">
+    <div class="row justify-content-center">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="col-12 col-md-8 col-lg-6">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="col-12 col-md-8 col-lg-6">
+            <!-- Frosted Glass Pane -->
+            <div class="p-4 p-md-5 rounded-4 shadow-lg frosted-pane">
+                
+                <!-- Page Header -->
+                <div class="text-center mb-4">
+                    <h1 class="display-5 fw-light text-light">Add New Player</h1>
+                    <p class="lead text-white-50">Add a new Player/Character combination to the roster.</p>
+                </div>
+
+                <!-- Add Player Form -->
+                <form action="{{ url_for('smash_add_player') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label text-white-50">Player Name</label>
+                        <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="e.g., Ganon" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="character" class="form-label text-white-50">Character</label>
+                        <input type="text" class="form-control form-control-lg" id="character" name="character" placeholder="e.g., Ganondorf" required>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg shadow"><i class="bi bi-person-plus-fill me-2"></i>Add Player</button>
+                        <a href="{{ url_for('smash') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

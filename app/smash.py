@@ -3,24 +3,27 @@ import csv
 import hashlib
 from rating import new_rating
 
-def get_color_for_name(name):
+
+def get_color_for_name(name: str) -> str:
     """
-    Generates a consistent, unique HSL color for a given name string
-    using an MD5 hash to ensure the color is always the same for the same name.
+    Generates a consistent, unique color for a name.
+    Names starting with "CPU" are hardcoded to a neutral gray.
     """
-    # Create a hash of the name to get a consistent integer.
+    # Check if the name is for a CPU player
+    if name.upper().startswith("CPU"):
+        return "#9E9E9E"  # A neutral, medium gray for CPU players
+
+    # For other players, generate a unique color from their name
+    # Using HSL color space for more vibrant and readable colors
     hash_object = hashlib.md5(name.encode())
-    hash_digest = hash_object.hexdigest()
-    hash_int = int(hash_digest, 16)
+    # We use the integer value of the hash to get a hue value
+    hue = int.from_bytes(hash_object.digest(), 'big') % 360
     
-    # Use the integer to generate a hue value (0-360)
-    hue = hash_int % 360
-    
-    # Use fixed saturation and lightness for a consistent, pleasant color palette.
-    saturation = 75 
-    lightness = 40
+    saturation = 75  # Keep saturation high for vibrancy
+    lightness = 60   # Keep lightness balanced for readability against a dark background
     
     return f"hsl({hue}, {saturation}%, {lightness}%)"
+
 
 def get_player_data():
     """Helper function to read and parse player data from the CSV."""
@@ -39,6 +42,7 @@ def get_player_data():
     except Exception as e:
         print(f"An error occurred reading elos.csv: {e}")
     return players
+
 
 def write_player_data(players):
     """Safely writes the list of player dicts back to the CSV."""
@@ -67,6 +71,7 @@ def write_player_data(players):
         print(f"An error occurred writing to {final_filepath}: {e}")
         if os.path.exists(temp_filepath):
             os.remove(temp_filepath)
+
 
 def process_match_report(winner_str, loser_str):
     """
@@ -101,3 +106,29 @@ def process_match_report(winner_str, loser_str):
     write_player_data(all_players)
     
     return (True, "Match processed successfully.")
+
+
+def add_player(name, character):
+    """
+    Adds a new player-character combination to the data file with default ratings.
+    Returns a tuple (success: bool, message: str).
+    """
+    if not name or not character:
+        return (False, "Error: Player name and character cannot be empty.")
+
+    all_players = get_player_data()
+
+    # Check for duplicates (case-insensitive)
+    name = name.strip()
+    character = character.strip()
+    exists = any(p['Name'].lower() == name.lower() and p['Character'].lower() == character.lower() for p in all_players)
+    if exists:
+        return (False, f"Error: Player '{name}' with character '{character}' already exists.")
+
+    new_player = {
+        'Name': name, 'Character': character, 'Rating': 1500, 'Confidence': 350
+    }
+    all_players.append(new_player)
+    write_player_data(all_players)
+    
+    return (True, f"Successfully added {name} ({character}) to the roster.")

@@ -5,6 +5,19 @@
 {% block content %}
 <div class="container py-5 fade-in">
     <div class="row justify-content-center">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="col-12 col-lg-10 col-xl-8">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         <div class="col-12 col-lg-10 col-xl-8">
             
             <!-- Frosted Glass Pane -->
@@ -43,9 +56,11 @@
                                     {{ loop.index }}
                                 </th>
                                 <!-- Player Info -->
-                                <span style="color: {{ generate_color(player['Name']) }}; font-weight: 500;">
+                                <td class="py-3">
+                                    <span style="color: {{ player['color'] }}; font-weight: 500;">
                                         {{ player['Name'] }}
                                     </span>
+                                </td>
                                 <td class="py-3">{{ player.Character }}</td>
                                 <td class="py-3">{{ player.Rating }}</td>
                                 <td class="py-3">{{ player.Confidence }}</td>
@@ -60,9 +75,12 @@
                 </div>
 
                 <!-- Report Match Button -->
-                <div class="text-center mt-4">
+                <div class="text-center mt-4 d-grid gap-2 d-sm-flex justify-content-sm-center">
                     <a href="{{ url_for('smash_report') }}" class="btn btn-success btn-lg shadow">
                         <i class="bi bi-joystick me-2"></i> Report a Match
+                    </a>
+                    <a href="{{ url_for('smash_add_player') }}" class="btn btn-info btn-lg shadow text-white">
+                        <i class="bi bi-person-plus-fill me-2"></i> Add Player
                     </a>
                 </div>
 
@@ -71,4 +89,3 @@
     </div>
 </div>
 {% endblock %}
-
