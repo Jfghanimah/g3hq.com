@@ -1,7 +1,7 @@
 import os
 import csv
 import hashlib
-from rating import new_rating
+from .rating import new_rating
 
 
 def get_color_for_name(name: str) -> str:
