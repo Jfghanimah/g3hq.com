@@ -2,10 +2,16 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 
 from smash import get_player_data, get_color_for_name, process_match_report, add_player
+from error_handler import handle_error
 
 # Initialize the Flask application
 app = Flask(__name__)
-app.secret_key = os.urandom(24) # Necessary for flash messaging
+
+# Load configuration from environment variables
+# SECRET_KEY is crucial for session security (flash messages).
+# Use a default for local dev, but set a strong, stable key in production.
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-should-be-changed')
+app.config['SMASH_PASSPHRASE'] = os.environ.get('SMASH_PASSPHRASE', 'G3')
 
 @app.route('/')
 @app.route('/home')
@@ -31,6 +37,11 @@ def smash():
 def smash_report():
     """Handles both displaying the match report form and processing the submitted data."""
     if request.method == "POST":
+        passphrase_submitted = request.form.get("passphrase")
+        if passphrase_submitted != app.config['SMASH_PASSPHRASE']:
+            flash("Invalid passphrase. Please try again.", 'danger')
+            return redirect(url_for('smash_report'))
+
         winner_str = request.form.get("winner")
         loser_str = request.form.get("loser")
 
@@ -89,6 +100,16 @@ def media_share():
     return render_template("media.html", videos=videos, title="Media Share")
 
 
+def get_video_mimetype(filename):
+    """Returns the MIME type for a given video filename based on its extension."""
+    ext_map = {
+        '.mp4': 'video/mp4',
+        '.webm': 'video/webm',
+        '.ogg': 'video/ogg',
+        '.mov': 'video/quicktime'
+    }
+    return ext_map.get(os.path.splitext(filename)[1].lower())
+
 @app.route("/media/<path:filename>")
 def media_viewer(filename):
     """Renders a page to view a single video."""
@@ -101,8 +122,15 @@ def media_viewer(filename):
         flash("Video not found or access denied.", "danger")
         return redirect(url_for('media_share'))
 
-    return render_template("media-viewer.html", filename=filename, title=f"Viewing {filename}")
+    video_type = get_video_mimetype(filename)
 
+    return render_template("media-viewer.html", filename=filename, video_type=video_type, title=f"Viewing {filename}")
+
+
+# Register custom error handlers
+app.register_error_handler(403, handle_error)
+app.register_error_handler(404, handle_error)
+app.register_error_handler(500, handle_error)
 
 if __name__ == '__main__':
     # Runs the app in debug mode for local development

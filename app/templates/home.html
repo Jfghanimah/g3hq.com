@@ -1,19 +1,5 @@
 {% extends "base.html" %}
 
-{% block head %}
-<style>
-    /* Ensure footer stays at the bottom on pages with little content */
-    body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-    main {
-        flex: 1;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <!-- Hero Section -->
 <div class="hero-section text-center text-white">
@@ -88,4 +74,3 @@
     </div>
 </div>
 {% endblock %}
-

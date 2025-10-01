@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block body_class %}smash-page-body{% endblock %}
+
+{% block content %}
+<div class="container py-5 fade-in">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <!-- Frosted Glass Pane -->
+            <div class="p-4 p-md-5 rounded-4 shadow-lg frosted-pane text-center">
+                
+                <h1 class="display-1 fw-bold text-light" style="font-size: 8rem;">{{ code }}</h1>
+                <h2 class="fw-light text-white mb-3">{{ message }} ☹️</h2>
+                <p class="lead text-white-50 mb-4">{{ description }}</p>
+                
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a class="btn btn-secondary btn-lg shadow" href="javascript:history.back()">
+                        <i class="bi bi-arrow-left-circle me-2"></i> Go Back
+                    </a>
+                    <a class="btn btn-primary btn-lg shadow" href="{{ url_for('home') }}">
+                        <i class="bi bi-house-door-fill me-2"></i> Go Home
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
