@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    /* Ensure footer stays at the bottom on pages with little content */
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    main {
+        flex: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center text-white">
+    <div class="container py-5">
+        <h1 class="display-4 fw-light">
+            Welcome to 
+            <img src="{{ url_for('static', filename='g3-trans.png') }}" alt="g3 Logo" class="hero-logo">
+            HQ
+        </h1>
+        <p class="lead col-lg-6 mx-auto">
+            Your central hub for group activities, stats, and content.
+        </p>
+    </div>
+</div>
+
+<!-- Action Cards Section -->
+<div class="container py-5">
+    <div class="row g-4 justify-content-center">
+
+        <!-- Smash Rankings Card -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="{{ url_for('smash') }}" class="card-link">
+                <div class="card action-card h-100 text-white text-center">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <i class="bi bi-joystick card-icon"></i>
+                        <h4 class="card-title">Smash Rankings</h4>
+                        <p class="card-text">View the official G3 Elo rankings and report match results.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Media Share Card -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="#" class="card-link">
+                <div class="card action-card h-100 text-white text-center">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <i class="bi bi-film card-icon"></i>
+                        <h4 class="card-title">Media Share</h4>
+                        <p class="card-text">Download and share content with the group.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Minecraft Server Card -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="#" class="card-link">
+                <div class="card action-card h-100 text-white text-center">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <i class="bi bi-server card-icon"></i>
+                        <h4 class="card-title">Minecraft Server</h4>
+                        <p class="card-text">Check server status and get connection details.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Discord Invite Card -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <a href="https://discord.gg/DxWDcNYD7f" target="_blank" class="card-link">
+                <div class="card action-card h-100 text-white text-center">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <i class="bi bi-discord card-icon"></i>
+                        <h4 class="card-title">Join the Discord</h4>
+                        <p class="card-text">Jump into the conversation and coordinate with the group.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+

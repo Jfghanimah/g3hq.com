@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block body_class %}smash-page-body{% endblock %}
+
+{% block content %}
+<div class="container py-5 fade-in">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+            
+            <!-- Frosted Glass Pane -->
+            <div class="p-4 p-md-5 rounded-4 shadow-lg frosted-pane">
+                
+                <!-- Page Header -->
+                <div class="text-center mb-4">
+                    <h1 class="display-5 fw-light text-light">Smash Bros. Ultimate Rankings</h1>
+                    <p class="lead text-white-50">Live player ratings using a elo-based system.</p>
+                </div>
+                
+                <!-- Table Wrapper -->
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle text-center" style="--bs-table-bg: transparent;">
+                        <thead>
+                            <tr class="fs-5">
+                                <th scope="col" class="py-3">Rank</th>
+                                <th scope="col" class="py-3">Name</th>
+                                <th scope="col" class="py-3">Character</th>
+                                <th scope="col" class="py-3">Rating</th>
+                                <th scope="col" class="py-3">Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in players %}
+                            <tr class="fs-5">
+                                <!-- Rank with Medal -->
+                                <th scope="row" class="py-3">
+                                    {% if loop.index == 1 %}
+                                        <i class="bi bi-trophy-fill rank-icon rank-gold"></i>
+                                    {% elif loop.index == 2 %}
+                                        <i class="bi bi-trophy-fill rank-icon rank-silver"></i>
+                                    {% elif loop.index == 3 %}
+                                        <i class="bi bi-trophy-fill rank-icon rank-bronze"></i>
+                                    {% endif %}
+                                    {{ loop.index }}
+                                </th>
+                                <!-- Player Info -->
+                                <span style="color: {{ generate_color(player['Name']) }}; font-weight: 500;">
+                                        {{ player['Name'] }}
+                                    </span>
+                                <td class="py-3">{{ player.Character }}</td>
+                                <td class="py-3">{{ player.Rating }}</td>
+                                <td class="py-3">{{ player.Confidence }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center py-4">No player data found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Report Match Button -->
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('smash_report') }}" class="btn btn-success btn-lg shadow">
+                        <i class="bi bi-joystick me-2"></i> Report a Match
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
