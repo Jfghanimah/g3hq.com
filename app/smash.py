@@ -3,6 +3,11 @@ import csv
 import hashlib
 from .rating import new_rating
 
+# Get the absolute path to the directory containing this script.
+# This makes file paths independent of the current working directory,
+# which is crucial when running with a WSGI server like Gunicorn.
+_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+_ELO_CSV_PATH = os.path.join(_BASE_DIR, 'elos.csv')
 
 def get_color_for_name(name: str) -> str:
     """
@@ -28,12 +33,12 @@ def get_color_for_name(name: str) -> str:
 def get_player_data():
     """Helper function to read and parse player data from the CSV."""
     players = []
-    if not os.path.exists("elos.csv"):
+    if not os.path.exists(_ELO_CSV_PATH):
         print("elos.csv not found.")
         return []
         
     try:
-        with open("elos.csv", mode='r', encoding='utf-8') as csvfile:
+        with open(_ELO_CSV_PATH, mode='r', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 row['Rating'] = int(float(row['Rating']))
@@ -46,8 +51,8 @@ def get_player_data():
 
 def write_player_data(players):
     """Safely writes the list of player dicts back to the CSV."""
-    temp_filepath = "elos.csv.tmp"
-    final_filepath = "elos.csv"
+    temp_filepath = _ELO_CSV_PATH + ".tmp"
+    final_filepath = _ELO_CSV_PATH
     fieldnames = ['Name', 'Character', 'Rating', 'Confidence']
     
     try:
