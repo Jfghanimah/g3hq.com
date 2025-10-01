@@ -13,9 +13,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-should-be-changed')
 app.config['SMASH_PASSPHRASE'] = os.environ.get('SMASH_PASSPHRASE', 'G3')
 
-@app.route('/')
 @app.route('/home')
 @app.route('/index')
+@app.route('/')
 def home():
     """Renders the main landing page."""
     return render_template('home.html')
