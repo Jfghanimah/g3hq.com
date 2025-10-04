@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, Markup
 
 from .smash import get_player_data, get_color_for_name, process_match_report, add_player
 from .error_handler import handle_error
@@ -48,7 +48,7 @@ def smash_report():
         success, message = process_match_report(winner_str, loser_str)
 
         if success:
-            flash(message, 'success')
+            flash(Markup(message), 'success')
             return redirect(url_for('smash'))
         else:
             flash(message, 'danger')
