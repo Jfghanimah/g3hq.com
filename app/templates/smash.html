@@ -62,7 +62,29 @@
                                     </span>
                                 </td>
                                 <td class="py-3">{{ player.Character }}</td>
-                                <td class="py-3">{{ player.Rating }}</td>
+                                <td class="py-3">
+                                    <!-- This container allows the rating number to be centered, with the daily change positioned relative to it -->
+                                    <div style="position: relative; display: inline-block;">
+                                        {{ player.Rating }}
+
+                                        {#- Check if DailyChange exists and is not zero -#}
+                                        {% if player.DailyChange and player.DailyChange != 0 %}
+                                            
+                                            {#- Display positive change in green -#}
+                                            {% if player.DailyChange > 0 %}
+                                                <span style="position: absolute; left: 100%; top: 0; white-space: nowrap; color: #28a745; font-size: 0.9em; padding-left: 5px;">
+                                                    (+{{ player.DailyChange }})
+                                                </span>
+                                            
+                                            {#- Display negative change in red -#}
+                                            {% else %}
+                                                <span style="position: absolute; left: 100%; top: 0; white-space: nowrap; color: #dc3545; font-size: 0.9em; padding-left: 5px;">
+                                                    ({{ player.DailyChange }})
+                                                </span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </td>
                                 <td class="py-3">{{ player.Confidence }}</td>
                             </tr>
                             {% else %}
