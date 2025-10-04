@@ -116,11 +116,17 @@ def process_match_report(winner_str, loser_str):
 
     write_player_data(all_players)
     
+    # Define colors for the message to improve readability
+    win_color = "#28a745"  # A nice green
+    lose_color = "#dc3545" # A standard red
+
     # Create a detailed, HTML-formatted message for the flash display
     message = (
         f"<b>Match Processed!</b><br>"
-        f"Winner: {winner_name} [{winner_char}] {old_winner_rating} → {new_winner_rating} ({winner_change:+})<br>"
-        f"Loser: {loser_name} [{loser_char}] {old_loser_rating} → {new_loser_rating} ({loser_change:+})"
+        f'<strong style="color: {win_color};">Winner:</strong> {winner_name} [{winner_char}] '
+        f'{old_winner_rating} → {new_winner_rating} <span style="color: {win_color};">({winner_change:+})</span><br>'
+        f'<strong style="color: {lose_color};">Loser:</strong> {loser_name} [{loser_char}] '
+        f'{old_loser_rating} → {new_loser_rating} <span style="color: {lose_color};">({loser_change:+})</span>'
     )
     return (True, message)
 

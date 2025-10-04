@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, Markup
+from flask import Flask, render_template, request, redirect, url_for, flash
+from markupsafe import Markup
 
 from .smash import get_player_data, get_color_for_name, process_match_report, add_player
 from .error_handler import handle_error
