@@ -39,6 +39,6 @@ def new_rating(rating1, rd1, rating2, rd2, score):
     # step 8 convert back to original scale
     new_rating1 = round(iRating1_prime * factor + 1500)
     new_rd1 = round(iRd1_prime * factor)
+    rating_change = new_rating1 - rating1
 
-    return new_rating1, new_rd1
-
+    return new_rating1, new_rd1, rating_change

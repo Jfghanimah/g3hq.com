@@ -100,17 +100,29 @@ def process_match_report(winner_str, loser_str):
     if not winner_obj or not loser_obj:
         return (False, "Error: Could not find one of the selected players in the data.")
     
-    new_winner_stats = new_rating(winner_obj['Rating'], winner_obj['Confidence'], loser_obj['Rating'], loser_obj['Confidence'], 1) 
-    new_loser_stats = new_rating(loser_obj['Rating'], loser_obj['Confidence'], winner_obj['Rating'], winner_obj['Confidence'], 0)
+    # Store old ratings to show the change
+    old_winner_rating = winner_obj['Rating']
+    old_loser_rating = loser_obj['Rating']
 
-    winner_obj['Rating'] = new_winner_stats[0]
-    winner_obj['Confidence'] = new_winner_stats[1]
-    loser_obj['Rating'] = new_loser_stats[0]
-    loser_obj['Confidence'] = new_loser_stats[1]
+    # Calculate new ratings and capture the changes
+    new_winner_rating, new_winner_rd, winner_change = new_rating(old_winner_rating, winner_obj['Confidence'], old_loser_rating, loser_obj['Confidence'], 1)
+    new_loser_rating, new_loser_rd, loser_change = new_rating(old_loser_rating, loser_obj['Confidence'], old_winner_rating, winner_obj['Confidence'], 0)
+
+    # Update player objects with new stats
+    winner_obj['Rating'] = new_winner_rating
+    winner_obj['Confidence'] = new_winner_rd
+    loser_obj['Rating'] = new_loser_rating
+    loser_obj['Confidence'] = new_loser_rd
 
     write_player_data(all_players)
     
-    return (True, "Match processed successfully.")
+    # Create a detailed, HTML-formatted message for the flash display
+    message = (
+        f"<b>Match Processed!</b><br>"
+        f"Winner: {winner_name} [{winner_char}] {old_winner_rating} → {new_winner_rating} ({winner_change:+})<br>"
+        f"Loser: {loser_name} [{loser_char}] {old_loser_rating} → {new_loser_rating} ({loser_change:+})"
+    )
+    return (True, message)
 
 
 def add_player(name, character):
