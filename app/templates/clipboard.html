@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block body_class %}smash-page-body{% endblock %}
+
+{% block content %}
+<div class="container py-5 fade-in">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm mb-4" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <!-- Frosted Glass Pane -->
+            <div class="p-4 p-md-5 rounded-4 shadow-lg frosted-pane">
+                
+                <!-- Page Header -->
+                <div class="text-center mb-4">
+                    <h1 class="display-5 fw-light text-light">Shared Clipboard</h1>
+                    <p class="lead text-white-50">A simple clipboard, shared in real-time across all devices.</p>
+                </div>
+
+                <!-- Clipboard Form -->
+                <form action="{{ url_for('clipboard') }}" method="post">
+                    <textarea class="form-control form-control-lg" name="content" rows="10" placeholder="Paste your text here...">{{ content | e }}</textarea>
+                    <div class="d-grid mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg shadow"><i class="bi bi-clipboard-check-fill me-2"></i>Save to Clipboard</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

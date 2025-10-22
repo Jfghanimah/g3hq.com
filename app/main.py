@@ -14,6 +14,14 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-should-be-changed')
 app.config['SMASH_PASSPHRASE'] = os.environ.get('SMASH_PASSPHRASE', 'G3')
 
+# Define the path for the shared clipboard file within the instance folder
+CLIPBOARD_FILE = os.path.join(app.instance_path, 'clipboard.txt')
+
+# Ensure the instance folder exists
+try:
+    os.makedirs(app.instance_path)
+except OSError:
+    pass
 @app.route('/home')
 @app.route('/index')
 @app.route('/')
@@ -79,6 +87,33 @@ def smash_add_player():
 
     return render_template("smash-add.html", title="Add a Player")
 
+
+@app.route('/clipboard', methods=['GET', 'POST'])
+def clipboard():
+    """Displays and handles updates to a shared clipboard."""
+    if request.method == 'POST':
+        content = request.form.get('content', '')
+        try:
+            with open(CLIPBOARD_FILE, 'w', encoding='utf-8') as f:
+                f.write(content)
+            flash('Clipboard updated successfully!', 'success')
+        except IOError as e:
+            # Log the error for debugging
+            app.logger.error(f"Error writing to clipboard file: {e}")
+            flash('Error: Could not update the clipboard.', 'danger')
+        return redirect(url_for('clipboard'))
+
+    # For a GET request, read the content and display the page
+    content = ''
+    if os.path.exists(CLIPBOARD_FILE):
+        try:
+            with open(CLIPBOARD_FILE, 'r', encoding='utf-8') as f:
+                content = f.read()
+        except IOError as e:
+            app.logger.error(f"Error reading clipboard file: {e}")
+            flash('Error: Could not read the clipboard content.', 'danger')
+            
+    return render_template('clipboard.html', content=content, title='Shared Clipboard')
 
 @app.route("/media")
 def media_share():
