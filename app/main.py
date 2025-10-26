@@ -88,32 +88,32 @@ def smash_add_player():
     return render_template("smash-add.html", title="Add a Player")
 
 
-@app.route('/clipboard', methods=['GET', 'POST'])
-def clipboard():
-    """Displays and handles updates to a shared clipboard."""
-    if request.method == 'POST':
-        content = request.form.get('content', '')
-        try:
-            with open(CLIPBOARD_FILE, 'w', encoding='utf-8') as f:
-                f.write(content)
-            flash('Clipboard updated successfully!', 'success')
-        except IOError as e:
-            # Log the error for debugging
-            app.logger.error(f"Error writing to clipboard file: {e}")
-            flash('Error: Could not update the clipboard.', 'danger')
-        return redirect(url_for('clipboard'))
+#@app.route('/clipboard', methods=['GET', 'POST'])
+#def clipboard():
+#    """Displays and handles updates to a shared clipboard."""
+#    if request.method == 'POST':
+#        content = request.form.get('content', '')
+#        try:
+#            with open(CLIPBOARD_FILE, 'w', encoding='utf-8') as f:
+#                f.write(content)
+#            flash('Clipboard updated successfully!', 'success')
+#        except IOError as e:
+#            # Log the error for debugging
+#            app.logger.error(f"Error writing to clipboard file: {e}")
+#            flash('Error: Could not update the clipboard.', 'danger')
+#        return redirect(url_for('clipboard'))
 
     # For a GET request, read the content and display the page
-    content = ''
-    if os.path.exists(CLIPBOARD_FILE):
-        try:
-            with open(CLIPBOARD_FILE, 'r', encoding='utf-8') as f:
-                content = f.read()
-        except IOError as e:
-            app.logger.error(f"Error reading clipboard file: {e}")
-            flash('Error: Could not read the clipboard content.', 'danger')
+#    content = ''
+#    if os.path.exists(CLIPBOARD_FILE):
+#        try:
+#            with open(CLIPBOARD_FILE, 'r', encoding='utf-8') as f:
+#                content = f.read()
+#        except IOError as e:
+#            app.logger.error(f"Error reading clipboard file: {e}")
+#            flash('Error: Could not read the clipboard content.', 'danger')
             
-    return render_template('clipboard.html', content=content, title='Shared Clipboard')
+#    return render_template('clipboard.html', content=content, title='Shared Clipboard')
 
 @app.route("/media")
 def media_share():

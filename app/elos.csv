@@ -1,31 +1,33 @@
 Name,Character,Rating,Confidence,DailyChange
-Abe,Yoshi,1747,149,0
-Abe,Captain Falcon,1603,111,0
+Abe,Yoshi,1792,139,0
+Abe,Captain Falcon,1575,107,0
 Abe,Ganondorf,1602,105,0
 Abe,Serphiroth,1570,165,0
 Abe,Sheik,1416,217,0
 Abe,Incineroar,1393,218,0
 CPU1,Kazuya,760,98,0
 CPU3,Kazuya,1038,84,0
-CPU5,Kazuya,1188,76,-2
-CPU7,Kazuya,1290,79,-4
-CPU8,Kazuya,1523,69,-8
-CPU9,Kazuya,1762,70,0
-CPU9,Byleth,1679,72,14
+CPU5,Kazuya,1188,76,0
+CPU7,Kazuya,1290,79,0
+CPU8,Kazuya,1516,69,0
+CPU9,Kazuya,1757,70,0
+CPU9,Byleth,1679,72,0
 CPU9,Mythra/Pyra,1458,69,0
 JT,Ganondorf,2003,92,0
 JT,Shulk,1872,135,0
 JT,Hero,1826,142,0
-Joey,Mythra/Pyra,1882,69,0
+Joey,Mythra/Pyra,1888,69,0
 Joey,Captain Falcon,1666,73,0
-Joey,Cloud,1688,76,0
+Joey,Cloud,1704,75,0
 Joey,ZSS,1664,127,0
 Kevin,Sheik,1594,123,0
-Kevin,Minmin,1646,94,0
-Milky,Kazuya,1700,127,0
-Milky,Ike,1643,234,0
+Kevin,Minmin,1655,90,0
+Milky,Kazuya,1667,121,0
+Milky,Ike,1753,163,0
 Milky,Pikachu,1566,142,0
 Travis,Sora,1570,114,0
 Travis,Lucina,1382,141,0
-Travis,Mythra/Pyra,1453,118,0
+Travis,Mythra/Pyra,1438,114,0
 Joey,Wolf,1552,144,0
+Akira,Cloud,1338,290,0
+Thomas,Lucina,1522,241,0
