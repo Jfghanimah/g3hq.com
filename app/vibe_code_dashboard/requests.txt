@@ -1,11 +1,9 @@
 ADJUST THIS PAGE WHEN YOU ADD FROM IT!!!
 CLEANUP:
-- Reddit placeholder guard so broken [COMMON BELIEF] / WAKE UP style posts do not render MUST FIX!!
 - Too many elemeents in top tab too much space so its overlapping
 - too many flight notifactions pls reduce frequency
 - when you click on a flight for details it shouldnt squish the map the menu that pops up should just be overlayed
 - also the flight details are too small the text make it a dad bigger 20% bigger?
-- too many slop toasts that make noise its desensitizing the user to real noise queues i dont like the slop toasts 
 - the radar seems hard to play with bc it keeps asking for confirmation make the user 'shoot missiles' at the purple blips that show up remove space invader mechanics
 - [ ] flights slowed down more
 - [ ] reroute should respect current in-flight position instead of resetting
@@ -13,7 +11,6 @@ CLEANUP:
 
 
 BACKLOG SUGGESTED IDEAS:
-
 -- FINANCIAL DESPAIR --
 - WORKING credit score tracker
 - Subscription drain tracker — lists fake subs (Netflix, Hulu, "THING YOU SIGNED UP FOR IN 2019"), total bleeding per month
@@ -50,7 +47,6 @@ AI SUGGESTED IDEAS:
 - one absurd ultra-rare radar event where every blip becomes a pizza delivery route for 10 seconds
 - decoy contacts named after inside jokes like DrDoughnut, mork, and Goat Gamers Gaming
 - IRS Audit Threat Level meter that spikes every time you win a hand of Blackjack or approve a shady funding request.
-- Fake Uber Eats tracker for a 40-piece McNugget meal that gets progressively more delayed until the status updates to "Driver ate your food".
 - Add a fake "live patch notes" popup where the game client claims it fixed matchmaking, then immediately says "known issue: it did not."
 - Add a rotating bunker-cam module that occasionally cuts to static and comes back with someone clearly standing in the wrong country.
 - Add a fake stockbreaker event where the trading terminal freezes for 6 seconds and a banner says "VOLATILITY HALT :: YOU CAUSED THIS."

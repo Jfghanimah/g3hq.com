@@ -125,7 +125,7 @@ let propagandaOnCooldown=false;
 
 function isRenderableSlopText(text) {
   if(!text) return false;
-  return !/\[[A-Z][A-Z\s]{2,}\]/.test(text);
+  return !/\[[A-Z][A-Z0-9_\-\s]{2,}\]/.test(text);
 }
 
 function pickRenderable(factoryList, attempts = 12) {
@@ -134,6 +134,14 @@ function pickRenderable(factoryList, attempts = 12) {
     if(isRenderableSlopText(next)) return next;
   }
   return null;
+}
+
+function findNextRenderablePromptIndex(startIdx = currentPropIdx) {
+  for(let offset = 0; offset < PROPAGANDA_PROMPTS.length; offset++) {
+    const idx = (startIdx + offset) % PROPAGANDA_PROMPTS.length;
+    if(isRenderableSlopText(PROPAGANDA_PROMPTS[idx])) return idx;
+  }
+  return -1;
 }
 
 function switchSlop(mode){
@@ -270,7 +278,7 @@ function makeInsiderPost(){
       <div class="chan-footer"><span>${randi(200,2000)} replies</span><span>HOLY BASED</span></div>`;
     cFeed.insertBefore(fdiv,cFeed.firstChild);
     while(cFeed.children.length>6) cFeed.removeChild(cFeed.lastChild);
-    toast(`📈 ${tip.ticker} ${tip.pct} — THE ANON WAS RIGHT`, 'var(--green)');
+    toast(`📈 ${tip.ticker} ${tip.pct} — THE ANON WAS RIGHT`, 'var(--green)', true);
   }, delay);
 }
 
@@ -333,9 +341,16 @@ function makeDmPost(){
 // Propaganda cycling
 let currentPropIdx=0;
 function cyclePropaganda(){
-  currentPropIdx=(currentPropIdx+1)%PROPAGANDA_PROMPTS.length;
+  // Only surface fully rendered prompts; placeholder sludge should never enter the UI.
+  const nextIdx = findNextRenderablePromptIndex(currentPropIdx + 1);
+  if(nextIdx === -1) {
+    document.getElementById('propaganda-prompt').textContent='[ 📡 NO SAFE ELON DIRECTIVE AVAILABLE ]';
+    return;
+  }
+  currentPropIdx = nextIdx;
   document.getElementById('propaganda-prompt').textContent='[ 📡 '+PROPAGANDA_PROMPTS[currentPropIdx]+' ]';
 }
+currentPropIdx = Math.max(0, findNextRenderablePromptIndex(0));
 setInterval(cyclePropaganda, 90000);
 
 // Initial posts

@@ -290,10 +290,10 @@ if(volumeSlider) {
 }
 
 let toastTimer;
-function toast(msg, color='var(--green)') {
+function toast(msg, color='var(--green)', silent=false) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.style.borderColor = color; el.style.color = color;
   el.classList.add('show'); clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 5000);
-  playUiSound('toast');
+  if(!silent) playUiSound('toast');
 }

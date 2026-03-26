@@ -239,7 +239,7 @@ function triggerCrash(plane) {
     `EPSTEIN LINK: ${pick(['UNCONFIRMED', 'BEING INVESTIGATED', 'NO COMMENT', 'CLASSIFIED'])}`;
   document.getElementById('crash-modal').classList.add('show');
   playUiSound('crash-alert');
-  toast(`⚠ ${plane.callsign} :: SIGNAL LOST OVER ${route[1]} REGION`, plane.color);
+  toast(`⚠ ${plane.callsign} :: SIGNAL LOST OVER ${route[1]} REGION`, plane.color, true);
   clearTimeout(crashAutoTimer);
   crashAutoTimer = setTimeout(() => {
     document.getElementById('crash-modal').classList.remove('show');
@@ -253,7 +253,7 @@ function triggerCrash(plane) {
     if(selectedPlaneId === plane.id) selectedPlaneId = null;
     plane.routeIdx = randi(0, plane.routes.length - 1);
     updateFlightInfo();
-    toast(`📡 ${plane.callsign} :: SIGNAL REACQUIRED. OFFICIAL EXPLANATION: WEATHER.`, plane.color);
+    toast(`📡 ${plane.callsign} :: SIGNAL REACQUIRED. OFFICIAL EXPLANATION: WEATHER.`, plane.color, true);
   }, 50000);
 }
 
@@ -374,10 +374,10 @@ function drawCrosshair(x, y, color) {
 
 function drawFlightMap() {
   const panel = document.getElementById('panel-flight');
-  const info = document.getElementById('flight-info');
   const title = panel.querySelector('.panel-title');
   const W = FC.width = panel.clientWidth;
-  const H = FC.height = Math.max(250, panel.clientHeight - info.clientHeight - title.clientHeight);
+  // Flight details are an overlay; they should not steal height from the map canvas.
+  const H = FC.height = Math.max(250, panel.clientHeight - title.clientHeight);
   FX.clearRect(0, 0, W, H);
 
   FX.fillStyle = '#020408';

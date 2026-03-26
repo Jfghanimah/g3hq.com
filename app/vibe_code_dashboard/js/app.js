@@ -27,6 +27,7 @@ function advanceMcnugget() {
     setTimeout(() => { mcnuggetEl.classList.remove('show'); }, 8000);
     return;
   }
+  // This intentionally escalates from normal delivery updates into a doomed-order bit.
   const stage = MCNUGGET_STAGES[mcnuggetStage];
   mcnuggetText.textContent = stage.text;
   mcnuggetText.style.color = stage.color;
