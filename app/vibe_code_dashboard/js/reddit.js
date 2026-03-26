@@ -312,6 +312,7 @@ const DM_REPLIES=['ratio','skill issue','ratio + skill issue','L','cope','not re
 const dmFeed = document.getElementById('dm-feed');
 
 function makeDmPost(){
+  // This feed is intentionally one-sided: incoming nonsense, automatic "ratio/skill issue" reply.
   const sender=pick(DM_SENDERS);
   const platform=pick(DM_PLATFORMS);
   const msg=pick(DM_MSGS)();

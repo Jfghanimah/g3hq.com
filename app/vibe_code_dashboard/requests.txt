@@ -51,7 +51,6 @@ AI SUGGESTED IDEAS:
 - decoy contacts named after inside jokes like DrDoughnut, mork, and Goat Gamers Gaming
 - IRS Audit Threat Level meter that spikes every time you win a hand of Blackjack or approve a shady funding request.
 - Fake Uber Eats tracker for a 40-piece McNugget meal that gets progressively more delayed until the status updates to "Driver ate your food".
-- Add a "Tinder/Discord" auto-responder module that just replies "ratio" and "skill issue" to incoming unhinged DMs.
 - Add a fake "live patch notes" popup where the game client claims it fixed matchmaking, then immediately says "known issue: it did not."
 - Add a rotating bunker-cam module that occasionally cuts to static and comes back with someone clearly standing in the wrong country.
 - Add a fake stockbreaker event where the trading terminal freezes for 6 seconds and a banner says "VOLATILITY HALT :: YOU CAUSED THIS."
