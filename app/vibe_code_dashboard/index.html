@@ -33,21 +33,6 @@
   </div>
 </div>
 
-<!-- CRASH INVESTIGATION MODAL -->
-<div id="crash-modal">
-  <div id="crash-box">
-    <div id="crash-hdr">🚨 AVIATION INCIDENT DETECTED 🚨</div>
-    <div id="crash-callsign">???</div>
-    <div id="crash-name">SIGNAL LOST</div>
-    <div id="crash-location">LAST KNOWN: ???</div>
-    <div id="crash-evidence">BLACK BOX: PENDING · SURVIVORS: CLASSIFIED</div>
-    <div class="crash-btns">
-      <button class="cr-btn cr-investigate" onclick="investigateCrash()">[ 🔍 INVESTIGATE BLACK BOX ]</button>
-      <button class="cr-btn cr-coverup" onclick="coverupCrash()">[ 🤫 INITIATE COVERUP ]</button>
-    </div>
-    <div id="crash-fine">*Investigating may result in IRS audit. Coverup constitutes taxpayer consent per Aviation Act §420.69. You agreed to this.</div>
-  </div>
-</div>
 
 <!-- FUNDING REQUEST MODAL -->
 <div id="funding-modal">
@@ -261,6 +246,21 @@
   <div class="panel" id="panel-flight">
     <div class="panel-title">✈ FLIGHT TRACKER :: LIVE :: <span id="ft-status" style="color:var(--orange);font-size:10px">5 AIRCRAFT + 1 GROUND UNIT MONITORED</span></div>
     <canvas id="flight-canvas"></canvas>
+    <!-- CRASH INVESTIGATION MODAL -->
+    <div id="crash-modal">
+      <div id="crash-box">
+        <div id="crash-hdr">🚨 AVIATION INCIDENT DETECTED 🚨</div>
+        <div id="crash-callsign">???</div>
+        <div id="crash-name">SIGNAL LOST</div>
+        <div id="crash-location">LAST KNOWN: ???</div>
+        <div id="crash-evidence">BLACK BOX: PENDING · SURVIVORS: CLASSIFIED</div>
+        <div class="crash-btns">
+          <button class="cr-btn cr-investigate" onclick="investigateCrash()">[ 🔍 INVESTIGATE BLACK BOX ]</button>
+          <button class="cr-btn cr-coverup" onclick="coverupCrash()">[ 🤫 INITIATE COVERUP ]</button>
+        </div>
+        <div id="crash-fine">*Investigating may result in IRS audit. Coverup constitutes taxpayer consent per Aviation Act §420.69. You agreed to this.</div>
+      </div>
+    </div>
     <div id="flight-info">
       <div class="plane-card" id="plane-info-bigyahu"></div>
       <div class="plane-card" id="plane-info-dadatrump"></div>

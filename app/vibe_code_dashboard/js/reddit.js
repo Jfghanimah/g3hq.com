@@ -109,6 +109,17 @@ const CHAN_TMPLS=[
   ()=>`>bitcoin up 2%\n>time to declare victory on main social\n>bitcoin down 3% next day\n>delete the post\n>pretend it never happened\n>repeat monthly`,
 ];
 
+const INSIDER_TIPS=[
+  { ticker:'NVDA', action:'BUY', pct:'+14%', hint:'>uncle works at nvidia\n>Q3 numbers "not what people expect"\n>not saying buy\n>just saying my uncle drives a new lambo\n>do with that what you will\n>NOT FINANCIAL ADVICE' },
+  { ticker:'AAPL', action:'SELL', pct:'-8%', hint:'>worked catering at a "product reveal" event\n>saw the slide deck by accident\n>it\'s just the same phone again\n>but thinner\n>and $200 more\n>SELL\n>trust me bro' },
+  { ticker:'GME', action:'BUY', pct:'+340%', hint:'>they said it was dead\n>they were wrong before\n>check the short interest\n>i\'m not saying anything\n>i\'m just saying\n>🦍💎🚀\n>NOT FINANCIAL ADVICE' },
+  { ticker:'TSLA', action:'SELL', pct:'-11%', hint:'>have a contact at a major rental fleet\n>they\'re returning 4,000 units\n>"range anxiety" issues\n>announcement drops friday\n>don\'t say i didn\'t warn you\n>source: trust me' },
+  { ticker:'META', action:'BUY', pct:'+19%', hint:'>ad revenue numbers leaked internally\n>Q4 blew past estimates\n>metaverse is still cringe but somehow profitable\n>zuckerberg actually lizard AND genius\n>loading up calls\n>NOT FINANCIAL ADVICE' },
+  { ticker:'DOGE', action:'BUY', pct:'+88%', hint:'>certain prominent individual\n>has been accumulating\n>wallet address ends in ...6969\n>announcement imminent\n>this is not a drill\n>i will be deleting this post' },
+  { ticker:'AMZN', action:'BUY', pct:'+12%', hint:'>prime day numbers\n>internal memo says record-breaking\n>bezos texted someone\n>that someone texted me\n>i have one share and i am scared\n>NOT FINANCIAL ADVICE' },
+  { ticker:'PLTR', action:'BUY', pct:'+27%', hint:'>government contract renewal\n>not public yet\n>amount has 10 digits\n>palantir sees everything apparently including gains\n>my dad works at the pentagon\n>anyway' },
+];
+
 let postVotes={};
 let propagandaOnCooldown=false;
 
@@ -147,7 +158,6 @@ function makePost(){
 }
 
 function makeChanPost(){
-  if(slopMode!=='4chan') return;
   const board=pick(BOARDS);
   const content=pick(CHAN_TMPLS)();
   const anonId='Anonymous '+randi(1000,9999);
@@ -186,7 +196,7 @@ function postPropaganda(){
   const div=document.createElement('div'); div.className='reddit-post rpost-pinned'; div.id=pid;
   div.innerHTML=`
     <div class="rpost-sub" style="color:var(--red)">📌 r/BREAKING</div>
-    <div class="rpost-title">${prompt}</div>
+    <div class="rpost-title">${PROPAGANDA_PROMPTS[currentPropIdx]}</div>
     <div class="rpost-meta">
       <button class="vote-btn vote-up">▲</button>
       <span class="rpost-ups">${(999000).toLocaleString()}</span>
@@ -204,7 +214,44 @@ function postPropaganda(){
   toast('💰 ELON MUSK MEDIA GRANT: +$1,000. KEEP POSTING.', '#00ff41');
 }
 
-function awardPost(pid){
+function makeInsiderPost(){
+  const tip=pick(INSIDER_TIPS);
+  const cid='insider'+Date.now();
+  const anonId='Anonymous '+randi(1000,9999);
+  const div=document.createElement('div'); div.className='chan-post chan-insider'; div.id=cid;
+  div.innerHTML=`
+    <div class="chan-hdr">
+      <span class="chan-board">/biz/</span>
+      <span class="chan-anon">${anonId}</span>
+      <span class="chan-time">${Math.floor(Math.random()*24)}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}</span>
+      <span class="chan-insider-tag">⚠️ INSIDER</span>
+    </div>
+    <div class="chan-content">${tip.hint}</div>
+    <div class="chan-footer"><span>${randi(40,600)} replies</span><span>i will delete this</span></div>`;
+  cFeed.insertBefore(div,cFeed.firstChild);
+  while(cFeed.children.length>6) cFeed.removeChild(cFeed.lastChild);
+
+  // "Prediction comes true" follow-up after 30–60s
+  const delay=randi(30,60)*1000;
+  setTimeout(()=>{
+    const fid='insider-confirm'+Date.now();
+    const fdiv=document.createElement('div'); fdiv.className='chan-post chan-insider-confirm'; fdiv.id=fid;
+    fdiv.innerHTML=`
+      <div class="chan-hdr">
+        <span class="chan-board">/biz/</span>
+        <span class="chan-anon">Anonymous ${randi(1000,9999)}</span>
+        <span class="chan-time">${Math.floor(Math.random()*24)}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}</span>
+        <span class="chan-insider-tag" style="color:var(--green)">✅ UPDATE</span>
+      </div>
+      <div class="chan-content">>be me\n>saw that ${tip.ticker} post earlier\n>bought immediately\n>${tip.ticker} just moved ${tip.pct}\n>I am crying\n>who WAS that guy\n>thread already deleted\n>I owe him my life</div>
+      <div class="chan-footer"><span>${randi(200,2000)} replies</span><span>HOLY BASED</span></div>`;
+    cFeed.insertBefore(fdiv,cFeed.firstChild);
+    while(cFeed.children.length>6) cFeed.removeChild(cFeed.lastChild);
+    toast(`📈 ${tip.ticker} ${tip.pct} — THE ANON WAS RIGHT`, 'var(--green)');
+  }, delay);
+}
+
+function awardPost(_pid){
   const awards=['🏆 GOLDEN AWARD','💩 FACEPALM GOLD','🫂 WHOLESOME SEAL','❤️ HEARTFELT MOMENT','🎭 UNHINGED GENIUS','⚡ INCENDIARY TRUTH'];
   toast(`${pick(awards)} GIVEN`, '#ffb300');
 }
@@ -234,3 +281,5 @@ makePost(); makePost(); makePost();
 makeChanPost(); makeChanPost(); makeChanPost();
 setInterval(makePost, 8000);
 setInterval(makeChanPost, 10000);
+// Insider tips drop every 2–3 minutes, first one after 45s
+setTimeout(()=>{ makeInsiderPost(); setInterval(makeInsiderPost, randi(120,180)*1000); }, 45000);
