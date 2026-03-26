@@ -180,7 +180,7 @@ function queuePropagandaOpportunity() {
     propagandaAvailable = true;
     syncPropagandaBar();
     playUiSound('league-alert');
-    toast('📣 ELON POSTING WINDOW OPEN :: POST IT', 'var(--amber)');
+    toast('📣 ELON POSTING WINDOW OPEN :: POST IT', 'var(--amber)', true);
   }, randi(70, 140) * 1000);
 }
 
@@ -247,7 +247,7 @@ function postPropaganda(){
   if(propagandaOnCooldown || !propagandaAvailable) return;
   const prompt = PROPAGANDA_PROMPTS[currentPropIdx];
   if(!isRenderableSlopText(prompt)) {
-    toast('POST TEMPLATE REJECTED :: PLACEHOLDER TEXT DETECTED', 'var(--red)');
+    toast('POST TEMPLATE REJECTED :: PLACEHOLDER TEXT DETECTED', 'var(--red)', true);
     playUiSound('deny');
     propagandaAvailable = false;
     syncPropagandaBar();
@@ -284,7 +284,7 @@ function postPropaganda(){
   checkingBalance+=1000;
   updateChecking();
   playUiSound('cash');
-  toast('💰 ELON MUSK MEDIA GRANT: +$1,000. KEEP POSTING.', '#00ff41');
+  toast('💰 ELON MUSK MEDIA GRANT: +$1,000. KEEP POSTING.', '#00ff41', true);
 }
 
 function makeInsiderPost(){

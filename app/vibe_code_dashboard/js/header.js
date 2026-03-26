@@ -115,11 +115,37 @@ function addMoney(amount) {
 
 // ══ IRS AUDIT LEVEL ══
 let irsLevel = 0;
+let lastIrsBand = -1;
+function updateIRSDisplay() {
+  const el = document.getElementById('irs-level');
+  const bar = document.getElementById('irs-bar');
+  const pct = Math.max(0, Math.min(100, irsLevel));
+  const band = pct >= 75 ? 3 : pct >= 45 ? 2 : pct >= 15 ? 1 : 0;
+
+  if(bar) bar.style.width = pct + '%';
+  if(el) {
+    el.textContent = 'LVL ' + irsLevel;
+    el.className = 'hstat-val ' + (band >= 3 ? 'v-red pulse' : band >= 2 ? 'v-amber' : band >= 1 ? 'v-magenta' : 'v-green');
+  }
+
+  if(band !== lastIrsBand) {
+    if(band === 1) toast('IRS NOTICE :: MINOR PAPER TRAIL DETECTED', 'var(--magenta)', true);
+    if(band === 2) toast('IRS THREAT LEVEL RISING :: RECEIPTS REQUESTED', 'var(--amber)');
+    if(band === 3) toast('IRS AUDIT IMMINENT :: LAWYER UP', 'var(--red)');
+    lastIrsBand = band;
+  }
+}
+
 function spikeIRS(amount) {
   irsLevel = Math.min(irsLevel + (amount || randi(1,3)), 99);
-  const el = document.getElementById('irs-level');
-  if(el) el.textContent = 'LVL ' + irsLevel;
+  updateIRSDisplay();
 }
+
+setInterval(() => {
+  if(irsLevel <= 0) return;
+  irsLevel = Math.max(0, irsLevel - 1);
+  updateIRSDisplay();
+}, 12000);
 
 // ══ BANK ══
 let cryptoPortValue = 69;
@@ -130,6 +156,7 @@ setInterval(()=>{
 },4000);
 
 updateBankUI();
+updateIRSDisplay();
 
 // ══ WI-FI SIGNAL ══
 let wifiSignal = 67;

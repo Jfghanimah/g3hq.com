@@ -9,6 +9,9 @@ let threatCount = 0;
 let missileBursts = [];
 const radarLog = document.getElementById('radar-log');
 const MAX_BLIPS = 7;
+const MISSILE_TRAVEL_MS = 900;
+const MISSILE_EXPLOSION_MS = 360;
+const lerp = (a, b, t) => a + (b - a) * t;
 
 const radarDefcon = document.getElementById('radar-defcon');
 const radarAirspace = document.getElementById('radar-airspace');
@@ -254,33 +257,47 @@ function drawRadar() {
     rCtx.fillText(b.label, bx + 10, by + 4);
   });
 
-  missileBursts = missileBursts.filter(burst => now - burst.started < 420);
+  missileBursts = missileBursts.filter(burst => now - burst.started < burst.duration + MISSILE_EXPLOSION_MS);
   missileBursts.forEach(burst => {
-    const t = Math.min(1, (now - burst.started) / 420);
+    const flightT = Math.min(1, (now - burst.started) / burst.duration);
+    const explosionT = Math.max(0, Math.min(1, (now - burst.started - burst.duration) / MISSILE_EXPLOSION_MS));
     const sx = cx;
     const sy = cy;
-    const mx = lerp(sx, burst.tx, t);
-    const my = lerp(sy, burst.ty, t);
-    rCtx.strokeStyle = `rgba(255,179,0,${1 - t * 0.45})`;
-    rCtx.lineWidth = 2.4;
-    rCtx.shadowColor = '#ffb300';
-    rCtx.shadowBlur = 12;
-    rCtx.beginPath();
-    rCtx.moveTo(sx, sy);
-    rCtx.lineTo(mx, my);
-    rCtx.stroke();
-    rCtx.shadowBlur = 0;
+    const mx = lerp(sx, burst.tx, flightT);
+    const my = lerp(sy, burst.ty, flightT);
 
-    rCtx.fillStyle = `rgba(255,220,120,${1 - t * 0.25})`;
-    rCtx.beginPath();
-    rCtx.arc(mx, my, 3.5, 0, Math.PI * 2);
-    rCtx.fill();
-
-    if(t >= 0.92) {
-      rCtx.strokeStyle = `rgba(255,179,0,${1 - t})`;
-      rCtx.lineWidth = 2;
+    if(flightT < 1) {
+      rCtx.strokeStyle = `rgba(255,179,0,${1 - flightT * 0.35})`;
+      rCtx.lineWidth = 2.4;
+      rCtx.shadowColor = '#ffb300';
+      rCtx.shadowBlur = 12;
       rCtx.beginPath();
-      rCtx.arc(burst.tx, burst.ty, 8 + t * 16, 0, Math.PI * 2);
+      rCtx.moveTo(sx, sy);
+      rCtx.lineTo(mx, my);
+      rCtx.stroke();
+      rCtx.shadowBlur = 0;
+
+      rCtx.fillStyle = `rgba(255,220,120,${1 - flightT * 0.2})`;
+      rCtx.beginPath();
+      rCtx.arc(mx, my, 3.5, 0, Math.PI * 2);
+      rCtx.fill();
+    } else {
+      const blastRadius = 10 + explosionT * 22;
+      rCtx.fillStyle = `rgba(255,220,120,${1 - explosionT * 0.75})`;
+      rCtx.beginPath();
+      rCtx.arc(burst.tx, burst.ty, 5 + explosionT * 6, 0, Math.PI * 2);
+      rCtx.fill();
+
+      rCtx.strokeStyle = `rgba(255,179,0,${1 - explosionT})`;
+      rCtx.lineWidth = 2.2;
+      rCtx.beginPath();
+      rCtx.arc(burst.tx, burst.ty, blastRadius, 0, Math.PI * 2);
+      rCtx.stroke();
+
+      rCtx.strokeStyle = `rgba(255,90,0,${1 - explosionT})`;
+      rCtx.lineWidth = 1.4;
+      rCtx.beginPath();
+      rCtx.arc(burst.tx, burst.ty, blastRadius * 0.62, 0, Math.PI * 2);
       rCtx.stroke();
     }
   });
@@ -323,6 +340,7 @@ function addRadarLog(threat, neutralized) {
 function radarTick() {
   rAngle += 0.02;
   if(rAngle > Math.PI * 2) rAngle -= Math.PI * 2;
+  resolveMissileBursts();
 
   AMBIENT_TRACKS.forEach(track => {
     track.x += track.vx;
@@ -333,7 +351,7 @@ function radarTick() {
   // Ultra-rare pizza delivery hijack (~0.03% per tick ≈ once every ~55 seconds)
   if(Math.random() < 0.0003 && !pizzaMode && blips.length > 0) triggerPizzaMode();
 
-  if(Math.random() < 0.012 && blips.length < MAX_BLIPS) {
+  if(Math.random() < 0.007 && blips.length < MAX_BLIPS) {
     const angle = rAngle + (Math.random() - 0.5) * 0.5;
     const dist = rand(0.18, 0.88);
     const threat = pizzaMode ? pick(PIZZA_LABELS) : pick(THREATS);
@@ -352,11 +370,32 @@ function radarTick() {
 function fireRadarMissile(blip, cx, cy, R) {
   const tx = cx + blip.x * R;
   const ty = cy + blip.y * R;
-  missileBursts.push({ tx, ty, started: Date.now() });
-  blips = blips.filter(b => b !== blip);
-  playUiSound('neutralize');
-  addRadarLog(blip.label, true);
-  toast(`MISSILE AWAY :: ${blip.label} SPLASHED`, 'var(--amber)');
+  missileBursts.push({
+    tx,
+    ty,
+    started: Date.now(),
+    duration: MISSILE_TRAVEL_MS,
+    blip,
+    exploded: false,
+    resolved: false,
+  });
+  toast(`MISSILE AWAY :: ${blip.label}`, 'var(--amber)', true);
+}
+
+function resolveMissileBursts() {
+  const now = Date.now();
+  missileBursts.forEach(burst => {
+    if(!burst.exploded && now - burst.started >= burst.duration) {
+      burst.exploded = true;
+      playUiSound('crash-investigate');
+    }
+    if(!burst.resolved && now - burst.started >= burst.duration + MISSILE_EXPLOSION_MS * 0.45) {
+      burst.resolved = true;
+      blips = blips.filter(b => b !== burst.blip);
+      addRadarLog(burst.blip.label, true);
+      toast(`TARGET SPLASHED :: ${burst.blip.label}`, 'var(--amber)', true);
+    }
+  });
 }
 
 rCanvas.addEventListener('click', e => {

@@ -14,6 +14,7 @@
 #boot-status{font-size:11px;color:var(--cyan);letter-spacing:2px;}
 #boot-cta{font-size:18px;color:var(--green);border:1px solid var(--green);padding:10px 32px;letter-spacing:4px;animation:blink 1s infinite;margin-top:12px;}
 #boot-cta:hover{background:rgba(0,255,65,0.08);text-shadow:0 0 12px var(--green);}
+#boot-note{max-width:480px;font-size:11px;line-height:1.6;color:var(--amber);border:1px solid rgba(255,179,0,0.45);padding:10px 14px;background:rgba(255,179,0,0.06);}
 
 body {
   background:var(--bg); color:var(--green);

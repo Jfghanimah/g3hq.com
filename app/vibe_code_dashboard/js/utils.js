@@ -270,6 +270,7 @@ function playUiSound(kind = 'toast') {
 }
 
 function bootEnter() {
+  if(isMobileBlocked()) return;
   const splash = document.getElementById('boot-splash');
   if(splash) {
     splash.style.opacity = '0';
@@ -278,9 +279,44 @@ function bootEnter() {
   unlockAudio();
 }
 
+function isMobileBlocked() {
+  const touchDevice = window.matchMedia('(pointer: coarse)').matches;
+  return touchDevice || window.innerWidth < 1100;
+}
+
+function updateBootAccessState() {
+  const status = document.getElementById('boot-status');
+  const cta = document.getElementById('boot-cta');
+  const note = document.getElementById('boot-note');
+  if(!status || !cta || !note) return;
+
+  if(isMobileBlocked()) {
+    status.textContent = 'DESKTOP REQUIRED · MOBILE CONNECTION BLOCKED';
+    status.style.color = 'var(--red)';
+    cta.textContent = '[ DESKTOP ONLY ]';
+    cta.style.color = 'var(--red)';
+    cta.style.borderColor = 'var(--red)';
+    cta.style.animation = 'none';
+    note.style.display = 'block';
+    note.textContent = 'This dashboard is currently desktop-only. Open it on a desktop/laptop browser to continue.';
+    return;
+  }
+
+  status.textContent = 'SYSTEMS ONLINE · AUDIO READY';
+  status.style.color = '';
+  cta.textContent = '[ CLICK TO ENTER ]';
+  cta.style.color = '';
+  cta.style.borderColor = '';
+  cta.style.animation = '';
+  note.style.display = 'none';
+  note.textContent = '';
+}
+
 document.addEventListener('pointerdown', unlockAudio, { once:true });
 document.addEventListener('keydown', e => { if(document.getElementById('boot-splash')) bootEnter(); else unlockAudio(); }, { once:true });
 setDashVolume(dashVolume);
+updateBootAccessState();
+window.addEventListener('resize', updateBootAccessState);
 
 const volumeSlider = document.getElementById('master-volume');
 if(volumeSlider) {

@@ -8,6 +8,5 @@ TOP IDEAS:
 - Fake stockbreaker event — trading terminal freezes 6 seconds, banner says "VOLATILITY HALT :: YOU CAUSED THIS"
 - Nuclear sub rare event — one blip on flight tracker briefly pings "hello :)" then disappears from the map
 - NORAD dossier card — fake "OBJECT OF INTEREST" card slides out when you click a radar contact
-- IRS Audit Threat Level meter — spikes every time you win blackjack or approve a funding request
 - Subscription drain tracker — lists fake subs (Netflix, Hulu, "THING YOU SIGNED UP FOR IN 2019"), total bleed per month
 - Live patch notes popup — claims it fixed matchmaking, immediately says "known issue: it did not"
