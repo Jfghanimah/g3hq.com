@@ -130,3 +130,72 @@ setInterval(()=>{
 },4000);
 
 updateBankUI();
+
+// ══ WI-FI SIGNAL ══
+let wifiSignal = 67;
+setInterval(()=>{
+  wifiSignal = Math.max(15, Math.min(95, wifiSignal + randi(-8,8)));
+  const el = document.getElementById('wifi-signal');
+  if(el) {
+    el.textContent = wifiSignal+'%';
+    el.className = wifiSignal > 75 ? 'hstat-val v-green' : wifiSignal > 50 ? 'hstat-val v-cyan' : 'hstat-val v-amber';
+  }
+},2500);
+
+// ══ EMAIL INBOX ══
+let inboxUnread = 847;
+setInterval(()=>{
+  inboxUnread += randi(3,12);
+  const el = document.getElementById('inbox-unread');
+  if(el) el.textContent = inboxUnread;
+},60000); // every minute
+
+// ══ TESTOSTERONE LEVEL ══
+const testosteroneReadings = ['LOW NORMAL','SUBOPTIMAL','NEEDING RED MEAT','CONCERNING'];
+let testLevel = testosteroneReadings[0];
+setInterval(()=>{
+  testLevel = pick(testosteroneReadings);
+  const el = document.getElementById('test-level');
+  if(el) el.textContent = testLevel;
+},8000);
+
+// ══ AMAZON PACKAGE TRACKER ══
+const amazonMessages = [
+  'PACKAGE STUCK: OUT FOR DELIVERY (11 DAYS)',
+  'PACKAGE STUCK: DELIVERY ATTEMPTED - NOBODY HOME',
+  'PACKAGE STUCK: IN TRANSIT (ALBUQUERQUE)',
+  'PACKAGE STUCK: WEATHER DELAY',
+  'PACKAGE STUCK: DRIVER LAST SEEN: UNKNOWN LOCATION'
+];
+let currentAmazonMsg = amazonMessages[0];
+setInterval(()=>{
+  currentAmazonMsg = pick(amazonMessages);
+  const el = document.getElementById('amazon-text');
+  if(el) el.textContent = '📦 ' + currentAmazonMsg;
+},15000);
+
+// ══ MISSION TIMER ══
+const missionNames = ['LOCATE MOHAN','AVOID BLACKROCK','DEFEND THE BUNKER','TRUST THE PLAN','FIND THE SIGNAL','DECODE THE MESSAGE'];
+const missionProgress = [99, 99, 99, 99, 99];
+let currentMission = pick(missionNames);
+let missionIdx = missionNames.indexOf(currentMission);
+setInterval(()=>{
+  if(Math.random() < 0.25) currentMission = pick(missionNames);
+  const el = document.getElementById('mission-text');
+  if(el) el.textContent = '⚔ MISSION: ' + currentMission + ' · 99%';
+},12000);
+
+// Show trackers randomly
+setInterval(()=>{
+  if(Math.random() < 0.4) {
+    document.getElementById('amazon-tracker').classList.add('show');
+    setTimeout(()=>document.getElementById('amazon-tracker').classList.remove('show'), 8000);
+  }
+},45000);
+
+setInterval(()=>{
+  if(Math.random() < 0.35) {
+    document.getElementById('mission-timer').classList.add('show');
+    setTimeout(()=>document.getElementById('mission-timer').classList.remove('show'), 10000);
+  }
+},50000);

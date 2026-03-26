@@ -19,6 +19,8 @@
 </div>
 <div id="toast"></div>
 <div id="mcnugget-tracker"><span id="mcnugget-text">🍗 ORDER PLACED: 40PC MCNUGGET</span></div>
+<div id="amazon-tracker"><span id="amazon-text">📦 PACKAGE STUCK: OUT FOR DELIVERY (11 DAYS)</span></div>
+<div id="mission-timer"><span id="mission-text">⚔ MISSION: LOCATE MOHAN · 99%</span></div>
 <audio id="bg-music" loop src="audio_clips/HOME - Resonance.mp3" preload="auto"></audio>
 
 <!-- SUGGESTION BOX MODAL -->
@@ -118,6 +120,10 @@
   <div class="hstat"><span class="hstat-lbl">RENT PAID</span><div class="bar-wrap"><div class="bar-fill br" style="width:0%"></div></div><span class="hstat-val v-red">0%</span></div>
   <div class="hstat"><span class="hstat-lbl">THREATS</span><span class="hstat-val v-magenta pulse" id="threat-count">0</span></div>
   <div class="hstat"><span class="hstat-lbl">IRS AUDIT</span><span class="hstat-val v-red" id="irs-level">LVL 0</span></div>
+  <div class="hstat"><span class="hstat-lbl">WIFI</span><span class="hstat-val v-cyan" id="wifi-signal">67%</span></div>
+  <div class="hstat"><span class="hstat-lbl">PTO</span><span class="hstat-val v-red" id="pto-days">OWES 2D</span></div>
+  <div class="hstat"><span class="hstat-lbl">TEST</span><span class="hstat-val v-amber" id="test-level">LOW NORMAL</span></div>
+  <div class="hstat"><span class="hstat-lbl">INBOX</span><span class="hstat-val v-magenta pulse" id="inbox-unread">847</span></div>
   <div class="hstat"><span class="hstat-lbl">GRASS TOUCHED</span><span class="hstat-val v-green">0 days, 0 hrs</span></div>
   <div id="bank-block">
     <div class="bank-item"><span class="bank-lbl">💳 CHECKING</span><span class="bank-val v-red pulse" id="bank-checking">$5.00</span></div>
@@ -167,10 +173,6 @@
       <div id="ufo-lab-main">
         <div id="ufo-cam-wrap">
           <iframe id="ufo-cam" src="https://www.dvidshub.net/video/embed/830260" width="100%" height="100%" frameborder="0" allowfullscreen allow="autoplay"></iframe>
-          <div id="ufo-controls">
-            <button class="ufo-btn" id="ufo-retarget" type="button">RETARGET</button>
-            <button class="ufo-btn" id="ufo-jam" type="button">JAM FEED</button>
-          </div>
         </div>
       </div>
     </div>
