@@ -98,8 +98,8 @@
   <span style="font-size:10px;color:#5577cc">SYS:ONLINE · BUILD:<span id="hdr-build">v2.1.??</span></span>
   <div id="audio-controls">
     <label for="master-volume">VOL</label>
-    <input id="master-volume" type="range" min="0" max="100" step="1" value="35">
-    <span id="master-volume-val">35%</span>
+    <input id="master-volume" type="range" min="0" max="100" step="1" value="100">
+    <span id="master-volume-val">100%</span>
   </div>
   <div id="hdr-clock">00:00:00</div>
   <button id="suggest-btn" onclick="openSuggestModal()" title="Submit a suggestion">[ ✉ SUGGEST ]</button>
@@ -120,12 +120,12 @@
   <div class="hstat"><span class="hstat-lbl">IRS AUDIT</span><span class="hstat-val v-red" id="irs-level">LVL 0</span></div>
   <div class="hstat"><span class="hstat-lbl">GRASS TOUCHED</span><span class="hstat-val v-green">0 days, 0 hrs</span></div>
   <div id="bank-block">
-    <div class="bank-item"><span class="bank-lbl">💳 CHECKING</span><span class="bank-val v-red pulse" id="bank-checking">$3.47</span></div>
-    <div class="bank-item"><span class="bank-lbl">SAVINGS</span><span class="bank-val v-red">$0.00</span></div>
-    <div class="bank-item"><span class="bank-lbl">CREDIT CARD</span><span class="bank-val v-amber" id="bank-cc">$14,847/$15k</span></div>
-    <div class="bank-item"><span class="bank-lbl">NET WORTH</span><span class="bank-val v-red" id="bank-net">-$14,843</span></div>
+    <div class="bank-item"><span class="bank-lbl">💳 CHECKING</span><span class="bank-val v-red pulse" id="bank-checking">$5.00</span></div>
+    <div class="bank-item"><span class="bank-lbl">SAVINGS</span><span class="bank-val v-red" id="bank-savings">$0.00</span></div>
+    <div class="bank-item"><span class="bank-lbl">CREDIT CARD</span><span class="bank-val v-amber" id="bank-cc">$10,000/$15k</span></div>
+    <div class="bank-item"><span class="bank-lbl">NET WORTH</span><span class="bank-val v-red" id="bank-net">-$9,926.00</span></div>
     <div class="bank-item"><span class="bank-lbl">CRYPTO PORT.</span><span class="bank-val v-purple" id="crypto-port">$69</span></div>
-    <div class="bank-item"><span class="bank-lbl">STATUS</span><span class="bank-val v-magenta pulse" style="font-size:10px">SEND HELP</span></div>
+    <div class="bank-item"><span class="bank-lbl">STATUS</span><span class="bank-val v-magenta pulse" id="bank-status">MAXED</span></div>
   </div>
 </div>
 
@@ -158,11 +158,10 @@
       <div class="radar-chip"><span class="radar-chip-lbl">BOGEYS</span><span class="radar-chip-val" id="radar-bogeys">0</span></div>
       <div class="radar-chip"><span class="radar-chip-lbl">SIGINT</span><span class="radar-chip-val" id="radar-sigint">ACTIVE</span></div>
     </div>
-    <div id="atc-chatter"><span id="atc-text">AWAITING COMMS...</span></div>
     <div id="radar-log"></div>
     <div id="ufo-lab">
       <div id="ufo-lab-hdr">
-        <span>UAP DRONE CAM / AI CODEGEN</span>
+        <span>UAP DRONE CAM</span>
         <span id="ufo-status">TRACKING: ORB-7</span>
       </div>
       <div id="ufo-lab-main">
@@ -173,10 +172,6 @@
             <button class="ufo-btn" id="ufo-retarget" type="button">RETARGET</button>
             <button class="ufo-btn" id="ufo-jam" type="button">JAM FEED</button>
           </div>
-        </div>
-        <div id="ufo-code-wrap">
-          <div id="ufo-code-hdr">python_oracle.py</div>
-          <div id="ufo-code"></div>
         </div>
       </div>
     </div>
@@ -223,7 +218,7 @@
         <div class="bj-stat"><div class="s-lbl">SHARES</div><div class="s-val v-cyan" id="tr-shares">0</div></div>
         <div class="bj-stat"><div class="s-lbl">AVG COST</div><div class="s-val v-amber" id="tr-avg">--</div></div>
         <div class="bj-stat"><div class="s-lbl">P&amp;L</div><div class="s-val v-green" id="tr-pnl">$0.00</div></div>
-        <div class="bj-stat"><div class="s-lbl">CASH</div><div class="s-val v-red" id="tr-cash">$3.47</div></div>
+        <div class="bj-stat"><div class="s-lbl">CHECKING</div><div class="s-val v-red" id="tr-cash">$5.00</div></div>
       </div>
       <div class="bj-btns">
         <button class="bj-btn btn-hit"   onclick="tradeBuy()">[ BUY 1 ]</button>
@@ -258,8 +253,9 @@
 
   <!-- FLIGHT TRACKER -->
   <div class="panel" id="panel-flight">
-    <div class="panel-title">✈ FLIGHT TRACKER :: LIVE :: <span id="ft-status" style="color:var(--orange);font-size:10px">5 AIRCRAFT + 1 GROUND UNIT MONITORED</span></div>
+    <div class="panel-title">✈ FLIGHT TRACKER :: LIVE :: <span id="ft-status" style="color:var(--orange);font-size:10px">4 AIRCRAFT + 5 CONTACTS MONITORED</span></div>
     <canvas id="flight-canvas"></canvas>
+    <div id="atc-chatter"><span id="atc-text">AWAITING ATC COMMS...</span></div>
     <!-- CRASH INVESTIGATION MODAL -->
     <div id="crash-modal">
       <div id="crash-box">
@@ -272,7 +268,7 @@
           <button class="cr-btn cr-investigate" onclick="investigateCrash()">[ 🔍 INVESTIGATE BLACK BOX ]</button>
           <button class="cr-btn cr-coverup" onclick="coverupCrash()">[ 🤫 INITIATE COVERUP ]</button>
         </div>
-        <div id="crash-fine">*Investigating may result in IRS audit. Coverup constitutes taxpayer consent per Aviation Act §420.69. You agreed to this.</div>
+        <div id="crash-fine">*Investigating may trigger classified paperwork. Coverup constitutes voluntary consent per Aviation Act §420.69. You agreed to this.</div>
       </div>
     </div>
     <div id="flight-info">
@@ -280,8 +276,11 @@
       <div class="plane-card" id="plane-info-dadatrump"></div>
       <div class="plane-card" id="plane-info-taylorswift"></div>
       <div class="plane-card" id="plane-info-pthiel"></div>
-      <div class="plane-card" id="plane-info-ckirk"></div>
       <div class="plane-card ground-unit-card" id="plane-info-mohan"></div>
+      <div class="plane-card ground-unit-card" id="plane-info-ckirkbunker"></div>
+      <div class="plane-card ground-unit-card" id="plane-info-epsteinbunker"></div>
+      <div class="plane-card ground-unit-card" id="plane-info-subatlantic"></div>
+      <div class="plane-card ground-unit-card" id="plane-info-subcoral"></div>
     </div>
   </div>
 
@@ -317,6 +316,31 @@
     <div id="dm-feed" style="display:none"></div>
   </div>
 
+</div>
+
+<div id="vibe-code-dock" class="dock-mid">
+  <div id="vibe-code-topbar">
+    <div id="vibe-code-brand">
+      <span id="vibe-code-dot"></span>
+      <span>G3 VIBE CODER</span>
+      <span class="vibe-code-muted">autonomous.py</span>
+      <span class="vibe-code-muted">model: overclocked-oracle</span>
+    </div>
+    <div id="vibe-code-controls">
+      <button class="vibe-code-btn" id="vibe-code-shrink" type="button">SHRINK</button>
+      <button class="vibe-code-btn" id="vibe-code-expand" type="button">EXPAND</button>
+    </div>
+  </div>
+  <div id="vibe-code-metrics">
+    <div class="vibe-chip"><span class="vibe-chip-lbl">TOKENS</span><span class="vibe-chip-val" id="vibe-code-tokens">0</span></div>
+    <div class="vibe-chip"><span class="vibe-chip-lbl">FILES</span><span class="vibe-chip-val" id="vibe-code-files">3</span></div>
+    <div class="vibe-chip"><span class="vibe-chip-lbl">MODE</span><span class="vibe-chip-val" id="vibe-code-mode">SHIP IT</span></div>
+    <div class="vibe-chip"><span class="vibe-chip-lbl">STATUS</span><span class="vibe-chip-val" id="vibe-code-status">GENERATING</span></div>
+  </div>
+  <div id="ufo-code-wrap">
+    <div id="ufo-code-gutter"></div>
+    <div id="ufo-code"></div>
+  </div>
 </div>
 
 <!-- TICKER -->

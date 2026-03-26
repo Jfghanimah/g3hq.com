@@ -1,5 +1,61 @@
 ADJUST THIS PAGE WHEN YOU ADD FROM IT!!!
 
 SUGGESTED IDEAS:
-- WORKING credit score tracker
 
+-- FINANCIAL DESPAIR --
+- WORKING credit score tracker
+- Subscription drain tracker — lists fake subs (Netflix, Hulu, "THING YOU SIGNED UP FOR IN 2019"), total bleeding per month
+- Crypto portfolio panel — always down except one coin you sold at -20% that is now up 6,000%
+- Side hustle passive income tracker — projected: $4,200/mo | actual: $0.00
+- Gig economy earnings breakdown — DoorDash gross: $312 | gas: -$180 | wear: -$140 | net: -$8. "ENTREPRENEURSHIP"
+- WageCuck clock — live ticking counter of hours worked this week vs. what the CEO made in the same time
+
+-- ABSURD NOTIFICATIONS --
+- Amazon package tracker — same energy as McNugget, package stuck "OUT FOR DELIVERY" for 11 days, driver last seen in Albuquerque
+- LinkedIn hustle feed — Gary Vee liked your post, recruiter viewed your profile, someone endorsed you for "Microsoft Word"
+- Email inbox — unread count climbs every minute, subject lines become increasingly unhinged spam
+
+-- LIFE METRICS (FAILING) --
+- Uber rating tracker — slowly declining from 4.9, reasons shown: "driver seemed tense", "uncomfortable silence"
+- Gym streak tracker — last check-in: 47 days ago. current streak: 0. "BODY: SOFTENING"
+- Sleep tracker panel — always 4.5 hrs. REM: NONE. "COGNITIVE PERFORMANCE: SUBOPTIMAL. CONTINUE GRINDING."
+- HOA violation feed — new notices accumulate, fines compound, final notice blinks red
+
+-- CHUD / SIGMA / GOYMAXXING --
+- SIGMA GRINDSET SCORE — live fluctuating score, drops when you open Reddit, rises when you "skip lunch"
+- LOOKSMAXX PROGRESS — jawline: 4.1/10, mewing streak: 3 days, overall: "COPING"
+- GOYMAXXING INDEX — tracks how many "forbidden" life hacks you've unlocked (e.g. buying store-brand cereal, canceling Spotify)
+- RED PILL DOSAGE METER — fills up throughout the day based on random events, at 100% flashes "FULLY PILLED"
+- COPE / SEETHE / MALD TRACKER — three live gauges, all perpetually elevated
+- NPC BEHAVIOR SCORE — how many normie things you did today (bought coffee: +1, said "have a good one": +1)
+- ALPHA HIERARCHY DISPLAY — scrolling org chart: CHAD → SIGMA → NORMIE → BETA → YOU
+- MIDWIT DETECTOR — bell curve graphic, your dot is always slightly left of center
+- TESTOSTERONE LEVEL — live readout, always "LOW NORMAL", advice: "EAT MORE RED MEAT"
+
+-- CHAOS --
+- Boss proximity alert — "MANAGER DETECTED NEARBY" overlays fake Excel spreadsheet over the whole dashboard
+- Wi-Fi signal panel — oscillates wildly, blames the neighbors, names their network "DEFINITELY_NOT_HACKING_YOU"
+- HR complaint counter — tracks how many times you've been "talked to", current status: "ON NOTICE"
+- PTO days remaining — always 0. accrual rate shown. "YOU OWE THE COMPANY 2 DAYS"
+- Performance review anxiety meter — spikes randomly, worst right before holidays
+
+POSSIBLE PREVIOUS WORK TO REAPPLY LATER:
+- volume default to 100%
+- larger/more realistic money block in header
+- bankroll tied together across blackjack, slots, trade, and funding modal
+- checking starts at $5, savings $0, credit card starts at $10k / $15k
+- spending falls onto credit card instead of going negative
+- funding approve uses a cha-ching cash sound
+- Reddit placeholder guard so broken [COMMON BELIEF] / WAKE UP style posts do not render
+- UAP drone cam keeps its own panel and fake codegen moves to a full-width bottom "G3 vibe coder" dock
+- flight tracker ATC chatter moved from radar into flight panel
+- flights slowed down more
+- flight destinations spread farther apart with more city options
+- reroute should respect current in-flight position instead of resetting
+- flight detail cards should mostly reveal on hover / selection instead of always being open
+- selected flight/contact should be much more obvious on map and in cards
+- C. Kirk removed as a plane and replaced by bunker contact(s)
+- bunker contacts around Argentina / Australia
+- add nuclear submarine contacts
+- center crash modal inside the flight tracker
+- remove IRS references from flight tracker copy
