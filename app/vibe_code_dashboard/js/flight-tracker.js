@@ -546,7 +546,10 @@ function buildPlaneInfo(plane) {
     <div class="pi-stats">ALT:${alt.toLocaleString()}ft · SPD:${spd}kts · ETA:${eta}min</div>
     <div class="pi-stats" style="color:#ff6600">CO₂:${co2}kg/hr · TURN:${plane.path ? 'ARCING' : 'STRAIGHT'}</div>
     <div class="pi-prog-wrap"><div class="pi-prog-fill" style="width:${pct}%;background:${plane.color}"></div></div>
-    <div class="pi-btns"><button class="pi-btn" onclick="reroutePlane('${plane.id}')">REROUTE</button></div>
+    <div class="pi-btns">
+      <button class="pi-btn" onclick="reroutePlane('${plane.id}')">REROUTE</button>
+      <button class="pi-btn pi-btn-close" onclick="selectPlane('${plane.id}')">CLOSE</button>
+    </div>
   `;
 }
 
@@ -558,6 +561,7 @@ function buildCrashInfo(plane) {
     <div class="pi-status" style="color:var(--red)">INCIDENT UNDER INVESTIGATION</div>
     <div class="pi-stats" style="color:#550000">STATUS: CLASSIFIED · ETA: UNKNOWN</div>
     <div class="pi-prog-wrap"><div class="pi-prog-fill" style="width:${Math.round(plane.t * 100)}%;background:var(--red)"></div></div>
+    <div class="pi-btns"><button class="pi-btn pi-btn-close" onclick="selectPlane('${plane.id}')">CLOSE</button></div>
   `;
 }
 
@@ -574,6 +578,7 @@ function buildUnitInfo(unit) {
     <div class="pi-status">${status}</div>
     <div class="pi-stats" style="color:#886633">${extra}</div>
     <div class="pi-prog-wrap"><div class="pi-prog-fill" style="width:${Math.max(20, 100 + lp / 4)}%;background:${unit.color}"></div></div>
+    <div class="pi-btns"><button class="pi-btn pi-btn-close" onclick="selectPlane('${unit.id}')">CLOSE</button></div>
   `;
 }
 
