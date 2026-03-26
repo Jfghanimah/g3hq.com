@@ -43,6 +43,7 @@ SUGGESTED IDEAS:
 
 AI SUGGESTED IDEAS:
 - fake NORAD-style "OBJECT OF INTEREST" dossier card that slides out when you click a radar contact
+- moreof a PLRT AI SURVELIENCE HUB
 - occasional DEFCON flash where the header bars all spike red for 3 seconds because the radar saw a "space invader boss wave"
 - tiny "air traffic chatter" subtitle strip under the radar with garbage comms like "AWACS says skill issue, over"
 - one absurd ultra-rare radar event where every blip becomes a pizza delivery route for 10 seconds
@@ -58,22 +59,22 @@ AI SUGGESTED IDEAS:
 - Add a rare flight tracker event where one nuclear sub briefly pings "hello :)" and then disappears from the map.
 
 POSSIBLE PREVIOUS WORK TO REAPPLY LATER:
-- [] volume default to 100%
-- [] larger/more realistic money block in header
-- [] bankroll tied together across blackjack, slots, trade, and funding modal
-- [] checking starts at $5, savings $0, credit card starts at $10k / $15k
-- [] spending falls onto credit card instead of going negative
-- [] funding approve uses a cha-ching cash sound
-- [] Reddit placeholder guard so broken [COMMON BELIEF] / WAKE UP style posts do not render
-- [] UAP drone cam keeps its own panel and fake codegen moves to a full-width bottom "G3 vibe coder" dock
-- [] flight tracker ATC chatter moved from radar into flight panel
-- [] flights slowed down more
-- [] flight destinations spread farther apart with more city options
-- [] reroute should respect current in-flight position instead of resetting
-- [] flight detail cards should mostly reveal on hover / selection instead of always being open
-- [] selected flight/contact should be much more obvious on map and in cards
-- [] C. Kirk removed as a plane and replaced by bunker contact(s)
-- [] bunker contacts around Argentina / Australia
-- [] add nuclear submarine contacts
-- [] center crash modal inside the flight tracker
-- [] remove IRS references from flight tracker copy
+- [x] volume default to 100%
+- [~] larger/more realistic money block in header
+- [x] bankroll tied together across blackjack, slots, trade, and funding modal
+- [x] checking starts at $5, savings $0, credit card starts at $10k / $15k
+- [x] spending falls onto credit card instead of going negative
+- [x] funding approve uses a cha-ching cash sound
+- [x] Reddit placeholder guard so broken [COMMON BELIEF] / WAKE UP style posts do not render
+- [x] UAP drone cam keeps its own panel and fake codegen moves to a full-width bottom "G3 vibe coder" dock
+- [x] flight tracker ATC chatter moved from radar into flight panel
+- [ ] flights slowed down more
+- [x] flight destinations spread farther apart with more city options
+- [ ] reroute should respect current in-flight position instead of resetting
+- [~] flight detail cards should mostly reveal on hover / selection instead of always being open
+- [~] selected flight/contact should be much more obvious on map and in cards
+- [ ] C. Kirk removed as a plane and replaced by bunker contact(s)
+- [ ] bunker contacts around Argentina / Australia
+- [ ] add nuclear submarine contacts
+- [x] center crash modal inside the flight tracker
+- [x] remove IRS references from flight tracker copy

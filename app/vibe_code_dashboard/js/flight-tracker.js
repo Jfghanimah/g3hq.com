@@ -482,17 +482,9 @@ FC.addEventListener('click', e=>{
   if(!hit) return;
 
   if(hit.type==='plane'){
-    const plane=hit.obj;
-    selectPlane(plane.id);
-    const r=plane.routes[plane.routeIdx];
-    const status=pick(plane.statuses);
-    const co2=plane.co2Base+randi(-100,200);
-    toast(`✈ [${plane.callsign}] ${plane.name} :: ${r[0]}→${r[1]} :: ${status} :: CO₂:${co2}kg/hr`, plane.color);
+    selectPlane(hit.obj.id);
   } else {
-    const unit=hit.obj;
-    selectPlane(unit.id);
-    const status=pick(unit.statuses);
-    toast(`📍 [${unit.callsign}] ${unit.name} :: ${unit.city} :: ${status}`, unit.color);
+    selectPlane(hit.obj.id);
   }
 });
 

@@ -75,7 +75,7 @@ function finishHand(){
     el.textContent=pick(lossPhrases)+` (${p})`;
     el.className='bj-result result-loss';
     playUiSound('bj-bust');
-    checkingBalance=Math.max(0,checkingBalance-bjBet); updateChecking();
+    spendMoney(bjBet);
   } else if(d>21||p>d){
     bjWins++;
     el.textContent=pick(winPhrases)+` (${p})`;
@@ -83,7 +83,7 @@ function finishHand(){
     toast('WIN: '+el.textContent,'var(--green)');
     playUiSound('bj-win');
     if(typeof spikeIRS === 'function') spikeIRS(randi(2,5));
-    checkingBalance+=bjBet; updateChecking();
+    addMoney(bjBet);
   } else if(p===d){
     el.textContent='PUSH (rigged tie)';
     el.className='bj-result'; el.style.color='var(--amber)';
@@ -93,7 +93,7 @@ function finishHand(){
     el.textContent=pick(lossPhrases)+` (${p})`;
     el.className='bj-result result-loss';
     playUiSound('bj-loss');
-    checkingBalance=Math.max(0,checkingBalance-bjBet); updateChecking();
+    spendMoney(bjBet);
   }
   updateBJStats();
   setTimeout(dealNewHand,3500);
@@ -173,7 +173,7 @@ function slotSpin(bet) {
   const slotBet = bet || 100;
   slotsSpins++;
   slotsNet -= slotBet;
-  checkingBalance=Math.max(0,checkingBalance-slotBet); updateChecking();
+  spendMoney(slotBet);
   updateSlotsStats();
   playUiSound('slots-spin');
 
@@ -242,8 +242,8 @@ function resolveSlots(results, bet) {
   }
 
   slotsNet += payout;
-  if(payout > 0) { checkingBalance += payout; updateChecking(); }
-  else if(payout < 0) { checkingBalance=Math.max(0,checkingBalance+payout); updateChecking(); }
+  if(payout > 0) addMoney(payout);
+  else if(payout < 0) spendMoney(Math.abs(payout));
   const resEl = document.getElementById('slots-result');
   resEl.textContent = resultText;
   resEl.className = 'slots-result ' + resultClass;

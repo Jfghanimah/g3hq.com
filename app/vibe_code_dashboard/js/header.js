@@ -47,11 +47,70 @@ setInterval(()=>{
   fluctBar('cope-val','cope-bar',70,98);
 },2000);
 
-// ══ CHECKING ACCOUNT BALANCE ══
-let checkingBalance = 3.47;
+// ══ BANK ACCOUNT STATE ══
+let checkingBalance = 5;
+let savingsBalance = 0;
+let creditCardBalance = 10000;
+const creditCardLimit = 15000;
+
+function updateBankUI() {
+  const checkingEl = document.getElementById('bank-checking');
+  const savingsEl = document.getElementById('bank-savings');
+  const creditEl = document.getElementById('bank-cc');
+  const netEl = document.getElementById('bank-net');
+  const statusEl = document.getElementById('bank-status');
+
+  if(checkingEl) checkingEl.textContent = '$' + checkingBalance.toFixed(2);
+  if(savingsEl) savingsEl.textContent = '$' + savingsBalance.toFixed(2);
+  if(creditEl) creditEl.textContent = `$${creditCardBalance.toLocaleString()}/$15k`;
+
+  const netWorth = checkingBalance + savingsBalance + cryptoPortValue - creditCardBalance;
+  if(netEl) {
+    const netPrefix = netWorth >= 0 ? '$' : '-$';
+    netEl.textContent = `${netPrefix}${Math.abs(netWorth).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+    netEl.className = 'bank-val ' + (netWorth >= 0 ? 'v-green' : 'v-red');
+  }
+
+  if(statusEl) {
+    const utilization = creditCardLimit ? creditCardBalance / creditCardLimit : 0;
+    if(utilization >= 0.95) {
+      statusEl.textContent = 'MAXED';
+      statusEl.className = 'bank-val v-magenta pulse';
+    } else if(utilization >= 0.75) {
+      statusEl.textContent = 'DANGEROUS';
+      statusEl.className = 'bank-val v-red pulse';
+    } else if(utilization >= 0.5) {
+      statusEl.textContent = 'COOKED';
+      statusEl.className = 'bank-val v-amber';
+    } else {
+      statusEl.textContent = 'SURVIVING';
+      statusEl.className = 'bank-val v-green';
+    }
+  }
+}
+
 function updateChecking() {
-  const el = document.getElementById('bank-checking');
-  if(el) el.textContent = '$' + Math.max(0, checkingBalance).toFixed(2);
+  checkingBalance = Math.max(0, Number(checkingBalance) || 0);
+  updateBankUI();
+}
+
+function spendMoney(amount) {
+  const cost = Math.max(0, Number(amount) || 0);
+  const fromChecking = Math.min(checkingBalance, cost);
+  checkingBalance -= fromChecking;
+  const remainder = cost - fromChecking;
+  if(remainder > 0) {
+    creditCardBalance = Math.min(creditCardLimit, creditCardBalance + remainder);
+  }
+  updateBankUI();
+}
+
+function addMoney(amount) {
+  checkingBalance += Math.max(0, Number(amount) || 0);
+  updateBankUI();
 }
 
 // ══ IRS AUDIT LEVEL ══
@@ -60,16 +119,14 @@ function spikeIRS(amount) {
   irsLevel = Math.min(irsLevel + (amount || randi(1,3)), 99);
   const el = document.getElementById('irs-level');
   if(el) el.textContent = 'LVL ' + irsLevel;
-  if(irsLevel >= 10) toast('⚠ IRS AUDIT THREAT LEVEL: ' + irsLevel + ' — THEY ARE WATCHING', 'var(--red)');
 }
 
 // ══ BANK ══
 let cryptoPortValue = 69;
 setInterval(()=>{
-  const cc = randi(14800,14999);
-  document.getElementById('bank-cc').textContent = `$${cc.toLocaleString()}/$15k`;
-  document.getElementById('bank-net').textContent = `-$${(cc-3).toLocaleString()}`;
   cryptoPortValue = Math.max(1, cryptoPortValue + randi(-15,12));
   document.getElementById('crypto-port').textContent = '$'+cryptoPortValue;
-  updateChecking();
+  updateBankUI();
 },4000);
+
+updateBankUI();

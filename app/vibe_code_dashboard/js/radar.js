@@ -341,7 +341,6 @@ function neutralizeDossier() {
   if(!dossierBlip) return;
   blips = blips.filter(b => b !== dossierBlip);
   playUiSound('neutralize');
-  toast(`THREAT NEUTRALIZED: ${dossierBlip.label}`, 'var(--green)');
   addRadarLog(dossierBlip.label, true);
   dossierBlip = null;
   document.getElementById('radar-dossier').classList.remove('show');

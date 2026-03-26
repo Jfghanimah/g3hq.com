@@ -175,7 +175,8 @@ function updateTradeUI() {
 function tradeBuy() {
   const s = currentStock;
   if(typeof checkingBalance === 'undefined') return;
-  if(checkingBalance < s.price) {
+  const availableFunds = checkingBalance + Math.max(0, creditCardLimit - creditCardBalance);
+  if(availableFunds < s.price) {
     toast('INSUFFICIENT FUNDS :: BALANCE $' + checkingBalance.toFixed(2) + ' :: PRICE $' + fmtPrice(s.price), 'var(--red)');
     playUiSound('deny');
     return;
@@ -184,8 +185,7 @@ function tradeBuy() {
   const newTotal = pos.shares * pos.avgCost + s.price;
   pos.shares++;
   pos.avgCost = newTotal / pos.shares;
-  checkingBalance -= s.price;
-  updateChecking();
+  spendMoney(s.price);
   updateTradeUI();
   playUiSound('cash');
   document.getElementById('tr-advice').textContent = pick(tradeAdvices);
@@ -201,10 +201,9 @@ function tradeSell() {
     return;
   }
   const pnl = s.price - pos.avgCost;
-  checkingBalance += s.price;
+  addMoney(s.price);
   pos.shares--;
   if(pos.shares === 0) pos.avgCost = 0;
-  updateChecking();
   updateTradeUI();
   playUiSound(pnl >= 0 ? 'bj-win' : 'bj-loss');
   document.getElementById('tr-advice').textContent = pick(tradeAdvices);
@@ -221,10 +220,9 @@ function tradeSellAll() {
   }
   const proceeds = pos.shares * s.price;
   const pnl = proceeds - pos.shares * pos.avgCost;
-  checkingBalance += proceeds;
+  addMoney(proceeds);
   pos.shares = 0;
   pos.avgCost = 0;
-  updateChecking();
   updateTradeUI();
   playUiSound(pnl >= 0 ? 'slots-jackpot' : 'bj-bust');
   document.getElementById('tr-advice').textContent = pick(tradeAdvices);

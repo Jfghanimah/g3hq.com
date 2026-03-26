@@ -5,34 +5,6 @@ window.addEventListener('resize', () => {
   drawFlightMap();
 });
 
-// ══ VIBE CODE DOCK ══
-const DOCK_STATES = ['dock-mini', 'dock-mid', 'dock-full'];
-let dockStateIdx = 1;
-const dockEl = document.getElementById('vibe-code-dock');
-
-function setDockState(idx) {
-  DOCK_STATES.forEach(s => dockEl.classList.remove(s));
-  if(idx !== 1) dockEl.classList.add(DOCK_STATES[idx]);
-  dockStateIdx = idx;
-}
-
-document.getElementById('vibe-code-shrink').addEventListener('click', () => {
-  setDockState(Math.max(0, dockStateIdx - 1));
-});
-document.getElementById('vibe-code-expand').addEventListener('click', () => {
-  setDockState(Math.min(DOCK_STATES.length - 1, dockStateIdx + 1));
-});
-
-// Animate vibe code metrics
-const VIBE_MODES = ['SHIP IT','YOLO PUSH','REFACTOR','VIBE ONLY','NO TESTS'];
-const VIBE_STATUSES = ['GENERATING','HALLUCINATING','COMPILING','CRASHING','VIBING'];
-setInterval(() => {
-  document.getElementById('vibe-code-tokens').textContent = (Math.floor(Math.random()*9000)+1000).toLocaleString();
-  document.getElementById('vibe-code-files').textContent = randi(1,24);
-  if(Math.random() < 0.3) document.getElementById('vibe-code-mode').textContent = pick(VIBE_MODES);
-  if(Math.random() < 0.4) document.getElementById('vibe-code-status').textContent = pick(VIBE_STATUSES);
-}, 2200);
-
 // ══ MCNUGGET TRACKER ══
 const MCNUGGET_STAGES = [
   { text:'🍗 ORDER PLACED: 40PC MCNUGGET · EST. 22 MIN', color:'var(--cyan)' },

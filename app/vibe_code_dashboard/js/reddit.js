@@ -123,6 +123,19 @@ const INSIDER_TIPS=[
 let postVotes={};
 let propagandaOnCooldown=false;
 
+function isRenderableSlopText(text) {
+  if(!text) return false;
+  return !/\[[A-Z][A-Z\s]{2,}\]/.test(text);
+}
+
+function pickRenderable(factoryList, attempts = 12) {
+  for(let i = 0; i < attempts; i++) {
+    const next = pick(factoryList)();
+    if(isRenderableSlopText(next)) return next;
+  }
+  return null;
+}
+
 function switchSlop(mode){
   slopMode=mode;
   document.getElementById('reddit-feed').style.display=mode==='reddit'?'':'none';
@@ -134,7 +147,8 @@ function switchSlop(mode){
 
 function makePost(){
   if(slopMode!=='reddit') return;
-  const sub=pick(SUBS), title=pick(TMPLS)();
+  const sub=pick(SUBS), title=pickRenderable(TMPLS);
+  if(!title) return;
   const ups=randi(300,62000), cmts=randi(80,4200);
   const verdict=pick(VERDICTS);
   const isYTA=verdict.startsWith('Y')||verdict.startsWith('E');
@@ -183,6 +197,13 @@ function makeChanPost(){
 
 function postPropaganda(){
   if(propagandaOnCooldown) return;
+  const prompt = PROPAGANDA_PROMPTS[currentPropIdx];
+  if(!isRenderableSlopText(prompt)) {
+    toast('POST TEMPLATE REJECTED :: PLACEHOLDER TEXT DETECTED', 'var(--red)');
+    playUiSound('deny');
+    cyclePropaganda();
+    return;
+  }
   propagandaOnCooldown=true;
   document.getElementById('propaganda-btn').disabled=true;
   document.getElementById('propaganda-btn').textContent='[ ⏳ PROCESSING WIRE TRANSFER... ]';
@@ -198,7 +219,7 @@ function postPropaganda(){
   const div=document.createElement('div'); div.className='reddit-post rpost-pinned'; div.id=pid;
   div.innerHTML=`
     <div class="rpost-sub" style="color:var(--red)">📌 r/BREAKING</div>
-    <div class="rpost-title">${PROPAGANDA_PROMPTS[currentPropIdx]}</div>
+    <div class="rpost-title">${prompt}</div>
     <div class="rpost-meta">
       <button class="vote-btn vote-up">▲</button>
       <span class="rpost-ups">${(999000).toLocaleString()}</span>
@@ -253,21 +274,15 @@ function makeInsiderPost(){
   }, delay);
 }
 
-function awardPost(_pid){
-  const awards=['🏆 GOLDEN AWARD','💩 FACEPALM GOLD','🫂 WHOLESOME SEAL','❤️ HEARTFELT MOMENT','🎭 UNHINGED GENIUS','⚡ INCENDIARY TRUTH'];
-  toast(`${pick(awards)} GIVEN`, '#ffb300');
-}
+function awardPost(_pid){}
 
-function sharePost(){
-  toast('LINK COPIED TO 14 OPEN BROWSER TABS', '#00d4ff');
-}
+function sharePost(){}
 
 function vote(pid,dir){
   if(!postVotes[pid]) return;
   postVotes[pid].up += dir==='up'?1:-1;
   const el=document.getElementById('ups-'+pid);
   if(el) el.textContent=postVotes[pid].up.toLocaleString();
-  toast(dir==='up'?'▲ UPDOOTED':'▼ RATIO APPLIED', dir==='up'?'var(--amber)':'var(--purple)');
 }
 
 // ── DM AUTO-RESPONDER ──

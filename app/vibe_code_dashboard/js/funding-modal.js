@@ -17,6 +17,7 @@ const FUNDING_REQUESTS = [
 ];
 
 let fundingAutoTimer = null;
+const FUNDING_COPAY = 500;
 function showFundingModal() {
   const req = pick(FUNDING_REQUESTS);
   const modal = document.getElementById('funding-modal');
@@ -43,8 +44,8 @@ function approveFunding() {
   document.getElementById('funding-modal').classList.remove('show');
   const req = window._fundReq;
   playUiSound('cash');
-  toast(`✓ ${req.amount} APPROVED. IT COMES OUT OF YOUR CHECK. THANK YOU FOR YOUR SERVICE.`, 'var(--red)');
-  document.getElementById('bank-checking').textContent = '$0.00';
+  spendMoney(FUNDING_COPAY);
+  toast(`✓ ${req.amount} APPROVED. PERSONAL COPAY: $${FUNDING_COPAY}. THANK YOU FOR YOUR SERVICE.`, 'var(--red)');
   threatCount += randi(5,15);
   document.getElementById('threat-count').textContent = threatCount;
   if(typeof spikeIRS === 'function') spikeIRS(randi(5,12));
