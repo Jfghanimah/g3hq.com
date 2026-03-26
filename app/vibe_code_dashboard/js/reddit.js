@@ -122,6 +122,8 @@ const INSIDER_TIPS=[
 
 let postVotes={};
 let propagandaOnCooldown=false;
+let propagandaAvailable=false;
+let propagandaAlertTimer=null;
 
 function isRenderableSlopText(text) {
   if(!text) return false;
@@ -144,12 +146,50 @@ function findNextRenderablePromptIndex(startIdx = currentPropIdx) {
   return -1;
 }
 
+function syncPropagandaBar() {
+  const bar = document.getElementById('propaganda-bar');
+  const promptEl = document.getElementById('propaganda-prompt');
+  const btn = document.getElementById('propaganda-btn');
+  if(!bar || !promptEl || !btn) return;
+
+  const visible = slopMode === 'reddit' && (propagandaAvailable || propagandaOnCooldown);
+  bar.style.display = visible ? 'flex' : 'none';
+  bar.classList.toggle('propaganda-live', propagandaAvailable && !propagandaOnCooldown);
+
+  if(propagandaOnCooldown) {
+    promptEl.textContent = '[ ⏳ WIRE TRANSFER IN FLIGHT ]';
+    btn.textContent = '[ ⏳ PROCESSING WIRE TRANSFER... ]';
+    btn.disabled = true;
+    return;
+  }
+
+  promptEl.textContent = '[ 🚨📣 NEW POSTING OPPORTUNITY FROM ELON 🚨 ]';
+  btn.textContent = '[ POST IT ]';
+  btn.disabled = !propagandaAvailable;
+}
+
+function queuePropagandaOpportunity() {
+  clearTimeout(propagandaAlertTimer);
+  propagandaAlertTimer = setTimeout(() => {
+    const nextIdx = findNextRenderablePromptIndex(currentPropIdx + 1);
+    if(nextIdx === -1) {
+      queuePropagandaOpportunity();
+      return;
+    }
+    currentPropIdx = nextIdx;
+    propagandaAvailable = true;
+    syncPropagandaBar();
+    playUiSound('league-alert');
+    toast('📣 ELON POSTING WINDOW OPEN :: POST IT', 'var(--amber)');
+  }, randi(70, 140) * 1000);
+}
+
 function switchSlop(mode){
   slopMode=mode;
   document.getElementById('reddit-feed').style.display=mode==='reddit'?'':'none';
   document.getElementById('chan-feed').style.display=mode==='4chan'?'':'none';
   document.getElementById('dm-feed').style.display=mode==='dm'?'':'none';
-  document.getElementById('propaganda-bar').style.display=mode==='reddit'?'':'none';
+  syncPropagandaBar();
   document.querySelectorAll('.reddit-tab').forEach(t=>t.classList.toggle('active', t.dataset.mode===mode));
 }
 
@@ -204,21 +244,23 @@ function makeChanPost(){
 }
 
 function postPropaganda(){
-  if(propagandaOnCooldown) return;
+  if(propagandaOnCooldown || !propagandaAvailable) return;
   const prompt = PROPAGANDA_PROMPTS[currentPropIdx];
   if(!isRenderableSlopText(prompt)) {
     toast('POST TEMPLATE REJECTED :: PLACEHOLDER TEXT DETECTED', 'var(--red)');
     playUiSound('deny');
-    cyclePropaganda();
+    propagandaAvailable = false;
+    syncPropagandaBar();
+    queuePropagandaOpportunity();
     return;
   }
+  propagandaAvailable=false;
   propagandaOnCooldown=true;
-  document.getElementById('propaganda-btn').disabled=true;
-  document.getElementById('propaganda-btn').textContent='[ ⏳ PROCESSING WIRE TRANSFER... ]';
+  syncPropagandaBar();
   setTimeout(()=>{
     propagandaOnCooldown=false;
-    document.getElementById('propaganda-btn').disabled=false;
-    document.getElementById('propaganda-btn').textContent='[ POST IT ]';
+    syncPropagandaBar();
+    queuePropagandaOpportunity();
   },15000);
 
   // Add as reddit post with insane upvotes
@@ -341,14 +383,8 @@ function makeDmPost(){
 // Propaganda cycling
 let currentPropIdx=0;
 function cyclePropaganda(){
-  // Only surface fully rendered prompts; placeholder sludge should never enter the UI.
   const nextIdx = findNextRenderablePromptIndex(currentPropIdx + 1);
-  if(nextIdx === -1) {
-    document.getElementById('propaganda-prompt').textContent='[ 📡 NO SAFE ELON DIRECTIVE AVAILABLE ]';
-    return;
-  }
-  currentPropIdx = nextIdx;
-  document.getElementById('propaganda-prompt').textContent='[ 📡 '+PROPAGANDA_PROMPTS[currentPropIdx]+' ]';
+  if(nextIdx !== -1) currentPropIdx = nextIdx;
 }
 currentPropIdx = Math.max(0, findNextRenderablePromptIndex(0));
 setInterval(cyclePropaganda, 90000);
@@ -360,5 +396,7 @@ makeDmPost(); makeDmPost(); makeDmPost();
 setInterval(makePost, 8000);
 setInterval(makeChanPost, 10000);
 setInterval(makeDmPost, 12000);
+syncPropagandaBar();
+queuePropagandaOpportunity();
 // Insider tips drop every 2–3 minutes, first one after 45s
 setTimeout(()=>{ makeInsiderPost(); setInterval(makeInsiderPost, randi(120,180)*1000); }, 45000);

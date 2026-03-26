@@ -36,6 +36,7 @@ def launch():
         "--disable-extensions",
         "--no-first-run",
         "--no-default-browser-check",
+        "--autoplay-policy=no-user-gesture-required",
     ]
 
     print(f"[VIBE_DASHBOARD] Launching...")
