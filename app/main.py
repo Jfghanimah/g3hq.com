@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from markupsafe import Markup
 
 from .smash import get_player_data, get_color_for_name, process_match_report, add_player
@@ -114,6 +114,14 @@ def smash_add_player():
 #            flash('Error: Could not read the clipboard content.', 'danger')
             
 #    return render_template('clipboard.html', content=content, title='Shared Clipboard')
+
+@app.route('/dashboard')
+@app.route('/dashboard/<path:filename>')
+def dashboard(filename='index.html'):
+    """Serves the vibe_code_dashboard static files."""
+    dashboard_dir = os.path.join(os.path.dirname(__file__), 'vibe_code_dashboard')
+    return send_from_directory(dashboard_dir, filename)
+
 
 @app.route("/media")
 def media_share():

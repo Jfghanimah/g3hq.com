@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIBE_DASHBOARD v2.1 :: MAXIMUM DEGENERACY</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="toast"></div>
+<audio id="bg-music" loop src="audio_clips/HOME - Resonance.mp3" preload="auto"></audio>
+
+<!-- CRASH INVESTIGATION MODAL -->
+<div id="crash-modal">
+  <div id="crash-box">
+    <div id="crash-hdr">🚨 AVIATION INCIDENT DETECTED 🚨</div>
+    <div id="crash-callsign">???</div>
+    <div id="crash-name">SIGNAL LOST</div>
+    <div id="crash-location">LAST KNOWN: ???</div>
+    <div id="crash-evidence">BLACK BOX: PENDING · SURVIVORS: CLASSIFIED</div>
+    <div class="crash-btns">
+      <button class="cr-btn cr-investigate" onclick="investigateCrash()">[ 🔍 INVESTIGATE BLACK BOX ]</button>
+      <button class="cr-btn cr-coverup" onclick="coverupCrash()">[ 🤫 INITIATE COVERUP ]</button>
+    </div>
+    <div id="crash-fine">*Investigating may result in IRS audit. Coverup constitutes taxpayer consent per Aviation Act §420.69. You agreed to this.</div>
+  </div>
+</div>
+
+<!-- FUNDING REQUEST MODAL -->
+<div id="funding-modal">
+  <div id="funding-box">
+    <div id="fund-hdr">⚠ INCOMING FUNDING REQUEST ⚠</div>
+    <div id="fund-from">FROM: ???</div>
+    <div id="fund-org">ORG</div>
+    <div id="fund-title">TITLE</div>
+    <div id="fund-amount">$0</div>
+    <div id="fund-urgency">URGENCY: ???</div>
+    <div id="fund-reason">REASON</div>
+    <div id="fund-source">💰 SOURCE OF FUNDS: YOUR TAX DOLLARS 💰</div>
+    <div class="fund-btns">
+      <button class="f-btn f-approve" onclick="approveFunding()">[ ✓ APPROVE ]</button>
+      <button class="f-btn f-deny"    onclick="denyFunding()">[ ✗ DENY ]</button>
+    </div>
+    <div id="fund-fine">*Closing this window constitutes automatic approval per taxpayer agreement §69.420. You agreed to this.</div>
+  </div>
+</div>
+
+<!-- LEAGUE POPUPS -->
+<div id="league-ff-popup" class="league-popup">
+  <div class="league-popup-box">
+    <div class="league-popup-hdr">LEAGUE CLIENT</div>
+    <div class="league-popup-title">EARLY SURRENDER VOTE</div>
+    <div id="league-ff-status" class="league-popup-status">15:02 · TEAM MENTAL: COLLAPSING</div>
+    <div class="league-ff-votes" aria-label="Early surrender vote">
+      <span class="league-ff-vote filled"></span>
+      <span class="league-ff-vote filled"></span>
+      <span class="league-ff-vote filled"></span>
+      <span class="league-ff-vote filled"></span>
+      <span class="league-ff-vote"></span>
+    </div>
+    <div id="league-ff-body" class="league-popup-body">Your top laner is 0/7, your jungler is typing essays, and DrDoughnut is AFK near krugs.</div>
+    <div class="league-popup-btns">
+      <button class="league-btn league-btn-primary" onclick="acceptLeagueFF()">YES</button>
+      <button class="league-btn league-btn-danger" onclick="denyLeagueFF()">NO</button>
+    </div>
+  </div>
+</div>
+
+<div id="league-baron-popup" class="league-popup">
+  <div class="league-popup-box">
+    <div class="league-popup-hdr">LEAGUE CLIENT</div>
+    <div class="league-popup-title">BARON CALL</div>
+    <div id="league-baron-status" class="league-popup-status">SHOTCALLER: UNQUALIFIED</div>
+    <div id="league-baron-body" class="league-popup-body">Your duo wants to flip Baron with no vision, no smite, and full confidence.</div>
+    <div class="league-popup-btns">
+      <button class="league-btn league-btn-primary" onclick="acceptLeagueBaron()">ON MY WAY</button>
+      <button class="league-btn league-btn-danger" onclick="denyLeagueBaron()">DONT FLIP</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER ROW 1 -->
+<div id="hdr1">
+  <span class="online-dot"></span>
+  <div id="logo">▓ VIBE_DASHBOARD ▓</div>
+  <span class="sep">║</span>
+  <span style="font-size:11px;color:#00aa33">192.168.1.69</span>
+  <span class="sep">║</span>
+  <span style="font-size:10px;color:#5577cc">SYS:ONLINE · BUILD:v2.1.69</span>
+  <div id="audio-controls">
+    <label for="master-volume">VOL</label>
+    <input id="master-volume" type="range" min="0" max="100" step="1" value="35">
+    <span id="master-volume-val">35%</span>
+  </div>
+  <div id="hdr-clock">00:00:00</div>
+</div>
+
+<!-- HEADER ROW 2 -->
+<div id="hdr2">
+  <div class="hstat"><span class="hstat-lbl">CPU</span><div class="bar-wrap"><div class="bar-fill bg" id="cpu-bar" style="width:45%"></div></div><span class="hstat-val v-green" id="cpu-val">45%</span></div>
+  <div class="hstat"><span class="hstat-lbl">RAM</span><div class="bar-wrap"><div class="bar-fill ba" id="ram-bar" style="width:68%"></div></div><span class="hstat-val v-amber" id="ram-val">68%</span></div>
+  <div class="hstat"><span class="hstat-lbl">VIBES</span><div class="bar-wrap"><div class="bar-fill br" style="width:12%"></div></div><span class="hstat-val v-red">12%</span></div>
+  <div class="hstat"><span class="hstat-lbl">SIGMA</span><div class="bar-wrap"><div class="bar-fill bp" id="sigma-bar" style="width:34%"></div></div><span class="hstat-val v-purple" id="sigma-val">34%</span></div>
+  <div class="hstat"><span class="hstat-lbl">HOPIUM</span><div class="bar-wrap"><div class="bar-fill bc" id="hopium-bar" style="width:94%"></div></div><span class="hstat-val v-cyan" id="hopium-val">94%</span></div>
+  <div class="hstat"><span class="hstat-lbl">COPE</span><div class="bar-wrap"><div class="bar-fill ba" id="cope-bar" style="width:87%"></div></div><span class="hstat-val v-amber" id="cope-val">87%</span></div>
+  <div class="hstat"><span class="hstat-lbl">DELUSION</span><div class="bar-wrap"><div class="bar-fill bpk" style="width:99%"></div></div><span class="hstat-val v-pink">99%</span></div>
+  <div class="hstat"><span class="hstat-lbl">RENT PAID</span><div class="bar-wrap"><div class="bar-fill br" style="width:0%"></div></div><span class="hstat-val v-red">0%</span></div>
+  <div class="hstat"><span class="hstat-lbl">THREATS</span><span class="hstat-val v-magenta pulse" id="threat-count">0</span></div>
+  <div class="hstat"><span class="hstat-lbl">IRS AUDIT</span><span class="hstat-val v-red" id="irs-level">LVL 0</span></div>
+  <div class="hstat"><span class="hstat-lbl">GRASS TOUCHED</span><span class="hstat-val v-green">0 days, 0 hrs</span></div>
+  <div id="bank-block">
+    <div class="bank-item"><span class="bank-lbl">💳 CHECKING</span><span class="bank-val v-red pulse" id="bank-checking">$3.47</span></div>
+    <div class="bank-item"><span class="bank-lbl">SAVINGS</span><span class="bank-val v-red">$0.00</span></div>
+    <div class="bank-item"><span class="bank-lbl">CREDIT CARD</span><span class="bank-val v-amber" id="bank-cc">$14,847/$15k</span></div>
+    <div class="bank-item"><span class="bank-lbl">NET WORTH</span><span class="bank-val v-red" id="bank-net">-$14,843</span></div>
+    <div class="bank-item"><span class="bank-lbl">CRYPTO PORT.</span><span class="bank-val v-purple" id="crypto-port">$69</span></div>
+    <div class="bank-item"><span class="bank-lbl">STATUS</span><span class="bank-val v-magenta pulse" style="font-size:10px">SEND HELP</span></div>
+  </div>
+</div>
+
+<!-- CRYPTO STRIP -->
+<div id="crypto-strip"><div id="crypto-inner"></div></div>
+
+<!-- MAIN GRID -->
+<div id="main">
+
+  <!-- RADAR -->
+  <div class="panel" id="panel-radar">
+    <div class="panel-title">◈ THREAT RADAR :: SECTOR 7 <span style="margin-left:auto;font-size:10px;color:#003a10">CLICK BLIP TO NEUTRALIZE</span></div>
+    <canvas id="radar-canvas"></canvas>
+    <div id="radar-hud">
+      <div class="radar-chip"><span class="radar-chip-lbl">DEFCON</span><span class="radar-chip-val" id="radar-defcon">3</span></div>
+      <div class="radar-chip"><span class="radar-chip-lbl">AIRSPACE</span><span class="radar-chip-val" id="radar-airspace">CROWDED</span></div>
+      <div class="radar-chip"><span class="radar-chip-lbl">BOGEYS</span><span class="radar-chip-val" id="radar-bogeys">0</span></div>
+      <div class="radar-chip"><span class="radar-chip-lbl">SIGINT</span><span class="radar-chip-val" id="radar-sigint">ACTIVE</span></div>
+    </div>
+    <div id="atc-chatter"><span id="atc-text">AWAITING COMMS...</span></div>
+    <div id="radar-log"></div>
+    <div id="ufo-lab">
+      <div id="ufo-lab-hdr">
+        <span>UAP DRONE CAM / AI CODEGEN</span>
+        <span id="ufo-status">TRACKING: ORB-7</span>
+      </div>
+      <div id="ufo-lab-main">
+        <div id="ufo-cam-wrap">
+          <canvas id="ufo-cam"></canvas>
+          <div id="ufo-overlay">LIVE FEED · SECTOR 7B · CLASSIFIED</div>
+          <div id="ufo-controls">
+            <button class="ufo-btn" id="ufo-retarget" type="button">RETARGET</button>
+            <button class="ufo-btn" id="ufo-jam" type="button">JAM FEED</button>
+          </div>
+        </div>
+        <div id="ufo-code-wrap">
+          <div id="ufo-code-hdr">python_oracle.py</div>
+          <div id="ufo-code"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMBLING TERMINAL -->
+  <div class="panel" id="panel-bj">
+    <div class="panel-title">🎲 GAMBLING TERMINAL :: <span id="bj-streak" style="color:var(--red);font-size:11px">LOSING STREAK: 847</span></div>
+    <div class="gamble-tabs">
+      <button class="gamble-tab active" data-game="bj" onclick="switchGamble('bj')">♠ BLACKJACK</button>
+      <button class="gamble-tab" data-game="slots" onclick="switchGamble('slots')">🎰 SLOTS</button>
+      <button class="gamble-tab" data-game="trade" onclick="switchGamble('trade')">📈 TRADE</button>
+    </div>
+    <!-- BLACKJACK SECTION -->
+    <div class="bj-stats" id="bj-stats-block">
+      <div class="bj-stat"><div class="s-lbl">HANDS WON</div><div class="s-val v-green" id="bj-wins">3</div></div>
+      <div class="bj-stat"><div class="s-lbl">HANDS LOST</div><div class="s-val v-red" id="bj-losses">847</div></div>
+      <div class="bj-stat"><div class="s-lbl">TOTAL WAGERED</div><div class="s-val v-amber" id="bj-wagered">$0</div></div>
+      <div class="bj-stat"><div class="s-lbl">CONFIDENCE</div><div class="s-val v-cyan" id="bj-conf">UNSHAKEN</div></div>
+    </div>
+    <div class="bj-area" id="bj-area-block">
+      <div class="bj-row-lbl">DEALER ─────────────────</div>
+      <div class="cards-row" id="dealer-cards"></div>
+      <div class="bj-row-lbl">PLAYER ─────────────────</div>
+      <div class="cards-row" id="player-cards"></div>
+      <div class="bj-result" id="bj-result"></div>
+      <div class="bj-btns">
+        <button class="bj-btn btn-hit"   onclick="bjHit()">[ HIT ]</button>
+        <button class="bj-btn btn-stand" onclick="bjStand()">[ STAND ]</button>
+        <button class="bj-btn btn-dbl"   onclick="bjDouble()">[ DOUBLE DOWN ]</button>
+      </div>
+      <div class="bj-advice" id="bj-advice">▶ HIT ON 17 (TRUST)</div>
+    </div>
+    <!-- TRADING SECTION -->
+    <div class="trade-area" id="trade-area">
+      <div class="trade-ticker-row" id="trade-ticker-row"></div>
+      <div class="trade-price-row">
+        <span class="trade-sym-lbl" id="tr-sym">HRLYCOIN</span>
+        <span class="trade-price-val" id="tr-price">$8.50</span>
+        <span class="trade-delta" id="tr-delta">▲0.00%</span>
+      </div>
+      <canvas id="trade-chart"></canvas>
+      <div class="bj-stats">
+        <div class="bj-stat"><div class="s-lbl">SHARES</div><div class="s-val v-cyan" id="tr-shares">0</div></div>
+        <div class="bj-stat"><div class="s-lbl">AVG COST</div><div class="s-val v-amber" id="tr-avg">--</div></div>
+        <div class="bj-stat"><div class="s-lbl">P&amp;L</div><div class="s-val v-green" id="tr-pnl">$0.00</div></div>
+        <div class="bj-stat"><div class="s-lbl">CASH</div><div class="s-val v-red" id="tr-cash">$3.47</div></div>
+      </div>
+      <div class="bj-btns">
+        <button class="bj-btn btn-hit"   onclick="tradeBuy()">[ BUY 1 ]</button>
+        <button class="bj-btn btn-stand" onclick="tradeSell()">[ SELL 1 ]</button>
+        <button class="bj-btn btn-dbl"   onclick="tradeSellAll()">[ LIQUIDATE ]</button>
+      </div>
+      <div class="bj-advice" id="tr-advice">▶ DIAMOND HANDS (STATISTICALLY SUBOPTIMAL)</div>
+    </div>
+    <!-- SLOTS SECTION -->
+    <div class="slots-area" id="slots-area">
+      <div class="bj-stats">
+        <div class="bj-stat"><div class="s-lbl">SPINS</div><div class="s-val v-cyan" id="sl-spins">0</div></div>
+        <div class="bj-stat"><div class="s-lbl">WINS</div><div class="s-val v-green" id="sl-wins">0</div></div>
+        <div class="bj-stat"><div class="s-lbl">JACKPOTS</div><div class="s-val v-amber" id="sl-jackpots">0</div></div>
+        <div class="bj-stat"><div class="s-lbl">NET</div><div class="s-val v-red" id="sl-net">-$0</div></div>
+      </div>
+      <div class="reel-display">
+        <div class="reel" id="reel-0" style="color:#ffd700">7</div>
+        <div class="reel-sep">║</div>
+        <div class="reel" id="reel-1" style="color:#ffd700">7</div>
+        <div class="reel-sep">║</div>
+        <div class="reel" id="reel-2" style="color:#ffd700">7</div>
+      </div>
+      <div class="slots-result" id="slots-result">INSERT COIN TO BEGIN</div>
+      <div class="bj-btns">
+        <button class="bj-btn btn-hit" onclick="slotSpin(100)">[ 🎰 SPIN $100 ]</button>
+        <button class="bj-btn btn-dbl" onclick="slotSpin(500)">[ ⚡ MAX BET $500 ]</button>
+      </div>
+      <div class="bj-advice" id="slots-advice">▶ STATISTICALLY DUE FOR JACKPOT (INCORRECT)</div>
+    </div>
+  </div>
+
+  <!-- FLIGHT TRACKER -->
+  <div class="panel" id="panel-flight">
+    <div class="panel-title">✈ FLIGHT TRACKER :: LIVE :: <span id="ft-status" style="color:var(--orange);font-size:10px">5 AIRCRAFT + 1 GROUND UNIT MONITORED</span></div>
+    <canvas id="flight-canvas"></canvas>
+    <div id="flight-info">
+      <div class="plane-card" id="plane-info-bigyahu"></div>
+      <div class="plane-card" id="plane-info-dadatrump"></div>
+      <div class="plane-card" id="plane-info-taylorswift"></div>
+      <div class="plane-card" id="plane-info-pthiel"></div>
+      <div class="plane-card" id="plane-info-ckirk"></div>
+      <div class="plane-card ground-unit-card" id="plane-info-mohan"></div>
+    </div>
+  </div>
+
+  <!-- FB MARKETPLACE -->
+  <div class="panel" id="panel-fb">
+    <div class="panel-title">🛒 MARKETPLACE WATCH :: FB MARKETPLACE • EBAY • CRAIGSLIST</div>
+    <div class="market-tabs">
+      <button class="market-tab active" data-platform="FB Marketplace" type="button">FB Marketplace</button>
+      <button class="market-tab" data-platform="eBay" type="button">eBay</button>
+      <button class="market-tab" data-platform="Craigslist" type="button">Craigslist</button>
+    </div>
+    <div class="fb-header">
+      <span id="market-item-label">2019 Harley Sportster 883 :: ASK: $8,500 FIRM</span>
+      <span><span id="market-platform-label">FB Marketplace</span> :: LOWBALLS SENT: <span id="lb-count">0</span></span>
+    </div>
+    <div id="fb-feed"></div>
+  </div>
+
+  <!-- REDDIT SLOP -->
+  <div class="panel" id="panel-reddit">
+    <div class="panel-title">🗑 REDDIT SLOP :: LIVE AGGREGATOR</div>
+    <div class="reddit-sub-bar">SCANNING: r/AITA • r/tifu • r/AmIOverreacting • r/relationship_advice • r/wallstreetbets • r/personalfinance</div>
+    <div id="reddit-feed"></div>
+  </div>
+
+</div>
+
+<!-- TICKER -->
+<div id="ticker"><div id="ticker-inner"></div></div>
+
+<script src="js/utils.js"></script>
+<script src="js/header.js"></script>
+<script src="js/crypto-ticker.js"></script>
+<script src="js/radar.js"></script>
+<script src="js/ufo-lab.js"></script>
+<script src="js/blackjack.js"></script>
+<script src="js/trading.js"></script>
+<script src="js/flight-tracker.js"></script>
+<script src="js/marketplace.js"></script>
+<script src="js/reddit.js"></script>
+<script src="js/funding-modal.js"></script>
+<script src="js/league-popups.js"></script>
+<script src="js/news-ticker.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
