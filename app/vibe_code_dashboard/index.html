@@ -286,11 +286,19 @@
     <div id="fb-feed"></div>
   </div>
 
-  <!-- REDDIT SLOP -->
+  <!-- REDDIT + 4CHAN SLOP -->
   <div class="panel" id="panel-reddit">
-    <div class="panel-title">🗑 REDDIT SLOP :: LIVE AGGREGATOR</div>
-    <div class="reddit-sub-bar">SCANNING: r/AITA • r/tifu • r/AmIOverreacting • r/relationship_advice • r/wallstreetbets • r/personalfinance</div>
+    <div class="panel-title">🗑 SLOP AGGREGATOR :: LIVE</div>
+    <div class="reddit-tabs">
+      <button class="reddit-tab active" data-mode="reddit" onclick="switchSlop('reddit')">Reddit</button>
+      <button class="reddit-tab" data-mode="4chan" onclick="switchSlop('4chan')">4chan</button>
+    </div>
+    <div id="propaganda-bar">
+      <span id="propaganda-prompt">[ 📡 NEW POSTING OPPORTUNITY FROM ELON ]</span>
+      <button id="propaganda-btn" onclick="postPropaganda()">[ POST IT ]</button>
+    </div>
     <div id="reddit-feed"></div>
+    <div id="chan-feed" style="display:none"></div>
   </div>
 
 </div>

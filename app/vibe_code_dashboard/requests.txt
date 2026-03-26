@@ -1,13 +1,11 @@
 ADJUST THIS PAGE WHEN YOU ADD FROM IT!!!
-Baron / Dragon thing is too low on 1080p screens but justright on 4k screens
-
-Music:
-- add passive quiet vapor wave music  (C:\Users\Joseph\Documents\Python Projects\vibe_code_dashboard\audio_clips\HOME - Resonance.mp3) make sure its not loud!!!
 
 Reddit Section:
 - reddit seciont needs 4chan as well also
 - needs more interactivity
-
+- this is the most boring section...
+- reward user for posting propaganda? but it wouldnt be obvious they should somehow be prompted to do so and the reward should be that they get a paycheck from Elon Musk (dont make it too high maybe 1000 bucks per post prompt?)
+- this money should feed into the money ssystem were workingon  so all tabs share money
 
 
 SUGGESTED IDEAS:

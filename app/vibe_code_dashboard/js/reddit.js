@@ -1,7 +1,10 @@
 // ══════════════════════════════════════════════
-// REDDIT SLOP
+// REDDIT + 4CHAN SLOP
 // ══════════════════════════════════════════════
 const rFeed=document.getElementById('reddit-feed');
+const cFeed=document.getElementById('chan-feed');
+let slopMode='reddit';
+
 const SUBS=['r/AITA','r/tifu','r/AmIOverreacting','r/relationship_advice','r/wallstreetbets','r/personalfinance','r/mildlyinfuriating','r/confession','r/gaming','r/pcmasterrace','r/conspiracy','r/antiwork','r/LinkedInLunatics','r/PublicFreakout','r/unpopularopinion','r/teenagers','r/legaladvice','r/survivinginfidelity'];
 const ANIMALS=['iguana','harley','ferret','bearded dragon','emotional support peacock','axolotl','therapy hamster','miniature horse'];
 const FOODS=['soup','pasta','casserole','lasagna','chili','risotto','protein shake','emotional support lasagna'];
@@ -9,6 +12,18 @@ const AMF=['24M','27M','31M','19M','34M','22M','29M','41M','45M'];
 const AFF=['23F','26F','29F','21F','33F','25F','28F','38F','19F'];
 const ADJS=['mid','basic','cringe','sus','lowkey fire','not it','unhinged','giving red flag','chronically online','main character'];
 const VERDICTS=['YTA','NTA','ESH','NAH','YTA/NTA war in comments','INFO needed','Soft YTA','Gentle NTA'];
+
+const BOARDS=['/pol/','biz/','/g/','/v/','/fit/'];
+const PROPAGANDA_PROMPTS=[
+  "🚀 MUSK MEDIA: 'Government waste is literally theft from your paycheck. RT this.'",
+  "💡 FACT CHECK NEEDED: 'Does anyone else think regulations are just [CENSORED BY ESTABLISHMENT]?'",
+  "🔥 HOT TAKE: 'The problem is nobody will just SAY IT anymore. But here it is.'",
+  "📊 DATA SHOWS: '87% of [STATISTICS] are [STATISTICALLY DUBIOUS]. Share this.'",
+  "⚠️ BREAKING: 'Mainstream media won't cover this simple LIFE HACK for [VAGUE TOPIC].'",
+  "🎯 WAKE UP: 'If you still believe [COMMON BELIEF], you haven\'t been paying attention.'",
+  "💰 ECON 101: 'Inflation is caused by [OVERSIMPLIFIED]. Here\'s how to fix it.'",
+  "🛑 CENSORSHIP: 'They deleted my post about [UNVERIFIED CLAIM]. Can\'t silence the truth.'",
+];
 
 const TMPLS=[
   ()=>`AITA for telling my roommate his emotional support ${pick(ANIMALS)} doesn't count as a "service animal" in my Prius?`,
@@ -81,12 +96,36 @@ const TMPLS=[
   ()=>`My [${pick(AMF)}] coworker [${pick(AMF)}] refers to every purchase as an "investment." His portfolio: ${pick(['3 harleys','2 jet skis','a comic collection','commemorative NFTs','a boat named after his ex'])}. AITA for the look I gave him?`,
 ];
 
+const CHAN_TMPLS=[
+  ()=>`>be me\n>bought harley on FB marketplace\n>seller seemed sus\n>now it's "appreciating"\n>wife left\n>mfw this is good actually`,
+  ()=>`>be me\n>invested in doge\n>only lost 40%\n>STILL HOLDING\n>diamond hands engage\n>wife wants divorce\n>HODL`,
+  ()=>`>see government contract for toilet seat\n>$2400\n>for a TOILET SEAT\n>nobody cares\n>system is fine apparently\n>go back to sleep`,
+  ()=>`>coworker won't shut up about grindset\n>wakes up at 4am\n>cold plunge\n>makes less than me\n>still talks about sigma\n>mfw`,
+  ()=>`>tfw you realize birds aren't real\n>government tracking device list:\n>pigeons\n>drones\n>that one sparrow outside\n>pretty sure my toaster\n>should move to basement`,
+  ()=>`>friend spent rent money on blackjack\n>said martingale system "always works"\n>he is now homeless\n>still convinced he's "1 hand away"\n>living in my closet\n>please help`,
+  ()=>`>BREAKING NEWS\n>government billed $600 for hammer\n>nobody talking about this\n>society is collapsing\n>anyway back to scrolling\n>mfw`,
+  ()=>`>my boss made chief vibes officer\n>sends emails at 3am\n>"grindset affects morale"\n>fired me\n>now i am the one affected\n>rip morale`,
+  ()=>`>see random dude doing looksmaxxing\n>this is his 4th month of self-improvement\n>each time: different maxx\n>sleepmaxxing, sigma maxxing\n>up 8% he claims\n>its cope`,
+  ()=>`>bitcoin up 2%\n>time to declare victory on main social\n>bitcoin down 3% next day\n>delete the post\n>pretend it never happened\n>repeat monthly`,
+];
+
 let postVotes={};
+let propagandaOnCooldown=false;
+
+function switchSlop(mode){
+  slopMode=mode;
+  document.getElementById('reddit-feed').style.display=mode==='reddit'?'':'none';
+  document.getElementById('chan-feed').style.display=mode==='4chan'?'':'none';
+  document.querySelectorAll('.reddit-tab').forEach(t=>t.classList.toggle('active', t.dataset.mode===mode));
+}
+
 function makePost(){
+  if(slopMode!=='reddit') return;
   const sub=pick(SUBS), title=pick(TMPLS)();
   const ups=randi(300,62000), cmts=randi(80,4200);
   const verdict=pick(VERDICTS);
   const isYTA=verdict.startsWith('Y')||verdict.startsWith('E');
+  const isHot=Math.random()<0.15;
   const pid='p'+Date.now();
   postVotes[pid]={up:ups};
   const div=document.createElement('div'); div.className='reddit-post'; div.id=pid;
@@ -99,10 +138,81 @@ function makePost(){
       <button class="vote-btn vote-dn" onclick="vote('${pid}','dn')">▼</button>
       <span>${cmts.toLocaleString()} comments</span>
       <span class="${isYTA?'rpost-yta':'rpost-nta'}">${verdict}</span>
+      ${isHot?'<span class="rpost-hot">🔥 HOT</span>':''}
+      <button class="post-award-btn" onclick="awardPost('${pid}')">🏆</button>
+      <button class="post-share-btn" onclick="sharePost()">📤</button>
     </div>`;
   rFeed.insertBefore(div,rFeed.firstChild);
-  while(rFeed.children.length>4) rFeed.removeChild(rFeed.lastChild);
+  while(rFeed.children.length>5) rFeed.removeChild(rFeed.lastChild);
 }
+
+function makeChanPost(){
+  if(slopMode!=='4chan') return;
+  const board=pick(BOARDS);
+  const content=pick(CHAN_TMPLS)();
+  const anonId='Anonymous '+randi(1000,9999);
+  const replies=randi(2,240);
+  const cid='c'+Date.now();
+  const div=document.createElement('div'); div.className='chan-post'; div.id=cid;
+  div.innerHTML=`
+    <div class="chan-hdr">
+      <span class="chan-board">${board}</span>
+      <span class="chan-anon">${anonId}</span>
+      <span class="chan-time">${Math.floor(Math.random()*24)}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}</span>
+    </div>
+    <div class="chan-content">${content}</div>
+    <div class="chan-footer">
+      <span>${replies} replies</span>
+      <span>pic unrelated</span>
+    </div>`;
+  cFeed.insertBefore(div,cFeed.firstChild);
+  while(cFeed.children.length>6) cFeed.removeChild(cFeed.lastChild);
+}
+
+function postPropaganda(){
+  if(propagandaOnCooldown) return;
+  propagandaOnCooldown=true;
+  document.getElementById('propaganda-btn').disabled=true;
+  document.getElementById('propaganda-btn').textContent='[ ⏳ PROCESSING WIRE TRANSFER... ]';
+  setTimeout(()=>{
+    propagandaOnCooldown=false;
+    document.getElementById('propaganda-btn').disabled=false;
+    document.getElementById('propaganda-btn').textContent='[ POST IT ]';
+  },15000);
+
+  // Add as reddit post with insane upvotes
+  const pid='prop'+Date.now();
+  postVotes[pid]={up:999000};
+  const div=document.createElement('div'); div.className='reddit-post rpost-pinned'; div.id=pid;
+  div.innerHTML=`
+    <div class="rpost-sub" style="color:var(--red)">📌 r/BREAKING</div>
+    <div class="rpost-title">${prompt}</div>
+    <div class="rpost-meta">
+      <button class="vote-btn vote-up">▲</button>
+      <span class="rpost-ups">${(999000).toLocaleString()}</span>
+      <button class="vote-btn vote-dn">▼</button>
+      <span>${randi(50000,400000).toLocaleString()} comments</span>
+      <span style="color:var(--amber);font-weight:bold">📌 PINNED BY MOD</span>
+    </div>`;
+  rFeed.insertBefore(div,rFeed.firstChild);
+  while(rFeed.children.length>5) rFeed.removeChild(rFeed.lastChild);
+
+  // Add money
+  checkingBalance+=1000;
+  updateChecking();
+  playUiSound('cash');
+  toast('💰 ELON MUSK MEDIA GRANT: +$1,000. KEEP POSTING.', '#00ff41');
+}
+
+function awardPost(pid){
+  const awards=['🏆 GOLDEN AWARD','💩 FACEPALM GOLD','🫂 WHOLESOME SEAL','❤️ HEARTFELT MOMENT','🎭 UNHINGED GENIUS','⚡ INCENDIARY TRUTH'];
+  toast(`${pick(awards)} GIVEN`, '#ffb300');
+}
+
+function sharePost(){
+  toast('LINK COPIED TO 14 OPEN BROWSER TABS', '#00d4ff');
+}
+
 function vote(pid,dir){
   if(!postVotes[pid]) return;
   postVotes[pid].up += dir==='up'?1:-1;
@@ -110,5 +220,17 @@ function vote(pid,dir){
   if(el) el.textContent=postVotes[pid].up.toLocaleString();
   toast(dir==='up'?'▲ UPDOOTED':'▼ RATIO APPLIED', dir==='up'?'var(--amber)':'var(--purple)');
 }
+
+// Propaganda cycling
+let currentPropIdx=0;
+function cyclePropaganda(){
+  currentPropIdx=(currentPropIdx+1)%PROPAGANDA_PROMPTS.length;
+  document.getElementById('propaganda-prompt').textContent='[ 📡 '+PROPAGANDA_PROMPTS[currentPropIdx]+' ]';
+}
+setInterval(cyclePropaganda, 90000);
+
+// Initial posts
 makePost(); makePost(); makePost();
-setInterval(makePost,8000);
+makeChanPost(); makeChanPost(); makeChanPost();
+setInterval(makePost, 8000);
+setInterval(makeChanPost, 10000);

@@ -156,6 +156,7 @@ const crashedPlanes = new Set();
 let activeCrash = null;
 const manualFlightNotes = {};
 let crashAutoTimer = null;
+let selectedPlaneId = null;
 
 function triggerCrash(plane) {
   if(crashedPlanes.has(plane.id)) return;
@@ -372,14 +373,19 @@ function updateFlightInfo(){
   PLANES.forEach(plane=>{
     const el=document.getElementById('plane-info-'+plane.id);
     if(!el) return;
+    const isSelected = selectedPlaneId === plane.id;
+
     if(crashedPlanes.has(plane.id)){
       el.innerHTML=`
-        <div class="pi-call">${plane.callsign}</div>
+        <div class="pi-call" onclick="selectPlane('${plane.id}')">${plane.callsign}</div>
         <div class="pi-name" style="color:var(--red)">⚠ ${plane.name}</div>
-        <div class="pi-route" style="color:var(--red)">SIGNAL LOST</div>
-        <div class="pi-status" style="color:var(--red)">INCIDENT UNDER INVESTIGATION</div>
-        <div class="pi-stats" style="color:#550000">STATUS: CLASSIFIED · ETA: UNKNOWN</div>
-        <div class="pi-prog-wrap"><div class="pi-prog-fill" style="width:${Math.round(plane.t*100)}%;background:var(--red)"></div></div>`;
+        ${isSelected ? `
+          <div class="pi-route" style="color:var(--red)">SIGNAL LOST</div>
+          <div class="pi-status" style="color:var(--red)">INCIDENT UNDER INVESTIGATION</div>
+          <div class="pi-stats" style="color:#550000">STATUS: CLASSIFIED · ETA: UNKNOWN</div>
+          <div class="pi-prog-wrap"><div class="pi-prog-fill" style="width:${Math.round(plane.t*100)}%;background:var(--red)"></div></div>
+        ` : ''}`;
+      el.classList.toggle('selected', isSelected);
       return;
     }
     const r=plane.routes[plane.routeIdx];
@@ -391,30 +397,42 @@ function updateFlightInfo(){
     const pct=Math.round(plane.t*100);
     const co2=plane.co2Base+randi(-100,200);
     el.innerHTML=`
-      <div class="pi-call">${plane.callsign}</div>
+      <div class="pi-call" onclick="selectPlane('${plane.id}')">${plane.callsign}</div>
       <div class="pi-name" style="color:${plane.color}">${plane.name}</div>
-      <div class="pi-route">${r[0]} → ${r[1]}</div>
-      <div class="pi-status">${note || status}</div>
-      <div class="pi-stats">ALT:${alt.toLocaleString()}ft · SPD:${spd}kts · ETA:${eta}min</div>
-      <div class="pi-stats" style="color:#ff6600">CO₂:${co2}kg/hr · OFFSET:LOL</div>
-      <div class="pi-prog-wrap"><div class="pi-prog-fill" style="width:${pct}%;background:${plane.color}"></div></div>
-      <div class="pi-btns"><button class="pi-btn" onclick="reroutePlane('${plane.id}')">REROUTE</button></div>`;
+      ${isSelected ? `
+        <div class="pi-route">${r[0]} → ${r[1]}</div>
+        <div class="pi-status">${note || status}</div>
+        <div class="pi-stats">ALT:${alt.toLocaleString()}ft · SPD:${spd}kts · ETA:${eta}min</div>
+        <div class="pi-stats" style="color:#ff6600">CO₂:${co2}kg/hr · OFFSET:LOL</div>
+        <div class="pi-prog-wrap"><div class="pi-prog-fill" style="width:${pct}%;background:${plane.color}"></div></div>
+        <div class="pi-btns"><button class="pi-btn" onclick="reroutePlane('${plane.id}')">REROUTE</button></div>
+      ` : ''}`;
+    el.classList.toggle('selected', isSelected);
     delete manualFlightNotes[plane.id];
   });
 
   GROUND_UNITS.forEach(unit=>{
     const el=document.getElementById('plane-info-'+unit.id);
     if(!el) return;
+    const isSelected = selectedPlaneId === unit.id;
     const status=pick(unit.statuses);
     const lp=randi(-400,-10);
     el.innerHTML=`
-      <div class="pi-call">[GROUND UNIT · CHICAGO]</div>
+      <div class="pi-call" onclick="selectPlane('${unit.id}')">[GROUND UNIT · CHICAGO]</div>
       <div class="pi-name" style="color:${unit.color}">${unit.name}</div>
-      <div class="pi-route" style="color:#886633">📍 WAGE CAGE · NO ESCAPE</div>
-      <div class="pi-status">${status}</div>
-      <div class="pi-stats" style="color:#886633">CHAMP: EKKO · RANK: IRON IV · LP: ${lp}</div>
-      <div class="pi-prog-wrap"><div class="pi-prog-fill" style="width:${Math.max(0,100+lp/4)}%;background:${unit.color}"></div></div>`;
+      ${isSelected ? `
+        <div class="pi-route" style="color:#886633">📍 WAGE CAGE · NO ESCAPE</div>
+        <div class="pi-status">${status}</div>
+        <div class="pi-stats" style="color:#886633">CHAMP: EKKO · RANK: IRON IV · LP: ${lp}</div>
+        <div class="pi-prog-wrap"><div class="pi-prog-fill" style="width:${Math.max(0,100+lp/4)}%;background:${unit.color}"></div></div>
+      ` : ''}`;
+    el.classList.toggle('selected', isSelected);
   });
+}
+
+function selectPlane(planeId) {
+  selectedPlaneId = selectedPlaneId === planeId ? null : planeId;
+  updateFlightInfo();
 }
 
 function flightTick(){
@@ -465,18 +483,16 @@ FC.addEventListener('click', e=>{
 
   if(hit.type==='plane'){
     const plane=hit.obj;
+    selectPlane(plane.id);
     const r=plane.routes[plane.routeIdx];
     const status=pick(plane.statuses);
     const co2=plane.co2Base+randi(-100,200);
     toast(`✈ [${plane.callsign}] ${plane.name} :: ${r[0]}→${r[1]} :: ${status} :: CO₂:${co2}kg/hr`, plane.color);
-    const el=document.getElementById('plane-info-'+plane.id);
-    if(el){el.style.background=plane.color+'22';setTimeout(()=>{el.style.background='';},700);}
   } else {
     const unit=hit.obj;
+    selectPlane(unit.id);
     const status=pick(unit.statuses);
     toast(`📍 [${unit.callsign}] ${unit.name} :: ${unit.city} :: ${status}`, unit.color);
-    const el=document.getElementById('plane-info-'+unit.id);
-    if(el){el.style.background=unit.color+'22';setTimeout(()=>{el.style.background='';},700);}
   }
 });
 
