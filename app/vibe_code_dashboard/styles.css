@@ -244,7 +244,7 @@ body::after { /* vignette */
 .bj-stat{padding:4px 6px;border:1px solid #0a1a1a;background:#040a0a;border-radius:2px;}
 .bj-stat .s-lbl{font-size:9px;color:#336;letter-spacing:1px;}
 .bj-stat .s-val{font-size:18px;font-weight:bold;}
-.bj-area{flex:1;display:flex;flex-direction:column;padding:6px 8px;gap:5px;overflow:hidden;position:relative;z-index:1;}
+.bj-area{flex:1;display:flex;flex-direction:column;justify-content:center;padding:8px 10px;gap:8px;overflow:hidden;position:relative;z-index:1;min-height:0;}
 .bj-row-lbl{font-size:10px;color:#004a4a;letter-spacing:1px;}
 .cards-row{display:flex;gap:5px;flex-wrap:wrap;}
 .card{
@@ -279,9 +279,9 @@ body::after { /* vignette */
 .btn-dbl:hover{background:rgba(180,77,255,0.15);}
 
 /* ── SLOTS ── */
-.slots-area{display:none;flex-direction:column;flex:1;padding:6px 8px;gap:6px;overflow:hidden;position:relative;z-index:1;}
+.slots-area{display:none;flex-direction:column;justify-content:space-evenly;flex:1;padding:8px 10px;gap:10px;overflow:hidden;position:relative;z-index:1;min-height:0;}
 .slots-area.active{display:flex;}
-.trade-area{display:none;flex-direction:column;flex:1;padding:6px 8px;gap:5px;overflow:hidden;position:relative;z-index:1;}
+.trade-area{display:none;flex-direction:column;flex:1;padding:8px 10px;gap:8px;overflow:hidden;position:relative;z-index:1;min-height:0;}
 .trade-area.active{display:flex;}
 .trade-ticker-row{display:flex;gap:4px;flex-wrap:wrap;}
 .tr-sym-btn{background:transparent;border:1px solid #1a3a1a;color:#555;font-family:inherit;font-size:9px;padding:2px 5px;cursor:pointer;border-radius:2px;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:52px;}
@@ -293,8 +293,8 @@ body::after { /* vignette */
 .trade-sym-lbl{font-size:13px;color:var(--cyan);font-weight:bold;letter-spacing:1px;}
 .trade-price-val{font-size:16px;color:var(--green);}
 .trade-delta{font-size:11px;}
-#trade-chart{display:block;width:100%;border:1px solid #0a1a0a;border-radius:2px;flex-shrink:0;}
-.reel-display{display:flex;align-items:center;justify-content:center;gap:10px;flex:1;max-height:105px;}
+#trade-chart{display:block;width:100%;border:1px solid #0a1a0a;border-radius:2px;flex:1;min-height:130px;}
+.reel-display{display:flex;align-items:center;justify-content:center;gap:10px;flex:0 0 auto;min-height:108px;}
 .reel{
   width:70px;height:86px;border:2px solid #1a1800;
   background:linear-gradient(160deg,#0a0800,#140f00);
@@ -314,6 +314,9 @@ body::after { /* vignette */
 .slots-result.sl-jackpot{color:#ffd700;text-shadow:0 0 16px #ffd700;animation:pulse 0.5s infinite;}
 .slots-result.sl-loss{color:var(--red);}
 .slots-result.sl-curse{color:var(--pink);text-shadow:0 0 10px var(--pink);}
+
+#panel-bj .bj-stats{flex-shrink:0;}
+#panel-bj .bj-advice{margin-top:auto;}
 
 /* ── FLIGHT TRACKER ── */
 #flight-canvas{display:block;flex:1;min-height:0;position:relative;z-index:1;cursor:crosshair;}
