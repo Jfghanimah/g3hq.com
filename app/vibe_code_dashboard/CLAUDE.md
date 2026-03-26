@@ -51,3 +51,15 @@ Both `radar.js` and `flight-tracker.js` use `requestAnimationFrame` loops starte
 ### Script load order matters
 
 `utils.js` must be first (defines globals everything else uses). `app.js` must be last (calls functions from radar and flight-tracker). The order in `index.html` is the correct dependency order — maintain it when adding new modules.
+
+## Git Operations
+
+**IMPORTANT**: Never run git commands (commit, push, branch, reset, rebase, etc.) without explicitly asking for permission first. Always confirm with the user before making any git-related changes, even if it seems like a natural next step. This includes:
+- Creating or switching branches
+- Committing changes
+- Pushing to remote
+- Rebasing or merging
+- Checking out files
+- Resetting or cleaning
+
+Ask first, execute after approval.
