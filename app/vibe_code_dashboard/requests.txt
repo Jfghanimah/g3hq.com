@@ -9,6 +9,7 @@ Reddit Section:
 
 
 SUGGESTED IDEAS:
+- WORKING credit score tracker
 - fake NORAD-style "OBJECT OF INTEREST" dossier card that slides out when you click a radar contact
 - occasional DEFCON flash where the header bars all spike red for 3 seconds because the radar saw a "space invader boss wave"
 - tiny "air traffic chatter" subtitle strip under the radar with garbage comms like "AWACS says skill issue, over"
