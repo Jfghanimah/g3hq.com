@@ -249,7 +249,10 @@ function triggerCrash(plane) {
     crashedPlanes.delete(plane.id);
     plane.t = 0;
     plane.path = null;
+    delete manualFlightNotes[plane.id];
+    if(selectedPlaneId === plane.id) selectedPlaneId = null;
     plane.routeIdx = randi(0, plane.routes.length - 1);
+    updateFlightInfo();
     toast(`📡 ${plane.callsign} :: SIGNAL REACQUIRED. OFFICIAL EXPLANATION: WEATHER.`, plane.color);
   }, 50000);
 }
@@ -322,6 +325,7 @@ function reroutePlane(planeId) {
   const route = getPlaneRoute(plane);
   const destination = pickNextDestination(route[1]);
   const end = CITIES[destination];
+  // Reroutes originate from the asset's live 2D position and preserve heading via a curved turn.
   plane.path = {
     start: current,
     control: makeTurnControl(current, end, getPlaneHeadingVector(plane)),
@@ -572,6 +576,11 @@ function buildUnitInfo(unit) {
 
 function updateFlightInfo() {
   const info = document.getElementById('flight-info');
+  // Nothing selected means there is no detail card to refresh.
+  if(!selectedPlaneId) {
+    info.classList.remove('has-selection');
+    return;
+  }
   let hasSelection = false;
 
   PLANES.forEach(plane => {
@@ -586,7 +595,6 @@ function updateFlightInfo() {
     hasSelection = true;
     el.innerHTML = crashedPlanes.has(plane.id) ? buildCrashInfo(plane) : buildPlaneInfo(plane);
     el.classList.add('selected');
-    delete manualFlightNotes[plane.id];
   });
 
   GROUND_UNITS.forEach(unit => {
@@ -624,6 +632,7 @@ function flightTick() {
       const completedDestination = getPlaneRoute(plane)[1];
       plane.t = 0;
       plane.path = null;
+      delete manualFlightNotes[plane.id];
       plane.routeIdx = (plane.routeIdx + 1) % plane.routes.length;
       plane.routes[plane.routeIdx] = [completedDestination, pickNextDestination(completedDestination)];
     }
@@ -661,6 +670,8 @@ FC.addEventListener('click', e => {
     }
   });
 
+  // Keep the current selection if the user clicks empty map space.
+  if(!hit) return;
   selectedPlaneId = hit;
   updateFlightInfo();
   drawFlightMap();

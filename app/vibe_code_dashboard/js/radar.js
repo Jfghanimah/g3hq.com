@@ -47,7 +47,7 @@ const THREATS = [
   'AIR FORCE ONE: DRIFTING','NUCLEAR FOOTBALL: UNACCOUNTED FOR','SCRAMBLE ORDER: PENDING',
   'B-2 ECHO: RETURNING','ICBM LARP DETECTED','AIRSPACE BREACH: QUESTIONABLE',
   'AWACS BLIP: CIRCLING','MISSILE SILO DISCOURSE','STEALTH CONTACT: PROBABLY FINE',
-  'SPACE INVADER WAVE: APPROACHING','PIXEL UFO: DESCENDING','BOSS FIGHT IN ORBIT',
+  'UNIDENTIFIED FORMATION: APPROACHING','PIXEL ANOMALY: DESCENDING','ORBITAL INTRUSION DETECTED',
   'SATELLITE DEBRIS: ANNOYED','NUCLEAR SUB TWEETED','AIR RAID VIBES: IMMACULATE',
   // government waste
   'CONTRACTOR: BILLING','SUBSIDY: REQUESTED','AUDIT: NEVER',
@@ -66,7 +66,7 @@ const THREATS = [
 const AMBIENT_TRACKS = [
   { label:'AF1', x:-0.62, y:-0.18, vx:0.0018, vy:0.0005, color:'#7fd3ff', kind:'plane' },
   { label:'NUKE', x:0.48, y:-0.54, vx:-0.0011, vy:0.0013, color:'#ff6666', kind:'missile' },
-  { label:'INV-1', x:-0.22, y:0.67, vx:0.0014, vy:-0.001, color:'#ff00ff', kind:'invader' },
+  { label:'ECHO-1', x:-0.22, y:0.67, vx:0.0014, vy:-0.001, color:'#ff00ff', kind:'missile' },
   { label:'AWACS', x:0.68, y:0.18, vx:-0.0012, vy:-0.0007, color:'#ffd166', kind:'plane' },
   { label:'SAT-7', x:0.1, y:-0.74, vx:0.0008, vy:0.0015, color:'#00ffaa', kind:'sat' },
   { label:'DrDoughnut [AFK]', x:-0.35, y:0.42, vx:0.0, vy:0.0, color:'#ff9900', kind:'sat' },
@@ -120,10 +120,6 @@ function drawAmbientTrack(track, cx, cy, R, now) {
     rCtx.lineTo(-4, 3);
     rCtx.closePath();
     rCtx.fill();
-  } else if(track.kind === 'invader') {
-    rCtx.fillRect(-5, -4, 10, 8);
-    rCtx.clearRect(-2, -1, 1, 1);
-    rCtx.clearRect(1, -1, 1, 1);
   } else {
     rCtx.beginPath();
     rCtx.arc(0, 0, 4, 0, Math.PI * 2);
@@ -412,17 +408,17 @@ function triggerDefconFlash() {
   const hdr2 = document.getElementById('hdr2');
   hdr1.classList.add('defcon-flash');
   hdr2.classList.add('defcon-flash');
-  // Spawn space invader boss wave blips
+  // Spawn hostile contact wave
   for(let i = 0; i < 6; i++) {
     const angle = (i / 6) * Math.PI * 2;
     const dist = rand(0.3, 0.82);
-    blips.push({ x:Math.cos(angle)*dist, y:Math.sin(angle)*dist, label:'SPACE INVADER BOSS', born:Date.now() });
+    blips.push({ x:Math.cos(angle)*dist, y:Math.sin(angle)*dist, label:'HOSTILE CONTACT', born:Date.now() });
     threatCount++;
   }
   document.getElementById('threat-count').textContent = threatCount;
   document.getElementById('radar-defcon').textContent = '1';
   document.getElementById('radar-defcon').style.color = 'var(--red)';
-  toast('🚨 DEFCON 1 :: SPACE INVADER BOSS WAVE :: SECTOR 7 COMPROMISED', 'var(--red)');
+  toast('🚨 DEFCON 1 :: HOSTILE FORMATION :: SECTOR 7 COMPROMISED', 'var(--red)');
   playUiSound('crash-alert');
   setTimeout(() => {
     hdr1.classList.remove('defcon-flash');

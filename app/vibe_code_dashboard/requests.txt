@@ -1,8 +1,18 @@
 ADJUST THIS PAGE WHEN YOU ADD FROM IT!!!
-
+CLEANUP:
 - Reddit placeholder guard so broken [COMMON BELIEF] / WAKE UP style posts do not render MUST FIX!!
+- Too many elemeents in top tab too much space so its overlapping
+- too many flight notifactions pls reduce frequency
+- when you click on a flight for details it shouldnt squish the map the menu that pops up should just be overlayed
+- also the flight details are too small the text make it a dad bigger 20% bigger?
+- too many slop toasts that make noise its desensitizing the user to real noise queues i dont like the slop toasts 
+- the radar seems hard to play with bc it keeps asking for confirmation make the user 'shoot missiles' at the purple blips that show up remove space invader mechanics
+- [ ] flights slowed down more
+- [ ] reroute should respect current in-flight position instead of resetting
 
-SUGGESTED IDEAS:
+
+
+BACKLOG SUGGESTED IDEAS:
 
 -- FINANCIAL DESPAIR --
 - WORKING credit score tracker
@@ -13,16 +23,9 @@ SUGGESTED IDEAS:
 - WageCuck clock — live ticking counter of hours worked this week vs. what the CEO made in the same time
 
 -- ABSURD NOTIFICATIONS --
-- [x] Amazon package tracker — same energy as McNugget, package stuck "OUT FOR DELIVERY" for 11 days, driver last seen in Albuquerque
 - LinkedIn hustle feed — Gary Vee liked your post, recruiter viewed your profile, someone endorsed you for "Microsoft Word"
-- [x] Email inbox — unread count climbs every minute, subject lines become increasingly unhinged spam
 
 -- LIFE METRICS (FAILING) --
-- [x] Uber rating tracker — slowly declining from 4.9, reasons shown: "driver seemed tense", "uncomfortable silence"
-- [x] Gym streak tracker — last check-in: 47 days ago. current streak: 0. "BODY: SOFTENING"
-- [x] Sleep tracker panel — always 4.5 hrs. REM: NONE. "COGNITIVE PERFORMANCE: SUBOPTIMAL. CONTINUE GRINDING."
-- [x] HOA violation feed — new notices accumulate, fines compound, final notice blinks red
-
 -- CHUD / SIGMA / GOYMAXXING --
 - SIGMA GRINDSET SCORE — live fluctuating score, drops when you open Reddit, rises when you "skip lunch"
 - LOOKSMAXX PROGRESS — jawline: 4.1/10, mewing streak: 3 days, overall: "COPING"
@@ -32,15 +35,11 @@ SUGGESTED IDEAS:
 - NPC BEHAVIOR SCORE — how many normie things you did today (bought coffee: +1, said "have a good one": +1)
 - ALPHA HIERARCHY DISPLAY — scrolling org chart: CHAD → SIGMA → NORMIE → BETA → YOU
 - MIDWIT DETECTOR — bell curve graphic, your dot is always slightly left of center
-- [x] TESTOSTERONE LEVEL — live readout, always "LOW NORMAL", advice: "EAT MORE RED MEAT"
 
 -- CHAOS --
 - Boss proximity alert — "MANAGER DETECTED NEARBY" overlays fake Excel spreadsheet over the whole dashboard
-- [x] Wi-Fi signal panel — oscillates wildly, blames the neighbors, names their network "DEFINITELY_NOT_HACKING_YOU"
 - HR complaint counter — tracks how many times you've been "talked to", current status: "ON NOTICE"
-- [x] PTO days remaining — always 0. accrual rate shown. "YOU OWE THE COMPANY 2 DAYS"
 - Performance review anxiety meter — spikes randomly, worst right before holidays
-
 
 
 AI SUGGESTED IDEAS:
@@ -50,19 +49,10 @@ AI SUGGESTED IDEAS:
 - tiny "air traffic chatter" subtitle strip under the radar with garbage comms like "AWACS says skill issue, over"
 - one absurd ultra-rare radar event where every blip becomes a pizza delivery route for 10 seconds
 - decoy contacts named after inside jokes like DrDoughnut, mork, and Goat Gamers Gaming
-- [x] Add a "Grass Touched" timer that is permanently stuck at 0 days, 0 hours.
 - IRS Audit Threat Level meter that spikes every time you win a hand of Blackjack or approve a shady funding request.
 - Fake Uber Eats tracker for a 40-piece McNugget meal that gets progressively more delayed until the status updates to "Driver ate your food".
 - Add a "Tinder/Discord" auto-responder module that just replies "ratio" and "skill issue" to incoming unhinged DMs.
 - Add a fake "live patch notes" popup where the game client claims it fixed matchmaking, then immediately says "known issue: it did not."
 - Add a rotating bunker-cam module that occasionally cuts to static and comes back with someone clearly standing in the wrong country.
 - Add a fake stockbreaker event where the trading terminal freezes for 6 seconds and a banner says "VOLATILITY HALT :: YOU CAUSED THIS."
-- [x] Add a tiny "mission timer" widget for random absurd ops like "locate mohan" or "avoid blackrock" that always finishes at 99%.
 - Add a rare flight tracker event where one nuclear sub briefly pings "hello :)" and then disappears from the map.
-
-- [ ] flights slowed down more
-- [ ] reroute should respect current in-flight position instead of resetting
-- [~] flight detail cards should mostly reveal on hover / selection instead of always being open
-- [~] selected flight/contact should be much more obvious on map and in cards
-- [ ] bunker contacts around Argentina / Australia
-- [ ] add nuclear submarine contacts
