@@ -18,6 +18,7 @@
   </div>
 </div>
 <div id="toast"></div>
+<div id="mcnugget-tracker"><span id="mcnugget-text">🍗 ORDER PLACED: 40PC MCNUGGET</span></div>
 <audio id="bg-music" loop src="audio_clips/HOME - Resonance.mp3" preload="auto"></audio>
 
 <!-- SUGGESTION BOX MODAL -->
@@ -138,6 +139,19 @@
   <div class="panel" id="panel-radar">
     <div class="panel-title">◈ THREAT RADAR :: SECTOR 7 <span style="margin-left:auto;font-size:10px;color:#003a10">CLICK BLIP TO NEUTRALIZE</span></div>
     <canvas id="radar-canvas"></canvas>
+    <!-- NORAD DOSSIER -->
+    <div id="radar-dossier">
+      <div id="dossier-hdr">⬛ OBJECT OF INTEREST</div>
+      <div id="dossier-class">CLASSIFICATION: ???</div>
+      <div id="dossier-id">DESIGNATION: ???</div>
+      <div id="dossier-threat">THREAT CLASS: ???</div>
+      <div id="dossier-origin">ORIGIN: UNKNOWN</div>
+      <div id="dossier-action">ACTION: ???</div>
+      <div class="dossier-btns">
+        <button class="doss-btn doss-neut" onclick="neutralizeDossier()">[ ⚡ NEUTRALIZE ]</button>
+        <button class="doss-btn doss-dismiss" onclick="dismissDossier()">[ ✕ DISMISS ]</button>
+      </div>
+    </div>
     <div id="radar-hud">
       <div class="radar-chip"><span class="radar-chip-lbl">DEFCON</span><span class="radar-chip-val" id="radar-defcon">3</span></div>
       <div class="radar-chip"><span class="radar-chip-lbl">AIRSPACE</span><span class="radar-chip-val" id="radar-airspace">CROWDED</span></div>
@@ -292,6 +306,7 @@
     <div class="reddit-tabs">
       <button class="reddit-tab active" data-mode="reddit" onclick="switchSlop('reddit')">Reddit</button>
       <button class="reddit-tab" data-mode="4chan" onclick="switchSlop('4chan')">4chan</button>
+      <button class="reddit-tab" data-mode="dm" onclick="switchSlop('dm')">📱 DMs</button>
     </div>
     <div id="propaganda-bar">
       <span id="propaganda-prompt">[ 📡 NEW POSTING OPPORTUNITY FROM ELON ]</span>
@@ -299,6 +314,7 @@
     </div>
     <div id="reddit-feed"></div>
     <div id="chan-feed" style="display:none"></div>
+    <div id="dm-feed" style="display:none"></div>
   </div>
 
 </div>

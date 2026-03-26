@@ -127,6 +127,8 @@ function switchSlop(mode){
   slopMode=mode;
   document.getElementById('reddit-feed').style.display=mode==='reddit'?'':'none';
   document.getElementById('chan-feed').style.display=mode==='4chan'?'':'none';
+  document.getElementById('dm-feed').style.display=mode==='dm'?'':'none';
+  document.getElementById('propaganda-bar').style.display=mode==='reddit'?'':'none';
   document.querySelectorAll('.reddit-tab').forEach(t=>t.classList.toggle('active', t.dataset.mode===mode));
 }
 
@@ -268,6 +270,50 @@ function vote(pid,dir){
   toast(dir==='up'?'▲ UPDOOTED':'▼ RATIO APPLIED', dir==='up'?'var(--amber)':'var(--purple)');
 }
 
+// ── DM AUTO-RESPONDER ──
+const DM_PLATFORMS=['Discord','Tinder','Instagram','Reddit DM','Twitter DM','Snapchat'];
+const DM_SENDERS=[
+  'xX_alpha_sigma_Xx','HarleyInvestor69','GrindsetGuru','CryptoKing2025',
+  'MartingaleMan','DrDoughnut_Real','WokeCrusher99','NFTPhilosopher',
+  'BasedAndPilled','FreedomEagle1776','GymRat_Philosophy','IQOver200',
+  'RedactedTruth','DeltaForceVet','SkillIssueKing',
+];
+const DM_MSGS=[
+  ()=>`bro your blackjack strategy is WRONG. you need to HIT on soft 17 unless the dealer shows a 6, and even then you should DOUBLE if your cards total ${randi(8,12)}. i have been doing this for ${randi(3,15)} years`,
+  ()=>`wake up. the government puts ${pick(['fluoride','5G','microchips','chemicals'])} in ${pick(['the water','vaccines','chemtrails','fast food'])} to keep you compliant. i can explain more. do your research`,
+  ()=>`my harley is NOT depreciating it's a COLLECTOR'S ITEM. i bought it for $${randi(9000,18000)} and it's going up. you don't understand the market`,
+  ()=>`ratio + you fell off + cope + ${pick(['skill issue','L','no bitches','touch grass','down bad','not based'])}`,
+  ()=>`i have an IQ of ${randi(140,200)} and i figured out that ${pick(['the matrix is real','birds aren\'t real','the simulation is glitching','Epstein didn\'t kill himself'])}. you should listen to me`,
+  ()=>`your ${pick(['post','comment','opinion','take','profile'])} was ${pick(['cringe','mid','not it','giving red flag','actually kind of based ngl','unhinged'])} and i had to tell someone`,
+  ()=>`actually the martingale strategy DOES work you just need ${pick(['infinite money','patience','the right casino','to believe in yourself','better vibes'])}`,
+  ()=>`i'm not racist but ${pick(['have you considered','what if','hear me out','statistically speaking'])} ${pick(['the data','my uncle','a podcast','common sense'])} says—`,
+  ()=>`ur so valid for this actually. i'm in my era of being ${pick(['hyper-independent','delusional','unbothered','sigma','on my grind'])} and this really resonated`,
+  ()=>`i applied to ${randi(200,800)} jobs in ${randi(3,18)} months and got ${randi(0,2)} callbacks. my cover letter says "chief vibes officer." this is the system's fault`,
+  ()=>`ok so ACTUALLY if you look at what Elon said in context it was clearly ${pick(['a joke','taken out of context','based','misrepresented by the media','based on data'])}`,
+  ()=>`day ${randi(100,900)} of my self-improvement journey. ${pick(['looksmaxxing','sleepmaxxing','cold plunging','fasting','sigma grindset'])} has changed everything. anyway can you fund my ${pick(['podcast','crypto','nft project','startup','supplement brand'])}`,
+];
+const DM_REPLIES=['ratio','skill issue','ratio + skill issue','L','cope','not reading all that','bro really typed all this','noted. ignored.','ratio','skill issue lol','who asked','ratio + fell off','deleted. not read. gone.','blocked (but auto-replied first)'];
+
+const dmFeed = document.getElementById('dm-feed');
+
+function makeDmPost(){
+  const sender=pick(DM_SENDERS);
+  const platform=pick(DM_PLATFORMS);
+  const msg=pick(DM_MSGS)();
+  const reply=pick(DM_REPLIES);
+  const did='dm'+Date.now();
+  const div=document.createElement('div'); div.className='dm-post'; div.id=did;
+  div.innerHTML=`
+    <div class="dm-header">
+      <span class="dm-sender">${sender}</span>
+      <span class="dm-platform">${platform}</span>
+    </div>
+    <div class="dm-msg">${msg}</div>
+    <div class="dm-reply">${reply}</div>`;
+  dmFeed.insertBefore(div,dmFeed.firstChild);
+  while(dmFeed.children.length>6) dmFeed.removeChild(dmFeed.lastChild);
+}
+
 // Propaganda cycling
 let currentPropIdx=0;
 function cyclePropaganda(){
@@ -279,7 +325,9 @@ setInterval(cyclePropaganda, 90000);
 // Initial posts
 makePost(); makePost(); makePost();
 makeChanPost(); makeChanPost(); makeChanPost();
+makeDmPost(); makeDmPost(); makeDmPost();
 setInterval(makePost, 8000);
 setInterval(makeChanPost, 10000);
+setInterval(makeDmPost, 12000);
 // Insider tips drop every 2–3 minutes, first one after 45s
 setTimeout(()=>{ makeInsiderPost(); setInterval(makeInsiderPost, randi(120,180)*1000); }, 45000);

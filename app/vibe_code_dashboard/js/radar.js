@@ -302,10 +302,13 @@ function radarTick() {
     wrapTrack(track);
   });
 
+  // Ultra-rare pizza delivery hijack (~0.03% per tick ≈ once every ~55 seconds)
+  if(Math.random() < 0.0003 && !pizzaMode && blips.length > 0) triggerPizzaMode();
+
   if(Math.random() < 0.012 && blips.length < MAX_BLIPS) {
     const angle = rAngle + (Math.random() - 0.5) * 0.5;
     const dist = rand(0.18, 0.88);
-    const threat = pick(THREATS);
+    const threat = pizzaMode ? pick(PIZZA_LABELS) : pick(THREATS);
     blips.push({ x:Math.cos(angle) * dist, y:Math.sin(angle) * dist, label:threat, born:Date.now() });
     threatCount++;
     document.getElementById('threat-count').textContent = threatCount;
@@ -318,6 +321,36 @@ function radarTick() {
   requestAnimationFrame(radarTick);
 }
 
+// ── NORAD DOSSIER ──
+let dossierBlip = null;
+const DOSSIER_CLASSES = ['ALPHA','BRAVO','CHARLIE','DELTA','OMEGA','SIGMA','CURSED','CLASSIFIED'];
+const DOSSIER_ORIGINS = ['UNKNOWN ORIGIN','DEEP STATE','SECTOR 7B','RUSSIAN ORIGIN','DOMESTIC','CYBERSPACE','LOW EARTH ORBIT','CLASSIFIED'];
+const DOSSIER_ACTIONS = ['SCRAMBLE JETS','MONITOR ONLY','AUDIT IMMEDIATELY','DEPLOY COUNTER-MEMES','CALL LAWYER','NO ACTION (YET)','THOUGHTS AND PRAYERS','INVOKE ARTICLE §69'];
+
+function showDossier(blip) {
+  dossierBlip = blip;
+  document.getElementById('dossier-class').textContent = 'CLASSIFICATION: ' + pick(DOSSIER_CLASSES);
+  document.getElementById('dossier-id').textContent = 'DESIGNATION: ' + blip.label;
+  document.getElementById('dossier-threat').textContent = 'THREAT LEVEL: ' + randi(1,10) + '/10';
+  document.getElementById('dossier-origin').textContent = 'ORIGIN: ' + pick(DOSSIER_ORIGINS);
+  document.getElementById('dossier-action').textContent = 'RECOMMENDED ACTION: ' + pick(DOSSIER_ACTIONS);
+  document.getElementById('radar-dossier').classList.add('show');
+  playUiSound('modal-open');
+}
+function neutralizeDossier() {
+  if(!dossierBlip) return;
+  blips = blips.filter(b => b !== dossierBlip);
+  playUiSound('neutralize');
+  toast(`THREAT NEUTRALIZED: ${dossierBlip.label}`, 'var(--green)');
+  addRadarLog(dossierBlip.label, true);
+  dossierBlip = null;
+  document.getElementById('radar-dossier').classList.remove('show');
+}
+function dismissDossier() {
+  dossierBlip = null;
+  document.getElementById('radar-dossier').classList.remove('show');
+}
+
 rCanvas.addEventListener('click', e => {
   const rect = rCanvas.getBoundingClientRect();
   const mx = e.clientX - rect.left;
@@ -326,7 +359,7 @@ rCanvas.addEventListener('click', e => {
   const cy = rCanvas.height / 2;
   const R = Math.min(cx, cy) - 10;
   let closest = null;
-  let minDist = 24;
+  let minDist = 28;
 
   blips.forEach(b => {
     const d = Math.hypot(mx - (cx + b.x * R), my - (cy + b.y * R));
@@ -337,10 +370,7 @@ rCanvas.addEventListener('click', e => {
   });
 
   if(closest) {
-    blips = blips.filter(b => b !== closest);
-    playUiSound('neutralize');
-    toast(`THREAT NEUTRALIZED: ${closest.label}`, 'var(--green)');
-    addRadarLog(closest.label, true);
+    showDossier(closest);
   }
 });
 
@@ -373,6 +403,60 @@ function tickAtcChatter() {
 }
 tickAtcChatter();
 setInterval(tickAtcChatter, 5000);
+
+// ── DEFCON FLASH ──
+let defconFlashActive = false;
+function triggerDefconFlash() {
+  if(defconFlashActive) return;
+  defconFlashActive = true;
+  const hdr1 = document.getElementById('hdr1');
+  const hdr2 = document.getElementById('hdr2');
+  hdr1.classList.add('defcon-flash');
+  hdr2.classList.add('defcon-flash');
+  // Spawn space invader boss wave blips
+  for(let i = 0; i < 6; i++) {
+    const angle = (i / 6) * Math.PI * 2;
+    const dist = rand(0.3, 0.82);
+    blips.push({ x:Math.cos(angle)*dist, y:Math.sin(angle)*dist, label:'SPACE INVADER BOSS', born:Date.now() });
+    threatCount++;
+  }
+  document.getElementById('threat-count').textContent = threatCount;
+  document.getElementById('radar-defcon').textContent = '1';
+  document.getElementById('radar-defcon').style.color = 'var(--red)';
+  toast('🚨 DEFCON 1 :: SPACE INVADER BOSS WAVE :: SECTOR 7 COMPROMISED', 'var(--red)');
+  playUiSound('crash-alert');
+  setTimeout(() => {
+    hdr1.classList.remove('defcon-flash');
+    hdr2.classList.remove('defcon-flash');
+    document.getElementById('radar-defcon').style.color = '';
+    defconFlashActive = false;
+  }, 3000);
+}
+function scheduleDefconFlash() {
+  setTimeout(() => { triggerDefconFlash(); scheduleDefconFlash(); }, randi(90,180) * 1000);
+}
+scheduleDefconFlash();
+
+// ── PIZZA DELIVERY EVENT ──
+let pizzaMode = false;
+const PIZZA_LABELS = [
+  'PIZZA HUT (14 MIN LATE)','DOORDASH #6969 ARRIVING','DRIVER: 1.9 STARS',
+  'WINGS · ETA: NEVER','WRONG ADDRESS: CONFIRMED','ORDER: MYSTERIOUSLY CANCELLED',
+  'EXTRA NAPKINS: DENIED','40PC MCNUGGET (WARM-ISH)','DRIVER ATE THE FRIES',
+  'GRUBHUB: LOCATION UNKNOWN','UBER EATS: IN WRONG CITY','REFUND: DENIED',
+];
+function triggerPizzaMode() {
+  if(pizzaMode) return;
+  pizzaMode = true;
+  blips.forEach(b => { b._savedLabel = b.label; b.label = pick(PIZZA_LABELS); });
+  toast('🍕 RADAR HIJACK: DOORDASH TOOK OVER SECTOR 7. EST. DELIVERY: NEVER.', '#ff6600');
+  playUiSound('modal-open');
+  setTimeout(() => {
+    blips.forEach(b => { if(b._savedLabel) b.label = b._savedLabel; });
+    pizzaMode = false;
+    toast('📡 RADAR RESTORED. YOUR FOOD IS COLD. REFUND DENIED.', 'var(--green)');
+  }, 10000);
+}
 
 setupRadar();
 updateRadarHud();
