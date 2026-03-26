@@ -2,7 +2,7 @@
 // FLIGHT TRACKER
 // ══════════════════════════════════════════════
 const FC = document.getElementById('flight-canvas');
-const FX = FC.getContext('2d');
+const FX = FC ? FC.getContext('2d') : null;
 const flightMapImage = new Image();
 flightMapImage.src = 'image.png';
 flightMapImage.onload = () => drawFlightMap();
@@ -376,11 +376,15 @@ function drawCrosshair(x, y, color) {
 }
 
 function drawFlightMap() {
+  if(!FC || !FX) return;
   const panel = document.getElementById('panel-flight');
+  if(!panel) return;
   const title = panel.querySelector('.panel-title');
-  const W = FC.width = panel.clientWidth;
+  if(!title) return;
+  const rect = panel.getBoundingClientRect();
+  const W = FC.width = Math.max(320, Math.round(rect.width || panel.clientWidth || 0));
   // Flight details are an overlay; they should not steal height from the map canvas.
-  const H = FC.height = Math.max(250, panel.clientHeight - title.clientHeight);
+  const H = FC.height = Math.max(250, Math.round((rect.height || panel.clientHeight || 0) - title.offsetHeight));
   FX.clearRect(0, 0, W, H);
 
   FX.fillStyle = '#020408';
@@ -649,41 +653,43 @@ function flightTick() {
   requestAnimationFrame(flightTick);
 }
 
-FC.addEventListener('click', e => {
-  const rect = FC.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-  const W = FC.width;
-  const H = FC.height;
-  let hit = null;
-  let minD = 30;
+if(FC) {
+  FC.addEventListener('click', e => {
+    const rect = FC.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const W = FC.width;
+    const H = FC.height;
+    let hit = null;
+    let minD = 30;
 
-  PLANES.forEach(plane => {
-    if(crashedPlanes.has(plane.id)) return;
-    const pos = planePos(plane, W, H);
-    const d = Math.hypot(mx - pos.x, my - pos.y);
-    if(d < minD) {
-      minD = d;
-      hit = plane.id;
-    }
+    PLANES.forEach(plane => {
+      if(crashedPlanes.has(plane.id)) return;
+      const pos = planePos(plane, W, H);
+      const d = Math.hypot(mx - pos.x, my - pos.y);
+      if(d < minD) {
+        minD = d;
+        hit = plane.id;
+      }
+    });
+
+    GROUND_UNITS.forEach(unit => {
+      const pos = getUnitPos(unit, W, H);
+      if(!pos) return;
+      const d = Math.hypot(mx - pos.x, my - pos.y);
+      if(d < minD) {
+        minD = d;
+        hit = unit.id;
+      }
+    });
+
+    // Keep the current selection if the user clicks empty map space.
+    if(!hit) return;
+    selectedPlaneId = hit;
+    updateFlightInfo();
+    drawFlightMap();
   });
-
-  GROUND_UNITS.forEach(unit => {
-    const pos = getUnitPos(unit, W, H);
-    if(!pos) return;
-    const d = Math.hypot(mx - pos.x, my - pos.y);
-    if(d < minD) {
-      minD = d;
-      hit = unit.id;
-    }
-  });
-
-  // Keep the current selection if the user clicks empty map space.
-  if(!hit) return;
-  selectedPlaneId = hit;
-  updateFlightInfo();
-  drawFlightMap();
-});
+}
 
 document.addEventListener('keydown', e => {
   if(e.key === 'Escape') {
@@ -695,8 +701,14 @@ document.addEventListener('keydown', e => {
   }
 });
 
-updateFlightSummary();
-drawFlightMap();
-flightTick();
-setInterval(updateFlightInfo, 2000);
-updateFlightInfo();
+function initFlightTracker() {
+  if(!FC || !FX) return;
+  updateFlightSummary();
+  updateFlightInfo();
+  drawFlightMap();
+  flightTick();
+  setInterval(updateFlightInfo, 2000);
+  window.addEventListener('resize', drawFlightMap);
+}
+
+initFlightTracker();
