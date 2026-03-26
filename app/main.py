@@ -217,7 +217,8 @@ def webhook():
     if payload.get('ref') != 'refs/heads/main':
         return 'Ignored', 200  # not a push to main
 
-    subprocess.Popen(['/home/joseph/g3hq.com/deploy.sh'])
+    log = open('/home/joseph/g3hq.com/deploy.log', 'a')
+    subprocess.Popen(['/home/joseph/g3hq.com/deploy.sh'], stdout=log, stderr=log)
     return 'Deploying', 200
 
 
