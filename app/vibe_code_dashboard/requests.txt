@@ -2,7 +2,6 @@ ADJUST THIS PAGE WHEN YOU ADD FROM IT!!!
 CLEANUP:
 - Too many elemeents in top tab too much space so its overlapping
 - too many flight notifactions pls reduce frequency
-- when you click on a flight for details it shouldnt squish the map the menu that pops up should just be overlayed
 - also the flight details are too small the text make it a dad bigger 20% bigger?
 - the radar seems hard to play with bc it keeps asking for confirmation make the user 'shoot missiles' at the purple blips that show up remove space invader mechanics
 - [ ] flights slowed down more
