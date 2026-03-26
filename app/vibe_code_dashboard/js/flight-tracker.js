@@ -145,6 +145,7 @@ let activeCrash = null;
 const manualFlightNotes = {};
 let crashAutoTimer = null;
 let selectedPlaneId = null;
+let nextCrashEligibleAt = 0;
 
 const lerp = (a, b, t) => a + (b - a) * t;
 const lerpPoint = (a, b, t) => ({ lon: lerp(a.lon, b.lon, t), lat: lerp(a.lat, b.lat, t) });
@@ -225,6 +226,8 @@ function updateFlightSummary() {
 
 function triggerCrash(plane) {
   if(crashedPlanes.has(plane.id)) return;
+  // Enforce a quiet period so emergency incidents feel rare instead of spammy.
+  nextCrashEligibleAt = Date.now() + 180000;
   crashedPlanes.add(plane.id);
   activeCrash = plane;
   const route = getPlaneRoute(plane);
@@ -623,8 +626,8 @@ function selectPlane(planeId) {
 function flightTick() {
   PLANES.forEach(plane => {
     if(crashedPlanes.has(plane.id)) return;
-    plane.t += 0.00016 + Math.random() * 0.00006;
-    if(Math.random() < 1 / 36000 && !activeCrash) {
+    plane.t += 0.00011 + Math.random() * 0.00004;
+    if(Date.now() >= nextCrashEligibleAt && Math.random() < 1 / 90000 && !activeCrash) {
       triggerCrash(plane);
       return;
     }

@@ -6,6 +6,7 @@ const rCtx = rCanvas.getContext('2d');
 let rAngle = 0;
 let blips = [];
 let threatCount = 0;
+let missileBursts = [];
 const radarLog = document.getElementById('radar-log');
 const MAX_BLIPS = 7;
 
@@ -253,6 +254,37 @@ function drawRadar() {
     rCtx.fillText(b.label, bx + 10, by + 4);
   });
 
+  missileBursts = missileBursts.filter(burst => now - burst.started < 420);
+  missileBursts.forEach(burst => {
+    const t = Math.min(1, (now - burst.started) / 420);
+    const sx = cx;
+    const sy = cy;
+    const mx = lerp(sx, burst.tx, t);
+    const my = lerp(sy, burst.ty, t);
+    rCtx.strokeStyle = `rgba(255,179,0,${1 - t * 0.45})`;
+    rCtx.lineWidth = 2.4;
+    rCtx.shadowColor = '#ffb300';
+    rCtx.shadowBlur = 12;
+    rCtx.beginPath();
+    rCtx.moveTo(sx, sy);
+    rCtx.lineTo(mx, my);
+    rCtx.stroke();
+    rCtx.shadowBlur = 0;
+
+    rCtx.fillStyle = `rgba(255,220,120,${1 - t * 0.25})`;
+    rCtx.beginPath();
+    rCtx.arc(mx, my, 3.5, 0, Math.PI * 2);
+    rCtx.fill();
+
+    if(t >= 0.92) {
+      rCtx.strokeStyle = `rgba(255,179,0,${1 - t})`;
+      rCtx.lineWidth = 2;
+      rCtx.beginPath();
+      rCtx.arc(burst.tx, burst.ty, 8 + t * 16, 0, Math.PI * 2);
+      rCtx.stroke();
+    }
+  });
+
   rCtx.restore();
 
   rCtx.fillStyle = '#00aa30';
@@ -317,33 +349,14 @@ function radarTick() {
   requestAnimationFrame(radarTick);
 }
 
-// ── NORAD DOSSIER ──
-let dossierBlip = null;
-const DOSSIER_CLASSES = ['ALPHA','BRAVO','CHARLIE','DELTA','OMEGA','SIGMA','CURSED','CLASSIFIED'];
-const DOSSIER_ORIGINS = ['UNKNOWN ORIGIN','DEEP STATE','SECTOR 7B','RUSSIAN ORIGIN','DOMESTIC','CYBERSPACE','LOW EARTH ORBIT','CLASSIFIED'];
-const DOSSIER_ACTIONS = ['SCRAMBLE JETS','MONITOR ONLY','AUDIT IMMEDIATELY','DEPLOY COUNTER-MEMES','CALL LAWYER','NO ACTION (YET)','THOUGHTS AND PRAYERS','INVOKE ARTICLE §69'];
-
-function showDossier(blip) {
-  dossierBlip = blip;
-  document.getElementById('dossier-class').textContent = 'CLASSIFICATION: ' + pick(DOSSIER_CLASSES);
-  document.getElementById('dossier-id').textContent = 'DESIGNATION: ' + blip.label;
-  document.getElementById('dossier-threat').textContent = 'THREAT LEVEL: ' + randi(1,10) + '/10';
-  document.getElementById('dossier-origin').textContent = 'ORIGIN: ' + pick(DOSSIER_ORIGINS);
-  document.getElementById('dossier-action').textContent = 'RECOMMENDED ACTION: ' + pick(DOSSIER_ACTIONS);
-  document.getElementById('radar-dossier').classList.add('show');
-  playUiSound('modal-open');
-}
-function neutralizeDossier() {
-  if(!dossierBlip) return;
-  blips = blips.filter(b => b !== dossierBlip);
+function fireRadarMissile(blip, cx, cy, R) {
+  const tx = cx + blip.x * R;
+  const ty = cy + blip.y * R;
+  missileBursts.push({ tx, ty, started: Date.now() });
+  blips = blips.filter(b => b !== blip);
   playUiSound('neutralize');
-  addRadarLog(dossierBlip.label, true);
-  dossierBlip = null;
-  document.getElementById('radar-dossier').classList.remove('show');
-}
-function dismissDossier() {
-  dossierBlip = null;
-  document.getElementById('radar-dossier').classList.remove('show');
+  addRadarLog(blip.label, true);
+  toast(`MISSILE AWAY :: ${blip.label} SPLASHED`, 'var(--amber)');
 }
 
 rCanvas.addEventListener('click', e => {
@@ -365,7 +378,7 @@ rCanvas.addEventListener('click', e => {
   });
 
   if(closest) {
-    showDossier(closest);
+    fireRadarMissile(closest, cx, cy, R);
   }
 });
 

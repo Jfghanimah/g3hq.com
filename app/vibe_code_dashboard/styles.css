@@ -35,27 +35,27 @@ body::after { /* vignette */
 
 /* ── HEADER ROW 1 ── */
 #hdr1 {
-  display:flex; align-items:center; gap:14px;
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
   padding:6px 14px;
   background:linear-gradient(180deg,#0c0c0c,#050505);
   border-bottom:1px solid #1a2a1a; flex-shrink:0;
 }
 #logo {
-  font-size:20px; font-weight:bold; letter-spacing:3px;
+  font-size:17px; font-weight:bold; letter-spacing:2px;
   background:linear-gradient(90deg,var(--green),var(--cyan),var(--magenta),var(--green));
   background-size:300%; -webkit-background-clip:text; -webkit-text-fill-color:transparent;
   animation:logoShimmer 4s linear infinite, glitch 10s infinite;
   white-space:nowrap;
 }
 #audio-controls{
-  display:flex; align-items:center; gap:8px;
-  margin-left:auto; padding:3px 8px;
+  display:flex; align-items:center; gap:6px;
+  margin-left:auto; padding:3px 7px;
   border:1px solid #112218; background:rgba(0,32,10,0.45);
   font-size:10px; color:#4d8d62;
 }
 #audio-controls label{letter-spacing:1px;}
 #master-volume{
-  width:92px; accent-color:var(--cyan); cursor:pointer;
+  width:76px; accent-color:var(--cyan); cursor:pointer;
 }
 #master-volume-val{
   min-width:34px; text-align:right; color:var(--cyan);
@@ -68,9 +68,9 @@ body::after { /* vignette */
   93%{transform:translateX(-2px) skewX(3deg);filter:hue-rotate(180deg)}
   94%{transform:translateX(0)}
 }
-.sep{color:#2a6a2a;font-size:18px;}
-#hdr-clock{font-size:16px;color:var(--cyan);text-shadow:0 0 10px var(--cyan);white-space:nowrap;}
-#fs-btn,#suggest-btn{background:none;border:1px solid #1a3a2a;color:#4d8d62;font-family:inherit;font-size:10px;cursor:pointer;padding:3px 8px;letter-spacing:1px;white-space:nowrap;}
+.sep{color:#2a6a2a;font-size:16px;}
+#hdr-clock{font-size:14px;color:var(--cyan);text-shadow:0 0 10px var(--cyan);white-space:nowrap;}
+#fs-btn,#suggest-btn{background:none;border:1px solid #1a3a2a;color:#4d8d62;font-family:inherit;font-size:10px;cursor:pointer;padding:3px 7px;letter-spacing:1px;white-space:nowrap;}
 #fs-btn:hover{border-color:var(--cyan);color:var(--cyan);text-shadow:0 0 6px var(--cyan);}
 #suggest-btn:hover{border-color:var(--green);color:var(--green);text-shadow:0 0 6px var(--green);}
 
@@ -224,6 +224,10 @@ body::after { /* vignette */
   aspect-ratio:16 / 9;
   background:radial-gradient(circle at 50% 50%,rgba(10,36,18,0.7),rgba(0,0,0,0.96));
 }
+#ufo-cam-wrap::before{
+  content:''; position:absolute; bottom:0; left:0; right:0;
+  height:36px; background:#000; z-index:3;
+}
 #ufo-cam-wrap::after{
   content:''; position:absolute; inset:0; pointer-events:none;
   background:
@@ -358,6 +362,11 @@ body::after { /* vignette */
 .pi-route{font-size:10px;color:#886633;margin:2px 0;}
 .pi-status{font-size:10px;color:#999;font-style:italic;margin:2px 0;}
 .pi-stats{font-size:10px;color:#886633;margin:2px 0;}
+.plane-card.selected .pi-call{font-size:14px;}
+.plane-card.selected .pi-name{font-size:17px;}
+.plane-card.selected .pi-route{font-size:14px;}
+.plane-card.selected .pi-status{font-size:14px;}
+.plane-card.selected .pi-stats{font-size:14px;}
 .pi-prog-wrap{height:6px;background:#0a0500;border:1px solid #1a0a00;margin-top:6px;border-radius:2px;}
 .pi-prog-fill{height:100%;transition:width 1s linear;}
 .pi-btns{display:flex;gap:6px;margin-top:8px;}
