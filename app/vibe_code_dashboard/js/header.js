@@ -1,3 +1,14 @@
+// ══ BUILD NUMBER ══
+fetch('/build-number')
+  .then(r => r.json())
+  .then(d => {
+    const b = d.build;
+    const hdr = document.getElementById('hdr-build');
+    const boot = document.getElementById('boot-build');
+    if (hdr) hdr.textContent = b;
+    if (boot) boot.textContent = b;
+  });
+
 // ══ FULLSCREEN ══
 function toggleFullscreen() {
   if (!document.fullscreenElement) {

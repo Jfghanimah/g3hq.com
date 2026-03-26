@@ -128,6 +128,17 @@ def dashboard(filename='index.html'):
     return send_from_directory(dashboard_dir, filename)
 
 
+@app.route('/build-number')
+def build_number():
+    path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build_number.txt')
+    try:
+        with open(path) as f:
+            num = f.read().strip()
+    except OSError:
+        num = '0'
+    return jsonify({'build': f'v2.1.{num}'})
+
+
 @app.route('/dashboard-suggest', methods=['POST'])
 def dashboard_suggest():
     """Safely appends a user suggestion to requests.txt."""
