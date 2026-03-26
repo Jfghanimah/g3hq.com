@@ -147,8 +147,8 @@ let crashAutoTimer = null;
 let selectedPlaneId = null;
 let nextCrashEligibleAt = 0;
 
-const lerp = (a, b, t) => a + (b - a) * t;
-const lerpPoint = (a, b, t) => ({ lon: lerp(a.lon, b.lon, t), lat: lerp(a.lat, b.lat, t) });
+const flightLerp = (a, b, t) => a + (b - a) * t;
+const flightLerpPoint = (a, b, t) => ({ lon: flightLerp(a.lon, b.lon, t), lat: flightLerp(a.lat, b.lat, t) });
 
 function bezierPoint(path, t) {
   const inv = 1 - t;
@@ -189,7 +189,7 @@ function getPlanePointLonLat(plane) {
   const start = getPlaneStartPoint(plane);
   if(plane.path) return bezierPoint(plane.path, plane.t);
   const end = getPlaneEndPoint(plane);
-  return lerpPoint(start, end, plane.t);
+  return flightLerpPoint(start, end, plane.t);
 }
 
 function getPlaneHeadingVector(plane) {
