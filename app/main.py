@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
+import re
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, jsonify
 from markupsafe import Markup
 
 from .smash import get_player_data, get_color_for_name, process_match_report, add_player
@@ -121,6 +122,31 @@ def dashboard(filename='index.html'):
     """Serves the vibe_code_dashboard static files."""
     dashboard_dir = os.path.join(os.path.dirname(__file__), 'vibe_code_dashboard')
     return send_from_directory(dashboard_dir, filename)
+
+
+@app.route('/dashboard-suggest', methods=['POST'])
+def dashboard_suggest():
+    """Safely appends a user suggestion to requests.txt."""
+    data = request.get_json(silent=True) or {}
+    raw = data.get('suggestion', '')
+
+    # Strip HTML tags
+    clean = re.sub(r'<[^>]*>', '', str(raw))
+    # Collapse all whitespace/newlines to single spaces
+    clean = re.sub(r'[\r\n\t]+', ' ', clean)
+    # Remove non-printable control characters
+    clean = re.sub(r'[\x00-\x1f\x7f]', '', clean)
+    # Trim and enforce max length
+    clean = clean.strip()[:500]
+
+    if not clean:
+        return jsonify({'ok': False, 'error': 'Empty suggestion'}), 400
+
+    requests_file = os.path.join(os.path.dirname(__file__), 'vibe_code_dashboard', 'requests.txt')
+    with open(requests_file, 'a', encoding='utf-8') as f:
+        f.write(f'- {clean}\n')
+
+    return jsonify({'ok': True})
 
 
 @app.route("/media")

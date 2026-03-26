@@ -1,4 +1,5 @@
 ADJUST THIS PAGE WHEN YOU ADD FROM IT!!!
+Baron / Dragon thing is too low on 1080p screens but justright on 4k screens
 
 Music:
 - add passive quiet vapor wave music  (C:\Users\Joseph\Documents\Python Projects\vibe_code_dashboard\audio_clips\HOME - Resonance.mp3) make sure its not loud!!!
@@ -9,7 +10,7 @@ Reddit Section:
 
 
 
-AI SUGGESTED IDEAS:
+SUGGESTED IDEAS:
 - fake NORAD-style "OBJECT OF INTEREST" dossier card that slides out when you click a radar contact
 - occasional DEFCON flash where the header bars all spike red for 3 seconds because the radar saw a "space invader boss wave"
 - tiny "air traffic chatter" subtitle strip under the radar with garbage comms like "AWACS says skill issue, over"
@@ -19,3 +20,5 @@ AI SUGGESTED IDEAS:
 - IRS Audit Threat Level meter that spikes every time you win a hand of Blackjack or approve a shady funding request.
 - Fake Uber Eats tracker for a 40-piece McNugget meal that gets progressively more delayed until the status updates to "Driver ate your food".
 - Add a "Tinder/Discord" auto-responder module that just replies "ratio" and "skill issue" to incoming unhinged DMs.
+- Move the aviation popups in the middle of the flight tracker
+- test

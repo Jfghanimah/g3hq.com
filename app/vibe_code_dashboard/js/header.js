@@ -1,3 +1,19 @@
+// ══ FULLSCREEN ══
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  const btn = document.getElementById('fs-btn');
+  if (btn) btn.textContent = document.fullscreenElement ? '[ ✕ FS ]' : '[ ⛶ FS ]';
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+});
+
 // ══ CLOCK ══
 function updateClock() {
   const n = new Date();

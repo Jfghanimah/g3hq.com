@@ -3,13 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="/dashboard/">
 <title>VIBE_DASHBOARD v2.1 :: MAXIMUM DEGENERACY</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div id="boot-splash" onclick="bootEnter()">
+  <div id="boot-box">
+    <div id="boot-logo">▓ VIBE_DASHBOARD ▓</div>
+    <div id="boot-sub">v2.1.69 :: MAXIMUM DEGENERACY</div>
+    <div id="boot-status">SYSTEMS ONLINE · AUDIO READY</div>
+    <div id="boot-cta">[ CLICK TO ENTER ]</div>
+  </div>
+</div>
 <div id="toast"></div>
 <audio id="bg-music" loop src="audio_clips/HOME - Resonance.mp3" preload="auto"></audio>
+
+<!-- SUGGESTION BOX MODAL -->
+<div id="suggest-modal" style="display:none">
+  <div id="suggest-box">
+    <div id="suggest-hdr">[ SUBMIT SUGGESTION ]</div>
+    <textarea id="suggest-input" maxlength="500" placeholder="type your suggestion..."></textarea>
+    <div id="suggest-counter">0 / 500</div>
+    <div class="suggest-btns">
+      <button class="sg-btn sg-submit" onclick="submitSuggestion()">[ ✓ TRANSMIT ]</button>
+      <button class="sg-btn sg-cancel" onclick="closeSuggestModal()">[ ✕ ABORT ]</button>
+    </div>
+  </div>
+</div>
 
 <!-- CRASH INVESTIGATION MODAL -->
 <div id="crash-modal">
@@ -94,6 +116,8 @@
     <span id="master-volume-val">35%</span>
   </div>
   <div id="hdr-clock">00:00:00</div>
+  <button id="suggest-btn" onclick="openSuggestModal()" title="Submit a suggestion">[ ✉ SUGGEST ]</button>
+  <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen [F]">[ ⛶ FS ]</button>
 </div>
 
 <!-- HEADER ROW 2 -->
@@ -288,5 +312,6 @@
 <script src="js/league-popups.js"></script>
 <script src="js/news-ticker.js"></script>
 <script src="js/app.js"></script>
+<script src="js/suggest.js"></script>
 </body>
 </html>

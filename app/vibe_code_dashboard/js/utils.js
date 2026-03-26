@@ -269,8 +269,17 @@ function playUiSound(kind = 'toast') {
   }
 }
 
+function bootEnter() {
+  const splash = document.getElementById('boot-splash');
+  if(splash) {
+    splash.style.opacity = '0';
+    setTimeout(() => splash.remove(), 400);
+  }
+  unlockAudio();
+}
+
 document.addEventListener('pointerdown', unlockAudio, { once:true });
-document.addEventListener('keydown', unlockAudio, { once:true });
+document.addEventListener('keydown', e => { if(document.getElementById('boot-splash')) bootEnter(); else unlockAudio(); }, { once:true });
 setDashVolume(dashVolume);
 
 const volumeSlider = document.getElementById('master-volume');
