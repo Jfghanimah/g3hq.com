@@ -1,5 +1,8 @@
 import os
 import re
+import hmac
+import hashlib
+import subprocess
 from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, jsonify
 from markupsafe import Markup
 
@@ -14,6 +17,7 @@ app = Flask(__name__)
 # Use a default for local dev, but set a strong, stable key in production.
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-should-be-changed')
 app.config['SMASH_PASSPHRASE'] = os.environ.get('SMASH_PASSPHRASE', 'G3')
+app.config['DEPLOY_SECRET'] = os.environ.get('DEPLOY_SECRET', '')
 
 # Define the path for the shared clipboard file within the instance folder
 CLIPBOARD_FILE = os.path.join(app.instance_path, 'clipboard.txt')
@@ -195,6 +199,26 @@ def media_viewer(filename):
     video_type = get_video_mimetype(filename)
 
     return render_template("media-viewer.html", filename=filename, video_type=video_type, title=f"Viewing {filename}")
+
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    secret = app.config['DEPLOY_SECRET']
+    if not secret:
+        return 'Not configured', 500
+
+    sig = request.headers.get('X-Hub-Signature-256', '')
+    body = request.get_data()
+    expected = 'sha256=' + hmac.new(secret.encode(), body, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(sig, expected):
+        return 'Forbidden', 403
+
+    payload = request.get_json(silent=True) or {}
+    if payload.get('ref') != 'refs/heads/main':
+        return 'Ignored', 200  # not a push to main
+
+    subprocess.Popen(['/home/joseph/g3hq.com/deploy.sh'])
+    return 'Deploying', 200
 
 
 # Register custom error handlers
