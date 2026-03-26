@@ -192,6 +192,29 @@ function tradeBuy() {
   toast('BOUGHT 1 ' + s.sym + ' @ $' + fmtPrice(s.price), s.color);
 }
 
+function tradeBuyMax() {
+  const s = currentStock;
+  if(typeof checkingBalance === 'undefined') return;
+  const availableFunds = checkingBalance + Math.max(0, creditCardLimit - creditCardBalance);
+  const sharesToBuy = Math.floor(availableFunds / s.price);
+  if(sharesToBuy <= 0) {
+    toast('INSUFFICIENT FUNDS :: BALANCE $' + checkingBalance.toFixed(2) + ' :: PRICE $' + fmtPrice(s.price), 'var(--red)');
+    playUiSound('deny');
+    return;
+  }
+
+  const pos = tradePositions[s.sym];
+  const cost = sharesToBuy * s.price;
+  const newTotal = pos.shares * pos.avgCost + cost;
+  pos.shares += sharesToBuy;
+  pos.avgCost = newTotal / pos.shares;
+  spendMoney(cost);
+  updateTradeUI();
+  playUiSound('cash');
+  document.getElementById('tr-advice').textContent = pick(tradeAdvices);
+  toast('BOUGHT ' + sharesToBuy + ' ' + s.sym + ' @ $' + fmtPrice(s.price) + ' :: TOTAL $' + cost.toFixed(2), s.color);
+}
+
 function tradeSell() {
   const s = currentStock;
   const pos = tradePositions[s.sym];
@@ -254,4 +277,4 @@ function initTradeUI() {
 
 initTradeUI();
 updateTradeUI();
-setInterval(gbmTick, 2000);
+setInterval(gbmTick, 1000);
