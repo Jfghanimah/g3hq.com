@@ -630,3 +630,50 @@ body::after { /* vignette */
 .dm-msg{font-size:11px;color:var(--amber);background:rgba(255,179,0,0.05);padding:5px 7px;border-left:2px solid #3a2a00;}
 .dm-reply{font-size:11px;color:var(--green);margin-top:3px;padding:4px 7px;border-left:2px solid #003a10;}
 .dm-reply::before{content:'▶ AUTO-REPLY: ';color:#2a5a2a;}
+
+/* ── VIBE CODE DOCK ── */
+#vibe-code-dock{
+  position:fixed;bottom:30px;left:0;right:0;z-index:500;
+  background:#040804;border-top:2px solid #0a2a0a;
+  display:flex;flex-direction:column;
+  height:130px;overflow:hidden;
+  transition:height 0.18s ease;
+}
+#vibe-code-dock.dock-mini{height:28px;}
+#vibe-code-dock.dock-full{height:240px;}
+#vibe-code-topbar{
+  display:flex;align-items:center;gap:10px;
+  padding:0 10px;height:28px;min-height:28px;
+  background:#030603;border-bottom:1px solid #0a1a0a;flex-shrink:0;
+}
+#vibe-code-brand{display:flex;align-items:center;gap:10px;font-size:10px;color:#3a7a3a;}
+#vibe-code-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);display:inline-block;animation:blink 1.5s infinite;}
+.vibe-code-muted{color:#1a4a1a;font-size:9px;}
+#vibe-code-controls{margin-left:auto;display:flex;gap:6px;}
+.vibe-code-btn{background:none;font-family:inherit;font-size:9px;color:#2a6a2a;border:1px solid #1a3a1a;cursor:pointer;padding:2px 7px;letter-spacing:1px;}
+.vibe-code-btn:hover{border-color:var(--green);color:var(--green);}
+#vibe-code-metrics{
+  display:flex;gap:12px;padding:3px 10px;
+  border-bottom:1px solid #071207;flex-shrink:0;background:#030503;
+}
+.vibe-chip{display:flex;gap:5px;align-items:center;font-size:9px;}
+.vibe-chip-lbl{color:#1a4a1a;}
+.vibe-chip-val{color:var(--green);}
+#ufo-code-wrap{
+  display:flex;flex:1;min-height:0;
+  padding:4px 10px;overflow:hidden;
+}
+#ufo-code-gutter{
+  width:24px;flex-shrink:0;padding-top:1px;
+  display:flex;flex-direction:column;gap:2px;
+  color:#1a3a1a;font-size:10px;text-align:right;user-select:none;
+}
+#ufo-code{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+#ufo-code::-webkit-scrollbar{width:3px;}
+#ufo-code::-webkit-scrollbar-thumb{background:#0a2a0a;}
+.ufo-code-line{font-size:10px;color:#2a7a3a;white-space:pre-wrap;line-height:1.5;}
+.ufo-code-comment{color:#1a4a1a;}
+.ufo-code-func{color:var(--cyan);}
+.ufo-code-warn{color:var(--amber);}
+.ufo-code-num{color:var(--purple);}
+.dm-reply::before{content:'▶ AUTO-REPLY: ';color:#2a5a2a;}

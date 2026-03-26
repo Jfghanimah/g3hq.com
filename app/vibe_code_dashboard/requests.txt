@@ -39,23 +39,41 @@ SUGGESTED IDEAS:
 - PTO days remaining — always 0. accrual rate shown. "YOU OWE THE COMPANY 2 DAYS"
 - Performance review anxiety meter — spikes randomly, worst right before holidays
 
+
+
+AI SUGGESTED IDEAS:
+- fake NORAD-style "OBJECT OF INTEREST" dossier card that slides out when you click a radar contact
+- occasional DEFCON flash where the header bars all spike red for 3 seconds because the radar saw a "space invader boss wave"
+- tiny "air traffic chatter" subtitle strip under the radar with garbage comms like "AWACS says skill issue, over"
+- one absurd ultra-rare radar event where every blip becomes a pizza delivery route for 10 seconds
+- decoy contacts named after inside jokes like DrDoughnut, mork, and Goat Gamers Gaming
+- Add a "Grass Touched" timer that is permanently stuck at 0 days, 0 hours.
+- IRS Audit Threat Level meter that spikes every time you win a hand of Blackjack or approve a shady funding request.
+- Fake Uber Eats tracker for a 40-piece McNugget meal that gets progressively more delayed until the status updates to "Driver ate your food".
+- Add a "Tinder/Discord" auto-responder module that just replies "ratio" and "skill issue" to incoming unhinged DMs.
+- Add a fake "live patch notes" popup where the game client claims it fixed matchmaking, then immediately says "known issue: it did not."
+- Add a rotating bunker-cam module that occasionally cuts to static and comes back with someone clearly standing in the wrong country.
+- Add a fake stockbreaker event where the trading terminal freezes for 6 seconds and a banner says "VOLATILITY HALT :: YOU CAUSED THIS."
+- Add a tiny "mission timer" widget for random absurd ops like "locate mohan" or "avoid blackrock" that always finishes at 99%.
+- Add a rare flight tracker event where one nuclear sub briefly pings "hello :)" and then disappears from the map.
+
 POSSIBLE PREVIOUS WORK TO REAPPLY LATER:
-- volume default to 100%
-- larger/more realistic money block in header
-- bankroll tied together across blackjack, slots, trade, and funding modal
-- checking starts at $5, savings $0, credit card starts at $10k / $15k
-- spending falls onto credit card instead of going negative
-- funding approve uses a cha-ching cash sound
-- Reddit placeholder guard so broken [COMMON BELIEF] / WAKE UP style posts do not render
-- UAP drone cam keeps its own panel and fake codegen moves to a full-width bottom "G3 vibe coder" dock
-- flight tracker ATC chatter moved from radar into flight panel
-- flights slowed down more
-- flight destinations spread farther apart with more city options
-- reroute should respect current in-flight position instead of resetting
-- flight detail cards should mostly reveal on hover / selection instead of always being open
-- selected flight/contact should be much more obvious on map and in cards
-- C. Kirk removed as a plane and replaced by bunker contact(s)
-- bunker contacts around Argentina / Australia
-- add nuclear submarine contacts
-- center crash modal inside the flight tracker
-- remove IRS references from flight tracker copy
+- [] volume default to 100%
+- [] larger/more realistic money block in header
+- [] bankroll tied together across blackjack, slots, trade, and funding modal
+- [] checking starts at $5, savings $0, credit card starts at $10k / $15k
+- [] spending falls onto credit card instead of going negative
+- [] funding approve uses a cha-ching cash sound
+- [] Reddit placeholder guard so broken [COMMON BELIEF] / WAKE UP style posts do not render
+- [] UAP drone cam keeps its own panel and fake codegen moves to a full-width bottom "G3 vibe coder" dock
+- [] flight tracker ATC chatter moved from radar into flight panel
+- [] flights slowed down more
+- [] flight destinations spread farther apart with more city options
+- [] reroute should respect current in-flight position instead of resetting
+- [] flight detail cards should mostly reveal on hover / selection instead of always being open
+- [] selected flight/contact should be much more obvious on map and in cards
+- [] C. Kirk removed as a plane and replaced by bunker contact(s)
+- [] bunker contacts around Argentina / Australia
+- [] add nuclear submarine contacts
+- [] center crash modal inside the flight tracker
+- [] remove IRS references from flight tracker copy
