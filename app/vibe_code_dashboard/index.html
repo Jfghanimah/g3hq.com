@@ -100,9 +100,16 @@
   <span class="sep">║</span>
   <span style="font-size:10px;color:#5577cc">SYS:ONLINE · BUILD:<span id="hdr-build">v2.1.??</span></span>
   <div id="audio-controls">
-    <label for="master-volume">VOL</label>
-    <input id="master-volume" type="range" min="0" max="100" step="1" value="100">
-    <span id="master-volume-val">100%</span>
+    <div class="audio-group">
+      <label for="music-volume">MUSIC</label>
+      <input id="music-volume" type="range" min="0" max="100" step="1" value="100">
+      <span id="music-volume-val">100%</span>
+    </div>
+    <div class="audio-group">
+      <label for="sfx-volume">SFX</label>
+      <input id="sfx-volume" type="range" min="0" max="100" step="1" value="100">
+      <span id="sfx-volume-val">100%</span>
+    </div>
   </div>
   <div id="hdr-clock">00:00:00</div>
   <button id="suggest-btn" onclick="openSuggestModal()" title="Submit a suggestion">[ ✉ SUGGEST ]</button>

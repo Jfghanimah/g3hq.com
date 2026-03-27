@@ -82,6 +82,60 @@
     ctx.fillRect(0, 0, W(), H());
   }
 
+  function drawBackdrop() {
+    const horizonY = H() * 0.62;
+
+    const sky = ctx.createLinearGradient(0, 0, 0, H());
+    sky.addColorStop(0, '#021806');
+    sky.addColorStop(0.58, '#04240b');
+    sky.addColorStop(1, '#010603');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W(), H());
+
+    ctx.save();
+    ctx.globalAlpha = 0.18;
+    ctx.strokeStyle = '#00ff41';
+    for(let i = 0; i < 6; i++) {
+      const y = horizonY - i * 14;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(W(), y + Math.sin((frame * 0.01) + i) * 4);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    ctx.save();
+    ctx.fillStyle = '#010402';
+    ctx.beginPath();
+    ctx.moveTo(0, H());
+    ctx.lineTo(0, horizonY + 10);
+    for(let x = 0; x <= W(); x += 24) {
+      const ridge = horizonY + Math.sin((x * 0.018) + frame * 0.005) * 8 + Math.cos((x * 0.042) - frame * 0.004) * 5;
+      ctx.lineTo(x, ridge);
+    }
+    ctx.lineTo(W(), H());
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0,255,65,0.09)';
+    ctx.lineWidth = 1;
+    for(let x = 0; x <= W(); x += Math.max(18, W() / 18)) {
+      ctx.beginPath();
+      ctx.moveTo(x, horizonY + 18);
+      ctx.lineTo(W() / 2, H());
+      ctx.stroke();
+    }
+    for(let y = horizonY + 18; y < H(); y += Math.max(16, H() / 12)) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(W(), y);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
   function drawCrosshair(x, y, size, label, threat, blink) {
     if (blink && frame % 30 < 15) return;
     const glow = threat === 'HIGH' ? '#ff4400' : threat === 'MED' ? '#ffaa00' : '#00ff41';
@@ -194,9 +248,7 @@
       return;
     }
 
-    // Clear with deep green-black
-    ctx.fillStyle = '#010d03';
-    ctx.fillRect(0, 0, W(), H());
+    drawBackdrop();
 
     // Film grain
     drawGrain();

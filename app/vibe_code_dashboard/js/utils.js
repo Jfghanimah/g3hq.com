@@ -4,11 +4,15 @@ const randi = (a,b) => Math.floor(rand(a,b+1));
 const pick  = arr  => arr[Math.floor(Math.random()*arr.length)];
 const pad2  = n    => String(n).padStart(2,'0');
 
-const DASH_VOLUME_KEY = 'vibe-dashboard-volume';
-const DEFAULT_DASH_VOLUME = 0.18;
+const MUSIC_VOLUME_KEY = 'vibe-dashboard-music-volume';
+const SFX_VOLUME_KEY = 'vibe-dashboard-sfx-volume';
+const DEFAULT_MUSIC_VOLUME = 0.28;
+const DEFAULT_SFX_VOLUME = 0.18;
 const AUDIO_HEADROOM = 0.45;
-let dashVolume = Number(localStorage.getItem(DASH_VOLUME_KEY) ?? DEFAULT_DASH_VOLUME);
-if(Number.isNaN(dashVolume)) dashVolume = DEFAULT_DASH_VOLUME;
+let musicVolume = Number(localStorage.getItem(MUSIC_VOLUME_KEY) ?? DEFAULT_MUSIC_VOLUME);
+let sfxVolume = Number(localStorage.getItem(SFX_VOLUME_KEY) ?? DEFAULT_SFX_VOLUME);
+if(Number.isNaN(musicVolume)) musicVolume = DEFAULT_MUSIC_VOLUME;
+if(Number.isNaN(sfxVolume)) sfxVolume = DEFAULT_SFX_VOLUME;
 
 let audioCtx;
 let audioUnlocked = false;
@@ -23,18 +27,27 @@ function getMusicElement() {
 }
 
 function getMusicBaseVolume() {
-  return Math.max(0, Math.min(1, dashVolume * 0.07));
+  return Math.max(0, Math.min(1, musicVolume * 0.12));
 }
 
-function setDashVolume(nextVolume) {
-  dashVolume = Math.max(0, Math.min(1, nextVolume));
-  localStorage.setItem(DASH_VOLUME_KEY, String(dashVolume));
-  const slider = document.getElementById('master-volume');
-  const label = document.getElementById('master-volume-val');
-  if(slider) slider.value = String(Math.round(dashVolume * 100));
-  if(label) label.textContent = `${Math.round(dashVolume * 100)}%`;
+function setMusicVolume(nextVolume) {
+  musicVolume = Math.max(0, Math.min(1, nextVolume));
+  localStorage.setItem(MUSIC_VOLUME_KEY, String(musicVolume));
+  const slider = document.getElementById('music-volume');
+  const label = document.getElementById('music-volume-val');
+  if(slider) slider.value = String(Math.round(musicVolume * 100));
+  if(label) label.textContent = `${Math.round(musicVolume * 100)}%`;
   const music = getMusicElement();
   if(music) music.volume = getMusicBaseVolume();
+}
+
+function setSfxVolume(nextVolume) {
+  sfxVolume = Math.max(0, Math.min(1, nextVolume));
+  localStorage.setItem(SFX_VOLUME_KEY, String(sfxVolume));
+  const slider = document.getElementById('sfx-volume');
+  const label = document.getElementById('sfx-volume-val');
+  if(slider) slider.value = String(Math.round(sfxVolume * 100));
+  if(label) label.textContent = `${Math.round(sfxVolume * 100)}%`;
 }
 
 function unlockAudio() {
@@ -49,7 +62,7 @@ function unlockAudio() {
 }
 
 function getOutputVolume(level = 1) {
-  return Math.max(0, Math.min(1, level * dashVolume * AUDIO_HEADROOM));
+  return Math.max(0, Math.min(1, level * sfxVolume * AUDIO_HEADROOM));
 }
 
 function playAudioClip(src, {
@@ -60,7 +73,7 @@ function playAudioClip(src, {
   fadeOutDuration = 0,
   duckMusic = 0,
 } = {}) {
-  if(!dashVolume || !audioUnlocked) return;
+  if(!sfxVolume || !audioUnlocked) return;
   const startPlayback = () => {
     if(!audioUnlocked) return;
     const audio = new Audio(src);
@@ -137,7 +150,7 @@ function playTone(freq, duration, {
   attack = 0.01,
   release = 0.12,
 } = {}) {
-  if(!dashVolume || !audioUnlocked) return;
+  if(!sfxVolume || !audioUnlocked) return;
   const ctx = getAudioContext();
   const startAt = ctx.currentTime + delay;
   const stopAt = startAt + duration;
@@ -314,14 +327,22 @@ function updateBootAccessState() {
 
 document.addEventListener('pointerdown', unlockAudio, { once:true });
 document.addEventListener('keydown', e => { if(document.getElementById('boot-splash')) bootEnter(); else unlockAudio(); }, { once:true });
-setDashVolume(dashVolume);
+setMusicVolume(musicVolume);
+setSfxVolume(sfxVolume);
 updateBootAccessState();
 window.addEventListener('resize', updateBootAccessState);
 
-const volumeSlider = document.getElementById('master-volume');
-if(volumeSlider) {
-  volumeSlider.addEventListener('input', e => {
-    setDashVolume(Number(e.target.value) / 100);
+const musicSlider = document.getElementById('music-volume');
+if(musicSlider) {
+  musicSlider.addEventListener('input', e => {
+    setMusicVolume(Number(e.target.value) / 100);
+  });
+}
+
+const sfxSlider = document.getElementById('sfx-volume');
+if(sfxSlider) {
+  sfxSlider.addEventListener('input', e => {
+    setSfxVolume(Number(e.target.value) / 100);
   });
 }
 
@@ -329,7 +350,10 @@ let toastTimer;
 function toast(msg, color='var(--green)', silent=false) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.style.borderColor = color; el.style.color = color;
-  el.classList.add('show'); clearTimeout(toastTimer);
+  el.classList.remove('show');
+  void el.offsetWidth;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 5000);
   if(!silent) playUiSound('toast');
 }
