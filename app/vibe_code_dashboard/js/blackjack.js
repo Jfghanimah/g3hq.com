@@ -18,6 +18,8 @@ function switchGamble(game) {
 // ══ BLACKJACK ══════════════════════════════════
 let bjWins=3, bjLosses=847, bjWagered=14230, bjBet=100;
 let playerCards=[], dealerCards=[], gameOver=true;
+let blackjackAutoEnabled = false;
+let blackjackAutoTimer = null;
 const SUITS=['♠','♣','♥','♦'], REDS=['♥','♦'];
 const VALS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 const advices=[
@@ -62,6 +64,7 @@ function dealNewHand(){
   document.getElementById('bj-advice').textContent=pick(advices);
   updateBJStats();
   playUiSound('bj-deal');
+  scheduleBlackjackAutoTick(900);
 }
 function finishHand(){
   if(gameOver) return; gameOver=true;
@@ -96,7 +99,10 @@ function finishHand(){
     spendMoney(bjBet);
   }
   updateBJStats();
-  setTimeout(dealNewHand,3500);
+  setTimeout(() => {
+    dealNewHand();
+    scheduleBlackjackAutoTick(950);
+  },3500);
 }
 function updateBJStats(){
   document.getElementById('bj-wins').textContent=bjWins;
@@ -121,7 +127,66 @@ function bjDouble(){
   playerCards.push(deal()); renderCards('player-cards',playerCards);
   finishHand();
 }
+
+function updateBlackjackAutoUI() {
+  const btn = document.getElementById('bj-auto-btn');
+  const status = document.getElementById('bj-auto-status');
+  if(btn) btn.textContent = blackjackAutoEnabled ? '[ AUTO ON ]' : '[ AUTO OFF ]';
+  if(status) {
+    status.textContent = blackjackAutoEnabled
+      ? (gameOver ? 'AUTO DEAL QUEUED' : `AUTO PILOT :: HOLD ${total(playerCards)} / DEALER ${dealerCards[0]?.value || '?'}`)
+      : 'MANUAL PLAY';
+  }
+}
+
+function clearBlackjackAutoTimer() {
+  if(blackjackAutoTimer) clearTimeout(blackjackAutoTimer);
+  blackjackAutoTimer = null;
+}
+
+function scheduleBlackjackAutoTick(delay = 800) {
+  clearBlackjackAutoTimer();
+  if(!blackjackAutoEnabled) {
+    updateBlackjackAutoUI();
+    return;
+  }
+  blackjackAutoTimer = setTimeout(runBlackjackAutoTick, delay);
+}
+
+function runBlackjackAutoTick() {
+  if(!blackjackAutoEnabled) return;
+  if(gameOver) {
+    dealNewHand();
+    updateBlackjackAutoUI();
+    return;
+  }
+
+  const playerTotal = total(playerCards);
+  const dealerUp = dealerCards[0]?.hidden ? 0 : cardVal(dealerCards[0]?.value || '0');
+  if(playerCards.length === 2 && playerTotal >= 9 && playerTotal <= 11 && dealerUp <= 6 && dealerUp > 0 && Math.random() < 0.35) {
+    bjDouble();
+  } else if(playerTotal < 17) {
+    bjHit();
+  } else {
+    bjStand();
+  }
+  updateBlackjackAutoUI();
+  if(!gameOver) scheduleBlackjackAutoTick(900);
+}
+
+function toggleBlackjackAuto() {
+  blackjackAutoEnabled = !blackjackAutoEnabled;
+  updateBlackjackAutoUI();
+  if(blackjackAutoEnabled) {
+    toast('BLACKJACK AUTO PILOT ENABLED', 'var(--cyan)', true);
+    scheduleBlackjackAutoTick(500);
+  } else {
+    clearBlackjackAutoTimer();
+    toast('BLACKJACK AUTO PILOT DISABLED', 'var(--amber)', true);
+  }
+}
 dealNewHand();
+updateBlackjackAutoUI();
 
 // ══ SLOTS ══════════════════════════════════════
 const SLOT_SYMS  = ['7','♦','♣','₿','L','BAR','💀','W','DOGE','♥'];
@@ -140,6 +205,9 @@ const slotAdvices = [
 ];
 let slotsSpins=0, slotsWins=0, slotsJackpots=0, slotsNet=0;
 let slotSpinning=false;
+let slotsAutoEnabled = false;
+let slotsAutoBet = 100;
+let slotsAutoTimer = null;
 
 function slotSetReel(i, sym, cls='') {
   const el = document.getElementById('reel-'+i);
@@ -250,6 +318,7 @@ function resolveSlots(results, bet) {
   document.getElementById('slots-advice').textContent = pick(slotAdvices);
   updateSlotsStats();
   slotSpinning = false;
+  scheduleSlotsAutoTick(1200);
 }
 
 function updateSlotsStats() {
@@ -265,3 +334,55 @@ function updateSlotsStats() {
     netEl.className   = 's-val ' + (slotsNet >= 0 ? 'v-green' : 'v-red');
   }
 }
+
+function updateSlotsAutoUI() {
+  const autoBtn = document.getElementById('slots-auto-btn');
+  const betBtn = document.getElementById('slots-auto-bet-btn');
+  const status = document.getElementById('slots-auto-status');
+  if(autoBtn) autoBtn.textContent = slotsAutoEnabled ? '[ AUTO ON ]' : '[ AUTO OFF ]';
+  if(betBtn) betBtn.textContent = `[ AUTO BET $${slotsAutoBet} ]`;
+  if(status) {
+    status.textContent = slotsAutoEnabled
+      ? (slotSpinning ? `AUTO SPINNING :: $${slotsAutoBet}` : `AUTO ARMED :: NEXT $${slotsAutoBet} SPIN`)
+      : 'MANUAL SPIN';
+  }
+}
+
+function clearSlotsAutoTimer() {
+  if(slotsAutoTimer) clearTimeout(slotsAutoTimer);
+  slotsAutoTimer = null;
+}
+
+function scheduleSlotsAutoTick(delay = 900) {
+  clearSlotsAutoTimer();
+  if(!slotsAutoEnabled || slotSpinning) {
+    updateSlotsAutoUI();
+    return;
+  }
+  slotsAutoTimer = setTimeout(() => {
+    if(!slotsAutoEnabled || slotSpinning) return;
+    slotSpin(slotsAutoBet);
+    updateSlotsAutoUI();
+  }, delay);
+}
+
+function toggleSlotsAuto() {
+  slotsAutoEnabled = !slotsAutoEnabled;
+  updateSlotsAutoUI();
+  if(slotsAutoEnabled) {
+    toast('SLOTS AUTO SPIN ENABLED', 'var(--cyan)', true);
+    scheduleSlotsAutoTick(400);
+  } else {
+    clearSlotsAutoTimer();
+    toast('SLOTS AUTO SPIN DISABLED', 'var(--amber)', true);
+  }
+}
+
+function cycleSlotsAutoBet() {
+  const bets = [100, 500];
+  const idx = bets.indexOf(slotsAutoBet);
+  slotsAutoBet = bets[(idx + 1) % bets.length];
+  updateSlotsAutoUI();
+}
+
+updateSlotsAutoUI();

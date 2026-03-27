@@ -127,9 +127,17 @@
     <div class="bar-wrap"><div class="bar-fill br" id="irs-bar" style="width:0%"></div></div>
     <span class="hstat-val v-red" id="irs-level">LVL 0</span>
   </div>
-  <div class="hstat"><span class="hstat-lbl">TEST</span><span class="hstat-val v-amber" id="test-level">LOW NORMAL</span></div>
-  <div class="hstat"><span class="hstat-lbl">INBOX</span><span class="hstat-val v-magenta pulse" id="inbox-unread">847</span></div>
-  <div class="hstat"><span class="hstat-lbl">GRASS TOUCHED</span><span class="hstat-val v-green">0 days, 0 hrs</span></div>
+  <div id="cmd-console">
+    <div class="cmd-console-top">
+      <span class="cmd-console-lbl">CONSOLE</span>
+      <span class="cmd-console-status" id="cmd-console-status">READY :: TAB AUTOFILL ENABLED</span>
+    </div>
+    <div class="cmd-console-input-row">
+      <span class="cmd-console-prompt">&gt;</span>
+      <input id="cmd-console-input" type="text" spellcheck="false" autocomplete="off" placeholder="help, funding, league ff, crash random...">
+    </div>
+    <div class="cmd-console-suggestions" id="cmd-console-suggestions"></div>
+  </div>
   <div id="bank-block">
     <div class="bank-item"><span class="bank-lbl">💳 CHECKING</span><span class="bank-val v-red pulse" id="bank-checking">$5.00</span></div>
     <div class="bank-item"><span class="bank-lbl">SAVINGS</span><span class="bank-val v-red" id="bank-savings">$0.00</span></div>
@@ -192,6 +200,10 @@
         <button class="bj-btn btn-stand" onclick="bjStand()">[ STAND ]</button>
         <button class="bj-btn btn-dbl"   onclick="bjDouble()">[ DOUBLE DOWN ]</button>
       </div>
+      <div class="auto-row">
+        <button class="bj-btn btn-auto" id="bj-auto-btn" onclick="toggleBlackjackAuto()">[ AUTO OFF ]</button>
+        <span class="auto-status" id="bj-auto-status">MANUAL PLAY</span>
+      </div>
       <div class="bj-advice" id="bj-advice">▶ HIT ON 17 (TRUST)</div>
     </div>
     <!-- TRADING SECTION -->
@@ -237,6 +249,11 @@
         <button class="bj-btn btn-hit" onclick="slotSpin(100)">[ 🎰 SPIN $100 ]</button>
         <button class="bj-btn btn-dbl" onclick="slotSpin(500)">[ ⚡ MAX BET $500 ]</button>
       </div>
+      <div class="auto-row">
+        <button class="bj-btn btn-auto" id="slots-auto-btn" onclick="toggleSlotsAuto()">[ AUTO OFF ]</button>
+        <button class="bj-btn btn-stand" id="slots-auto-bet-btn" onclick="cycleSlotsAutoBet()">[ AUTO BET $100 ]</button>
+      </div>
+      <div class="auto-status" id="slots-auto-status">MANUAL SPIN</div>
       <div class="bj-advice" id="slots-advice">▶ STATISTICALLY DUE FOR JACKPOT (INCORRECT)</div>
     </div>
   </div>
@@ -324,6 +341,7 @@
 <script src="js/funding-modal.js"></script>
 <script src="js/league-popups.js"></script>
 <script src="js/news-ticker.js"></script>
+<script src="js/command-console.js"></script>
 <script src="js/app.js"></script>
 <script src="js/suggest.js"></script>
 </body>

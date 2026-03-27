@@ -122,6 +122,36 @@ body::after { /* vignette */
 .bank-item{display:flex;flex-direction:column;align-items:center;}
 .bank-lbl{font-size:9px;color:#555;}
 .bank-val{font-size:13px;}
+#cmd-console{
+  flex:1 1 420px; min-width:300px; max-width:640px;
+  display:flex; flex-direction:column; gap:3px;
+  border:1px solid #122919; background:linear-gradient(180deg,#041008,#030804);
+  padding:5px 8px; box-shadow:inset 0 0 12px rgba(0,255,65,0.04);
+}
+.cmd-console-top{display:flex;align-items:center;gap:8px;min-width:0;}
+.cmd-console-lbl{font-size:10px;color:#4d8d62;letter-spacing:1px;flex-shrink:0;}
+.cmd-console-status{font-size:10px;color:#7bd88f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cmd-console-input-row{
+  display:flex; align-items:center; gap:6px; min-width:0;
+  border:1px solid #11331a; background:rgba(0,0,0,0.28); padding:3px 6px;
+}
+.cmd-console-prompt{font-size:12px;color:var(--green);text-shadow:0 0 6px rgba(0,255,65,0.22);}
+#cmd-console-input{
+  flex:1; min-width:0; background:transparent; border:0; outline:none;
+  color:var(--green); font-family:inherit; font-size:11px; letter-spacing:0.5px;
+}
+#cmd-console-input::placeholder{color:#2e6a39;}
+.cmd-console-suggestions{
+  display:flex; gap:4px; flex-wrap:wrap; min-height:18px;
+  align-items:flex-start;
+}
+.cmd-suggestion{
+  font-size:9px; color:#5ab96a; border:1px solid #103010;
+  background:rgba(0,24,6,0.45); padding:1px 5px; border-radius:2px;
+  cursor:pointer; user-select:none; transition:border-color 0.12s ease,background 0.12s ease,color 0.12s ease;
+}
+.cmd-suggestion:hover{color:#d4ffd8;border-color:#1f6f2a;background:rgba(0,70,18,0.32);}
+.cmd-suggestion.active{color:#d4ffd8;border-color:#1f6f2a;background:rgba(0,70,18,0.45);}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 .pulse{animation:pulse 2s infinite;}
 
@@ -279,6 +309,16 @@ body::after { /* vignette */
 .btn-stand:hover{background:rgba(255,179,0,0.15);}
 .btn-dbl{color:var(--purple);border-color:var(--purple);}
 .btn-dbl:hover{background:rgba(180,77,255,0.15);}
+.btn-auto{color:#8be9a6;border-color:#2b8f52;}
+.btn-auto:hover{background:rgba(43,143,82,0.18);}
+.auto-row{display:flex;gap:5px;align-items:center;flex-shrink:0;}
+.auto-row .bj-btn{flex:0 0 auto;}
+.auto-status{
+  flex:1; min-width:0; font-size:11px; color:#63c27d;
+  border:1px solid #103010; background:rgba(0,18,4,0.36);
+  padding:7px 8px; letter-spacing:0.8px; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis; border-radius:2px;
+}
 
 /* ── SLOTS ── */
 .slots-area{display:none;flex-direction:column;justify-content:space-evenly;flex:1;padding:8px 10px;gap:10px;overflow:hidden;position:relative;z-index:1;min-height:0;}
