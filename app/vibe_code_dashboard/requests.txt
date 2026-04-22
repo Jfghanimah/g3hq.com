@@ -12,3 +12,4 @@ TOP IDEAS:
 - Live patch notes popup — claims it fixed matchmaking, immediately says "known issue: it did not"
 - fix map on mobile
 - fix song not playing on mobile (only sfz seem to work)
+- add Storm#Sup yuumi OTP reference
